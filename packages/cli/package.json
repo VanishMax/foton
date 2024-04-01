@@ -1,0 +1,51 @@
+{
+  "name": "@photon/cli",
+  "version": "0.1.0",
+  "description": "Photon CLI: compile, run test Tact smart contracts",
+  "keywords": [
+    "The Open Network",
+    "TON",
+    "Tact",
+    "CLI",
+    "Command line"
+  ],
+  "license": "ISC",
+  "author": "vanishmax",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vanishmax/photon.git"
+  },
+  "homepage": "https://github.com/vanishmax/photon/tree/main/packages/cli",
+  "bugs": "https://github.com/vanishmax/photon/issues",
+  "bin": {
+    "photon": "bin/run.js"
+  },
+  "files": ["/bin", "/dist"],
+  "scripts": {
+    "build": "shx rm -rf dist && tsc -b",
+    "prepack": "pnpm run build && oclif manifest && oclif readme",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "prepare": "pnpm run build",
+    "version": "oclif readme && git add README.md"
+  },
+  "oclif": {
+    "bin": "photon",
+    "commands": "./dist/commands",
+    "dirname": "cli",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "dependencies": {
+    "@oclif/core": "^3",
+    "@oclif/plugin-help": "^6"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "oclif": "^4.7.3",
+    "shx": "^0.3.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
+  }
+}

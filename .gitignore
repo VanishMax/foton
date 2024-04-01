@@ -1,0 +1,10 @@
+dist
+
+.DS_Store
+
+.idea
+.vscode
+
+node_modules
+*-debug.log
+*-error.log

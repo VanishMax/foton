@@ -1,0 +1,26 @@
+{
+  "name": "@photon/monorepo",
+  "version": "0.1.0",
+  "description": "Photon – a TON development ecosystem",
+  "license": "ISC",
+  "author": "Max Korsunov (https://t.me/vanishmax)",
+  "keywords": [
+    "The Open Network",
+    "TON",
+    "Tact"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vanishmax/photon.git"
+  },
+  "homepage": "https://github.com/vanishmax/photon#readme",
+  "bugs": "https://github.com/vanishmax/photon/issues",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "scripts": {
+    "cli": "pnpm --filter @photon/cli dev"
+  }
+}
