@@ -1,15 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "node16",
-    "moduleResolution": "node16",
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "declaration": true,
     "outDir": "dist",
     "rootDir": "src",
     "strict": true
   },
   "include": ["./src/**/*"],
-  "ts-node": {
-    "esm": true
-  }
 }
