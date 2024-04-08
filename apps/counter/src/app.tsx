@@ -1,12 +1,11 @@
 import type { FC } from 'react';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 
-import manifestUrl from '/tonconnect-manifest.json?url';
 import { HomePage } from './page.tsx';
 
 export const App: FC = () => {
   return (
-    <TonConnectUIProvider manifestUrl={manifestUrl}>
+    <TonConnectUIProvider manifestUrl="https://photon-counter.vercel.app/tonconnect-manifest.json">
       <HomePage />
     </TonConnectUIProvider>
   );

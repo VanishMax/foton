@@ -5,12 +5,10 @@ message Add {
     amount: Int as uint32;
 }
 
-contract SimpleCounter with Deployable {
-    id: Int as uint32;
+contract Counter with Deployable {
     counter: Int as uint32;
 
-    init(id: Int) {
-        self.id = id;
+    init() {
         self.counter = 0;
     }
 
@@ -20,9 +18,5 @@ contract SimpleCounter with Deployable {
 
     get fun counter(): Int {
         return self.counter;
-    }
-
-    get fun id(): Int {
-        return self.id;
     }
 }

@@ -8,6 +8,10 @@
   filter: drop-shadow(0 0 2em rgba(255, 154, 7, 0.89));
 }
 
-.card {
-  padding: 2em;
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  width: 100%;
 }
