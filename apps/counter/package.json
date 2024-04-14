@@ -14,7 +14,8 @@
     "@ton/core": "^0.56.3",
     "@tonconnect/ui-react": "^2.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "viem": "^2.9.16"
   },
   "devDependencies": {
     "@photon/cli": "workspace:*",
