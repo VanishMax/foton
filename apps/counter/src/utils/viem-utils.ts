@@ -1,6 +1,7 @@
-import { hexToBigInt, isHex } from 'viem';
+import { hexToBigInt, isHex, hexToBytes } from 'viem';
 
 export {
   hexToBigInt,
   isHex,
+  hexToBytes,
 };

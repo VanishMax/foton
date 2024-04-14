@@ -1,8 +1,9 @@
 import { ContractRunGetMethodResponse } from './types.ts';
-import { hexToBigInt, isHex } from './viem-utils.ts';
+import { hexToBigInt, isHex } from '../utils/viem-utils.ts';
+import { TONCENTER_API_URL } from './constants.ts';
 
 export const getCounter = async (address: string): Promise<undefined | bigint> => {
-  const res = await fetch(`https://testnet.toncenter.com/api/v3/runGetMethod`, {
+  const res = await fetch(`${TONCENTER_API_URL}/runGetMethod`, {
     method: 'POST',
     headers: {
       accept: 'application/json',
