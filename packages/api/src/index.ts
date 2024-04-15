@@ -1,6 +1,7 @@
 export {
   createClient,
-  type Chain,
   type CreateClientOptions,
-  type OpenapiClient,
 } from './client.js';
+
+export type { RpcClient } from './requests/index.js';
+export type { OpenapiClient, Chain } from './types.js';

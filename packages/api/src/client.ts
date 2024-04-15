@@ -1,7 +1,9 @@
-import type { paths } from './schemas/toncenter-v3.js';
 import createOpenapiClient from 'openapi-fetch';
 
-export type Chain = 'mainnet' | 'testnet';
+import type { paths } from './schemas/toncenter-v3.js';
+import type { Chain } from './types.js';
+import { adaptClientRpc, type RpcClient } from './requests/index.js';
+
 export interface CreateClientOptions {
   chain?: Chain;
 }
@@ -12,12 +14,12 @@ const CHAIN_API_MAP: Record<Chain, string> = {
   testnet: 'https://testnet.toncenter.com',
 }
 
-export type OpenapiClient = ReturnType<typeof createOpenapiClient<paths>>;
-
-export const createClient = (options?: CreateClientOptions): OpenapiClient => {
+export const createClient = (options?: CreateClientOptions): RpcClient => {
   const { chain = 'mainnet' } = options || {};
 
   const baseUrl = CHAIN_API_MAP[chain];
 
-  return createOpenapiClient<paths>({ baseUrl });
+  const openapiClient = createOpenapiClient<paths>({ baseUrl });
+
+  return adaptClientRpc(openapiClient);
 };
