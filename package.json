@@ -1,7 +1,7 @@
 {
-  "name": "@photon/monorepo",
+  "name": "@foton/monorepo",
   "version": "0.1.0",
-  "description": "Photon – a TON development ecosystem",
+  "description": "Foton – a TON development ecosystem",
   "license": "ISC",
   "author": "Max Korsunov (https://t.me/vanishmax)",
   "keywords": [
@@ -11,16 +11,16 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/vanishmax/photon.git"
+    "url": "https://github.com/vanishmax/foton.git"
   },
-  "homepage": "https://github.com/vanishmax/photon#readme",
-  "bugs": "https://github.com/vanishmax/photon/issues",
+  "homepage": "https://github.com/vanishmax/foton#readme",
+  "bugs": "https://github.com/vanishmax/foton/issues",
   "type": "module",
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=8.0.0"
   },
   "scripts": {
-    "cli": "pnpm --filter @photon/cli dev"
+    "cli": "pnpm --filter @foton/cli dev"
   }
 }

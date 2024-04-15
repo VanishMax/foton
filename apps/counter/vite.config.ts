@@ -13,10 +13,10 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@photon/client': path.join(__dirname, './.photon/index.ts'),
+      '@foton/client': path.join(__dirname, './.foton/index.ts'),
     }
   },
   server: {
     port: 3000,
   }
-})
+});

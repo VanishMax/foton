@@ -1,5 +1,5 @@
 {
-  "name": "@photon/counter",
+  "name": "@foton/counter",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "compile": "photon compile"
+    "compile": "foton compile"
   },
   "dependencies": {
     "@ton/core": "^0.56.3",
@@ -18,7 +18,7 @@
     "viem": "^2.9.16"
   },
   "devDependencies": {
-    "@photon/cli": "workspace:*",
+    "@foton/cli": "workspace:*",
     "@tact-lang/compiler": "^1.2.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

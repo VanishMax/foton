@@ -1,1 +1,1 @@
-# Photon CLI
+# Foton CLI

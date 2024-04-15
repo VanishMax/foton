@@ -1,7 +1,7 @@
 {
-  "name": "@photon/cli",
+  "name": "@foton/cli",
   "version": "0.1.0",
-  "description": "Photon CLI: compile, run test Tact smart contracts",
+  "description": "Foton CLI: compile, run test Tact smart contracts",
   "keywords": [
     "The Open Network",
     "TON",
@@ -14,12 +14,12 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vanishmax/photon.git"
+    "url": "https://github.com/vanishmax/foton.git"
   },
-  "homepage": "https://github.com/vanishmax/photon/tree/main/packages/cli",
-  "bugs": "https://github.com/vanishmax/photon/issues",
+  "homepage": "https://github.com/vanishmax/foton/tree/main/packages/cli",
+  "bugs": "https://github.com/vanishmax/foton/issues",
   "bin": {
-    "photon": "bin/run.js"
+    "foton": "bin/run.js"
   },
   "files": [
     "/bin",
@@ -33,7 +33,7 @@
     "version": "oclif readme && git add README.md"
   },
   "oclif": {
-    "bin": "photon",
+    "bin": "foton",
     "commands": "./dist/commands",
     "dirname": "cli",
     "plugins": [

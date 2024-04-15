@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { TonConnectButton, useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
-import photonClient from '@photon/client';
+import fotonClient from '@foton/client';
 
-import photonLogo from '/photon.png';
+import fotonLogo from '/foton.png';
 import styles from './page.module.css';
 import { deployContract } from './wallet-api/deploy.ts';
 import { setCounter } from './wallet-api/set-counter.ts';
@@ -30,7 +30,7 @@ export const HomePage: FC = () => {
   const userAddress = useTonAddress();
 
   const onDeploy = async () => {
-    const contractAddress = await deployContract(photonClient.counter, tonConnection);
+    const contractAddress = await deployContract(fotonClient.counter, tonConnection);
 
     if (!contractAddress) return;
     setCounterAddress(contractAddress);
@@ -64,10 +64,10 @@ export const HomePage: FC = () => {
   return (
     <>
       <header>
-        <a href="https://github.com/VanishMax/photon" target="_blank">
-          <img src={photonLogo} className={styles.logo} alt="Photon logo"/>
+        <a href="https://github.com/VanishMax/foton" target="_blank">
+          <img src={fotonLogo} className={styles.logo} alt="Foton logo"/>
         </a>
-        <h1>Photon counter</h1>
+        <h1>Foton counter</h1>
       </header>
 
       <div className={styles.actions}>

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const IGNORED_DIRECTORIES = ['node_modules', 'dist', '.idea', '.vscode', '.photon'];
+const IGNORED_DIRECTORIES = ['node_modules', 'dist', '.idea', '.vscode', '.foton'];
 
 /** Asynchronously checks whether the provided path is a directory. */
 const isDirectory = async (path: string): Promise<boolean> => {

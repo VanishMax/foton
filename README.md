@@ -1,3 +1,3 @@
-# Photon
+# Foton
 
 TON development ecosystem.

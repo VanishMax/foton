@@ -2,21 +2,21 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Config } from '@tact-lang/compiler';
 
-export const getPhotonDir = () => {
-  const photonDir = path.join(process.cwd(), '.photon');
+export const getFotonDir = () => {
+  const fotonDir = path.join(process.cwd(), '.foton');
 
-  if (!fs.existsSync(photonDir)) {
-    fs.mkdirSync(photonDir);
+  if (!fs.existsSync(fotonDir)) {
+    fs.mkdirSync(fotonDir);
   }
 
-  return photonDir;
+  return fotonDir;
 };
 
-export const copyContractToPhoton = (filePath: string): string => {
-  const photonDir = getPhotonDir();
+export const copyContractToFoton = (filePath: string): string => {
+  const fotonDir = getFotonDir();
 
   const name = path.basename(filePath, path.extname(filePath));
-  const newDir = path.join(photonDir, name);
+  const newDir = path.join(fotonDir, name);
   const newPath = path.join(newDir, path.basename(filePath));
 
   if (!fs.existsSync(newDir)) {
@@ -28,7 +28,7 @@ export const copyContractToPhoton = (filePath: string): string => {
 };
 
 export const createTactConfig = (contracts: string[]): string => {
-  const photonDir = getPhotonDir();
+  const fotonDir = getFotonDir();
 
   const config: Config = {
     projects: contracts.map((contract) => ({
@@ -38,7 +38,7 @@ export const createTactConfig = (contracts: string[]): string => {
     })),
   }
 
-  const tactConfigPath = path.join(photonDir, 'tact.config.json');
+  const tactConfigPath = path.join(fotonDir, 'tact.config.json');
   fs.writeFileSync(
     tactConfigPath,
     JSON.stringify(config, null, 2),

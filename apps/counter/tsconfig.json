@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@photon/client": ["./.photon/index.ts"]
+      "@foton/client": ["./.foton/index.ts"]
     }
   },
   "include": ["src"],

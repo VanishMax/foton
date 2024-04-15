@@ -26,7 +26,7 @@ importers:
         specifier: ^2.9.16
         version: 2.9.16(typescript@5.4.3)
     devDependencies:
-      '@photon/cli':
+      '@foton/cli':
         specifier: workspace:*
         version: link:../../packages/cli
       '@tact-lang/compiler':
