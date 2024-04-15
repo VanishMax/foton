@@ -1,0 +1,44 @@
+{
+  "name": "@foton/api",
+  "version": "0.1.0",
+  "description": "Foton API: comfortable public APIs to connect to the TON blockchain",
+  "keywords": [
+    "TON",
+    "Blockchain",
+    "API"
+  ],
+  "license": "ISC",
+  "author": "vanishmax",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vanishmax/foton.git"
+  },
+  "homepage": "https://github.com/vanishmax/foton/tree/main/packages/cli",
+  "bugs": "https://github.com/vanishmax/foton/issues",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "import": "./dist/index.js"
+  },
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "generate": "openapi-typescript https://toncenter.com/api/v3/openapi.json -o src/schemas/toncenter-v3.d.ts",
+    "build": "tsup src/index.ts --dts --minify --format cjs,esm --out-dir ./dist"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.9.3",
+    "openapi-typescript": "7.0.0-next.8",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.2"
+  }
+}
