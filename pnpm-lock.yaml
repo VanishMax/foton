@@ -26,6 +26,9 @@ importers:
         specifier: ^2.9.16
         version: 2.9.16(typescript@5.4.3)
     devDependencies:
+      '@foton/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@foton/cli':
         specifier: workspace:*
         version: link:../../packages/cli

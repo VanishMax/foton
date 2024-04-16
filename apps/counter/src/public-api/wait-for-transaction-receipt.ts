@@ -1,19 +1,13 @@
-import type { Transaction, TransactionsByMessageResponse } from './types.ts';
-import { TONCENTER_API_URL } from './constants.ts';
+import type { Transaction } from '@foton/api';
+import { publicClient } from './publicClient.ts';
 
-export const getTransactionsByMessageHash = async (hash: string): Promise<TransactionsByMessageResponse> => {
-  const search = new URLSearchParams();
-  search.set('direction', 'in');
-  search.set('msg_hash', hash);
-
-  const res = await fetch(`${TONCENTER_API_URL}/transactionsByMessage?${search.toString()}`, {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-    },
+export const getTransactionsByMessageHash = async (hash: string) => {
+  const res = await publicClient.transactionsByMessage({
+    direction: 'in',
+    msg_hash: hash,
   });
 
-  return await res.json();
+  return res.data;
 };
 
 export interface WaitForTransactionReceiptOptions {
@@ -33,7 +27,7 @@ export const waitForTransactionReceipt = async (
     const interval = setInterval(async () => {
       refethes += 1;
       const res = await getTransactionsByMessageHash(hash);
-      if (res.transactions.length) {
+      if (res?.transactions.length) {
         clearInterval(interval);
         resolve(res.transactions[0]);
       }
