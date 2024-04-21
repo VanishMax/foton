@@ -29,6 +29,9 @@ importers:
       '@foton/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@foton/candle':
+        specifier: workspace:*
+        version: link:../../packages/candle
       '@foton/cli':
         specifier: workspace:*
         version: link:../../packages/cli
@@ -77,6 +80,22 @@ importers:
       openapi-typescript:
         specifier: 7.0.0-next.8
         version: 7.0.0-next.8(typescript@5.4.5)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+    devDependencies:
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.4.5)
+
+  packages/candle:
+    dependencies:
+      '@foton/api':
+        specifier: workspace:*
+        version: link:../api
+      '@tonconnect/sdk':
+        specifier: ^3.0.0
+        version: 3.0.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5

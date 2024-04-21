@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { TonConnectButton, useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
+
 import fotonClient from '@foton/client';
+import { createWalletClient, UserClient, type WalletInfo } from '@foton/candle';
 
 import fotonLogo from '/foton.png';
 import styles from './page.module.css';
@@ -9,6 +11,8 @@ import { setCounter } from './wallet-api/set-counter.ts';
 import { getCounter } from './public-api/get-counter.ts';
 import type { Hex } from './public-api/types.ts';
 import { waitForTransactionReceipt } from './public-api/wait-for-transaction-receipt.ts';
+
+const walletClient = createWalletClient({ manifestUrl: 'https://photon-counter.vercel.app/tonconnect-manifest.json' });
 
 const useCounterAddress = (): [Hex | undefined, (arg: Hex) => void] => {
   const [counterAddress, setContractAddress] = useState<Hex | undefined>(localStorage.getItem('counterAddress') as Hex || undefined);
@@ -26,6 +30,9 @@ export const HomePage: FC = () => {
   const [counterAddress, setCounterAddress] = useCounterAddress();
   const [counterAmount, setCounterAmount] = useState<bigint | undefined>(undefined);
   const [loading, setLoading] = useState(false);
+
+  const [wallets, setWallets] = useState<WalletInfo[]>();
+  const [userClient, setUserClient] = useState<UserClient>();
 
   const userAddress = useTonAddress();
 
@@ -51,6 +58,22 @@ export const HomePage: FC = () => {
     return () => clearInterval(interval);
   }, [counterAddress]);
 
+  // CANDLE usage
+  useEffect(() => {
+    const g = async () => {
+      const data = await walletClient.getWallets({ type: 'injected' });
+      setWallets(data);
+    };
+    g();
+  }, []);
+
+  const onConnect = async (wallet: WalletInfo) => {
+    const uc = await walletClient.connect(wallet);
+    if (uc) {
+      setUserClient(uc);
+    }
+  };
+
   const onCount = async () => {
     if (!counterAddress) return;
     setLoading(true);
@@ -70,26 +93,45 @@ export const HomePage: FC = () => {
         <h1>Foton counter</h1>
       </header>
 
-      <div className={styles.actions}>
-        {userAddress && counterAddress && counterAmount !== undefined && (
-          <button disabled={loading} onClick={onCount}>
-            {loading ? 'Loading...' : (
-              <>
-                count is {counterAmount.toString()}
-              </>
-            )}
-          </button>
-        )}
-
-        <TonConnectButton/>
-      </div>
-
-      {!counterAddress && (
-        <div className={styles.actions}>
-          <button onClick={onDeploy}>
-            Deploy Counter contract
-          </button>
+      {!userClient && (
+        <div style={{
+          display: 'flex',
+          gap: '6px',
+          flexWrap: 'wrap',
+          maxWidth: 400,
+          justifyContent: 'center',
+          marginBottom: 24
+        }}>
+          {wallets && wallets.map((wallet) => (
+            <button key={wallet.appName} type="button" onClick={() => onConnect(wallet)}>
+              {wallet.name}
+            </button>
+          ))}
         </div>
+      )}
+
+      {userClient && (
+        <>
+          <div className={styles.actions}>
+            {userAddress && counterAddress && counterAmount !== undefined && (
+              <button disabled={loading} onClick={onCount}>
+                {loading ? 'Loading...' : (
+                  <>
+                    count is {counterAmount.toString()}
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+
+          {!counterAddress && (
+            <div className={styles.actions}>
+              <button onClick={onDeploy}>
+                Deploy Counter contract
+              </button>
+            </div>
+          )}
+        </>
       )}
     </>
   );

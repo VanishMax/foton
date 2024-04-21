@@ -1,11 +1,14 @@
 {
-  "name": "@foton/api",
+  "name": "@foton/candle",
   "version": "0.1.0",
-  "description": "Foton API: comfortable public APIs to connect to the TON blockchain",
+  "description": "Candle: build TON dApps with ease",
   "keywords": [
     "TON",
     "Blockchain",
-    "API"
+    "dApp",
+    "DAP",
+    "DEFI",
+    "Tact"
   ],
   "license": "ISC",
   "author": "vanishmax",
@@ -13,7 +16,7 @@
     "type": "git",
     "url": "https://github.com/vanishmax/foton.git"
   },
-  "homepage": "https://github.com/vanishmax/foton/tree/main/packages/api",
+  "homepage": "https://github.com/vanishmax/foton/tree/main/packages/candle",
   "bugs": "https://github.com/vanishmax/foton/issues",
   "type": "module",
   "files": [
@@ -30,13 +33,12 @@
     "access": "public"
   },
   "scripts": {
-    "generate": "openapi-typescript https://toncenter.com/api/v3/openapi.json -o src/schemas/toncenter-v3.ts",
     "build": "tsup src/index.ts --dts --minify --format cjs,esm --out-dir ./dist",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "openapi-fetch": "^0.9.3",
-    "openapi-typescript": "7.0.0-next.8",
+    "@foton/api": "workspace:*",
+    "@tonconnect/sdk": "^3.0.0",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
