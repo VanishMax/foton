@@ -1,6 +1,6 @@
 import { isWalletInfoInjectable, isWalletInfoRemote } from '@tonconnect/sdk';
 
-import type { WalletClient, WalletInfo, Wallet } from './types.js';
+import type { Wallet, WalletClient, WalletInfo } from './types.js';
 
 export interface ConnectOptions {
 
@@ -31,7 +31,13 @@ export async function connect (this: WalletClient, connector: WalletInfo, option
         universalLink: connector.universalLink,
         bridgeUrl: connector.bridgeUrl,
       });
-      console.log('LINK', link);
+      if (typeof window === 'undefined') {
+        console.info(`Open the following link in your browser to connect with ${connector.name}: ${link}`);
+        console.info(link);
+      } else {
+        window.open(link, '_blank');
+      }
+      // TODO: support other types of wallets, e.g. embedded
     }
   });
 }

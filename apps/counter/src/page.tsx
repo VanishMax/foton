@@ -30,7 +30,7 @@ const useWallets = (): WalletInfo[] => {
 
   useEffect(() => {
     const g = async () => {
-      const data = await walletClient.getWallets({ type: 'injected' });
+      const data = await walletClient.getWallets({ type: 'remote' });
       setWallets(data);
     };
     g();
@@ -57,6 +57,8 @@ export const HomePage: FC = () => {
         setUserAddress(undefined);
       }
     });
+
+    walletClient.reconnect();
   }, []);
 
   useEffect(() => {
