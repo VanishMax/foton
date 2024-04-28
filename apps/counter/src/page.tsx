@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
-import { TonConnectButton, useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
+import { useTonConnectUI } from '@tonconnect/ui-react';
 
 import fotonClient from '@foton/client';
-import { createWalletClient, UserClient, type WalletInfo } from '@foton/candle';
+import { createWalletClient, type WalletInfo } from '@foton/candle';
 
 import fotonLogo from '/foton.png';
 import styles from './page.module.css';
@@ -25,16 +25,46 @@ const useCounterAddress = (): [Hex | undefined, (arg: Hex) => void] => {
   return [counterAddress, setCounterAddress];
 };
 
+const useWallets = (): WalletInfo[] => {
+  const [wallets, setWallets] = useState<WalletInfo[]>([]);
+
+  useEffect(() => {
+    const g = async () => {
+      const data = await walletClient.getWallets({ type: 'injected' });
+      setWallets(data);
+    };
+    g();
+  }, []);
+
+  return wallets;
+};
+
 export const HomePage: FC = () => {
   const [tonConnection] = useTonConnectUI();
   const [counterAddress, setCounterAddress] = useCounterAddress();
   const [counterAmount, setCounterAmount] = useState<bigint | undefined>(undefined);
+
   const [loading, setLoading] = useState(false);
 
-  const [wallets, setWallets] = useState<WalletInfo[]>();
-  const [userClient, setUserClient] = useState<UserClient>();
+  const wallets = useWallets();
+  const [userAddress, setUserAddress] = useState<string>();
 
-  const userAddress = useTonAddress();
+  useEffect(() => {
+    walletClient.connection.onStatusChange((wallet) => {
+      if (wallet) {
+        setUserAddress(wallet.account.address);
+      } else {
+        setUserAddress(undefined);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    getCounterAmount();
+    const interval = setInterval(getCounterAmount, 5000);
+
+    return () => clearInterval(interval);
+  }, [counterAddress]);
 
   const onDeploy = async () => {
     const contractAddress = await deployContract(fotonClient.counter, tonConnection);
@@ -51,27 +81,18 @@ export const HomePage: FC = () => {
     setCounterAmount(await getCounter(counterAddress));
   };
 
-  useEffect(() => {
-    getCounterAmount();
-    const interval = setInterval(getCounterAmount, 5000);
-
-    return () => clearInterval(interval);
-  }, [counterAddress]);
-
-  // CANDLE usage
-  useEffect(() => {
-    const g = async () => {
-      const data = await walletClient.getWallets({ type: 'injected' });
-      setWallets(data);
-    };
-    g();
-  }, []);
-
   const onConnect = async (wallet: WalletInfo) => {
-    const uc = await walletClient.connect(wallet);
-    if (uc) {
-      setUserClient(uc);
+    try {
+      await walletClient.connect(wallet);
+    } catch (e) {
+      if (e instanceof Error) {
+        alert(e.message);
+      }
     }
+  };
+
+  const onDisconnect = async () => {
+    await walletClient.disconnect();
   };
 
   const onCount = async () => {
@@ -93,7 +114,7 @@ export const HomePage: FC = () => {
         <h1>Foton counter</h1>
       </header>
 
-      {!userClient && (
+      {!userAddress && (
         <div style={{
           display: 'flex',
           gap: '6px',
@@ -110,7 +131,7 @@ export const HomePage: FC = () => {
         </div>
       )}
 
-      {userClient && (
+      {userAddress && (
         <>
           <div className={styles.actions}>
             {userAddress && counterAddress && counterAmount !== undefined && (
@@ -128,6 +149,9 @@ export const HomePage: FC = () => {
             <div className={styles.actions}>
               <button onClick={onDeploy}>
                 Deploy Counter contract
+              </button>
+              <button onClick={onDisconnect}>
+                Disconnect
               </button>
             </div>
           )}

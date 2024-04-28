@@ -1,11 +1,13 @@
-import type { TonConnect, WalletInfo } from '@tonconnect/sdk';
+import type { TonConnect, Wallet, WalletInfo } from '@tonconnect/sdk';
 
 import type { ConnectOptions } from './connect.js';
 import type { GetWalletsOptions } from './get-wallets.js';
 
-export type { WalletInfo };
+export type { WalletInfo, Wallet };
 
 export interface WalletClient {
+  _connectionCallbacks: ((wallet: Error | Wallet | null) => void)[];
+
   address?: string;
   connected: boolean;
 
@@ -13,9 +15,9 @@ export interface WalletClient {
   wallets?: WalletInfo[];
   getWallets: (options?: GetWalletsOptions) => Promise<WalletInfo[]>;
 
-  connect: (connector: WalletInfo, options?: ConnectOptions) => Promise<UserClient>;
-  reconnect: VoidFunction;
-  disconnect: VoidFunction;
+  connect: (connector: WalletInfo, options?: ConnectOptions) => Promise<Wallet>;
+  reconnect: () => Promise<Wallet>
+  disconnect: () => Promise<void>;
   user?: UserClient;
 }
 
