@@ -1,5 +1,5 @@
 import { isWalletInfoCurrentlyInjected, isWalletInfoInjectable, isWalletInfoRemote, isWalletInfoCurrentlyEmbedded } from '@tonconnect/sdk';
-import type { WalletClient, WalletInfo } from './types.js';
+import type { WalletClientBase, WalletInfo } from './types.js';
 
 type WalletFilterType = 'all' | 'injected' | 'injectable' | 'remote' | 'embedded';
 
@@ -23,7 +23,7 @@ const filterWallets = (wallets: WalletInfo[], type: WalletFilterType) => {
   return wallets.filter(filter);
 };
 
-export async function getWallets (this: WalletClient, options?: GetWalletsOptions): Promise<WalletInfo[]> {
+export async function getWallets (this: WalletClientBase, options?: GetWalletsOptions): Promise<WalletInfo[]> {
   const { type = 'all' } = options || {};
 
   if (this.wallets?.length) {

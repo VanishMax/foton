@@ -1,13 +1,14 @@
 import { isWalletInfoInjectable, isWalletInfoRemote } from '@tonconnect/sdk';
 
-import type { Wallet, WalletClient, WalletInfo } from './types.js';
+import type { Wallet, WalletClientBase, WalletInfo } from './types.js';
+import { isTonConnect } from './utils.js';
 
-export interface ConnectOptions {
-
-}
-
-export async function connect (this: WalletClient, connector: WalletInfo, options?: ConnectOptions): Promise<Wallet> {
+export async function connect (this: WalletClientBase, connector: WalletInfo): Promise<Wallet> {
   return new Promise(async (resolve, reject) => {
+    if (!isTonConnect(this.connection)) {
+      return reject(new Error('This function is not available for UI-based wallet connections. Use `createWalletClientUI` instead.'));
+    }
+
     // Send a callback for a onStatusChange function to finish the connection on wallet change
     this._connectionCallbacks.push((wallet) => {
       if (wallet instanceof Error) {

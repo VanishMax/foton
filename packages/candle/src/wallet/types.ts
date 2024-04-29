@@ -1,24 +1,31 @@
 import type { TonConnect, Wallet, WalletInfo } from '@tonconnect/sdk';
+import type { TonConnectUI } from '@tonconnect/ui';
 
-import type { ConnectOptions } from './connect.js';
 import type { GetWalletsOptions } from './get-wallets.js';
 
 export type { WalletInfo, Wallet };
 
-export interface WalletClient {
+export interface WalletClientBase {
   _connectionCallbacks: ((wallet: Error | Wallet | null) => void)[];
 
   address?: string;
   connected: boolean;
 
-  connection: TonConnect;
+  connection: TonConnect | TonConnectUI;
   wallets?: WalletInfo[];
   getWallets: (options?: GetWalletsOptions) => Promise<WalletInfo[]>;
 
-  connect: (connector: WalletInfo, options?: ConnectOptions) => Promise<Wallet>;
-  reconnect: () => Promise<Wallet>
   disconnect: () => Promise<void>;
   user?: UserClient;
+}
+
+export interface WalletClient extends WalletClientBase {
+  connect: (connector: WalletInfo) => Promise<Wallet>;
+  reconnect: () => Promise<Wallet>;
+}
+
+export interface WalletClientUI extends WalletClientBase {
+  connect: (connector?: WalletInfo) => Promise<Wallet>;
 }
 
 export interface UserClient extends WalletClient {

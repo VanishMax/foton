@@ -1,13 +1,12 @@
 import { toNano, beginCell } from '@ton/core';
-import type { TonConnectUI } from '@tonconnect/ui-react';
 import type { Hex } from '../public-api/types.ts';
 import { bocToHash } from '../utils/boc-to-hash.ts';
+import { walletClient } from '../ton-clients.ts';
 
 export const setCounter = async (
   address: Hex,
-  connection: TonConnectUI,
 ): Promise<string | undefined> => {
-  const account = connection.account;
+  const account = walletClient.connection.account;
 
   if (!account) {
     return;
@@ -23,9 +22,9 @@ export const setCounter = async (
     builder.storeUint(1, 32);
   }).endCell();
 
-  const res = await connection.sendTransaction({
+  const res = await walletClient.connection.sendTransaction({
     validUntil: Date.now() + 5 * 60 * 1000,
-    from: connection.account.address,
+    from: account.address,
     messages: [
       {
         address,
