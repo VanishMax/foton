@@ -1,7 +1,7 @@
 {
-  "name": "@foton/candle",
+  "name": "@foton/core",
   "version": "0.1.0",
-  "description": "Candle: build TON dApps with ease",
+  "description": "Foton: build TON dApps with ease",
   "keywords": [
     "TON",
     "Blockchain",
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "https://github.com/vanishmax/foton.git"
   },
-  "homepage": "https://github.com/vanishmax/foton/tree/main/packages/candle",
+  "homepage": "https://github.com/vanishmax/foton/tree/main/packages/core",
   "bugs": "https://github.com/vanishmax/foton/issues",
   "type": "module",
   "files": [

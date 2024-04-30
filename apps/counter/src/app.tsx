@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
 import fotonClient from '@foton/client';
-import { parseTon } from '@foton/candle';
+import { parseTon } from '@foton/core';
 
 import styles from './page.module.css';
 import { setCounter } from './wallet-api/set-counter';

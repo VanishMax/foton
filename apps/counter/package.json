@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@foton/api": "workspace:*",
-    "@foton/candle": "workspace:*",
+    "@foton/core": "workspace:*",
     "@foton/cli": "workspace:*",
     "@tact-lang/compiler": "^1.2.0",
     "@types/react": "^18.3.1",

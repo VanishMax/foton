@@ -32,12 +32,12 @@ importers:
       '@foton/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@foton/candle':
-        specifier: workspace:*
-        version: link:../../packages/candle
       '@foton/cli':
         specifier: workspace:*
         version: link:../../packages/cli
+      '@foton/core':
+        specifier: workspace:*
+        version: link:../../packages/candle
       '@tact-lang/compiler':
         specifier: ^1.2.0
         version: 1.2.0
