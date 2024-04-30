@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@foton/api": "workspace:*",
+    "@ton/core": "^0.56.3",
     "@tonconnect/sdk": "^3.0.2",
     "@tonconnect/ui": "^2.0.2",
     "typescript": "^5.4.5"

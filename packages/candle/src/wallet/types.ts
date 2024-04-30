@@ -1,9 +1,15 @@
 import type { TonConnect, Wallet, WalletInfo } from '@tonconnect/sdk';
 import type { TonConnectUI } from '@tonconnect/ui';
 
-import type { GetWalletsOptions } from './get-wallets.js';
-
 export type { WalletInfo, Wallet };
+
+import type { getWallets } from './get-wallets.js';
+import type { connect } from './connect.js';
+import type { connectUI } from './ui-connect.js';
+import type { reconnect } from './reconnect.js';
+import type { disconnect } from './disconnect.js';
+import type { sendTransaction } from './send-transaction.js';
+import type { deployContract } from './deploy-contract.js';
 
 export interface WalletClientBase {
   _connectionCallbacks: ((wallet: Error | Wallet | null) => void)[];
@@ -13,36 +19,18 @@ export interface WalletClientBase {
 
   connection: TonConnect | TonConnectUI;
   wallets?: WalletInfo[];
-  getWallets: (options?: GetWalletsOptions) => Promise<WalletInfo[]>;
 
-  disconnect: () => Promise<void>;
-  user?: UserClient;
+  getWallets: typeof getWallets;
+  disconnect: typeof disconnect;
+  sendTransaction: typeof sendTransaction;
+  deployContract: typeof deployContract;
 }
 
 export interface WalletClient extends WalletClientBase {
-  connect: (connector: WalletInfo) => Promise<Wallet>;
-  reconnect: () => Promise<Wallet>;
+  connect: typeof connect;
+  reconnect: typeof reconnect;
 }
 
 export interface WalletClientUI extends WalletClientBase {
-  connect: (connector?: WalletInfo) => Promise<Wallet>;
-}
-
-export interface UserClient extends WalletClient {
-  address: string;
-  sendTransaction: (args: TransactionArgs) => Promise<string>;
-  deployContract: (contract: ContractArgs) => Promise<string>;
-}
-
-interface TransactionArgs {
-  account?: string; // no need when using UserClient
-  to: string;
-  value: bigint;
-}
-
-interface ContractArgs {
-  account?: string; // no need when using UserClient
-  // TODO: create type CompiledContract extending what is returned from the Tact compilation
-  contract: any;
-  value: bigint;
+  connect: typeof connectUI;
 }

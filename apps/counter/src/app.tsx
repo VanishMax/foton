@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 
 import fotonClient from '@foton/client';
+import { parseTon, type ContractMethods } from '@foton/candle';
 
 import styles from './page.module.css';
-import { deployContract } from './wallet-api/deploy';
 import { setCounter } from './wallet-api/set-counter';
 import { getCounter } from './public-api/get-counter';
 import type { Hex } from './public-api/types';
@@ -11,10 +11,13 @@ import { walletClient, publicClient } from './ton-clients';
 
 import { AppHeader } from './components/header';
 
-const useCounterAddress = (): [Hex | undefined, (arg: Hex) => void] => {
-  const [counterAddress, setContractAddress] = useState<Hex | undefined>(localStorage.getItem('counterAddress') as Hex || undefined);
+import counterAbi from './counter-abi.ts';
+type CounterAbiMethods = ContractMethods<typeof counterAbi>;
 
-  const setCounterAddress = (address: Hex) => {
+const useCounterAddress = (): [string | undefined, (arg: string) => void] => {
+  const [counterAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem('counterAddress') as Hex || undefined);
+
+  const setCounterAddress = (address: string) => {
     localStorage.setItem('counterAddress', address);
     setContractAddress(address);
   };
@@ -48,7 +51,16 @@ export const App: FC = () => {
   }, [counterAddress]);
 
   const onDeploy = async () => {
-    const contractAddress = await deployContract(fotonClient.counter);
+    const payload: CounterAbiMethods['Deploy'] = {
+      queryId: 15n,
+    };
+
+    const contractAddress = await walletClient.deployContract({
+      contract: fotonClient.counter,
+      value: parseTon('0.05'),
+      payload,
+    });
+    console.log('contractAddress', contractAddress);
 
     if (!contractAddress) return;
     setCounterAddress(contractAddress);

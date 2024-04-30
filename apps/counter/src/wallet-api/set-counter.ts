@@ -1,10 +1,9 @@
 import { toNano, beginCell } from '@ton/core';
-import type { Hex } from '../public-api/types.ts';
 import { bocToHash } from '../utils/boc-to-hash.ts';
 import { walletClient } from '../ton-clients.ts';
 
 export const setCounter = async (
-  address: Hex,
+  address: string,
 ): Promise<string | undefined> => {
   const account = walletClient.connection.account;
 
