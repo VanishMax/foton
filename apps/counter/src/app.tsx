@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
 import fotonClient from '@foton/client';
-import { parseTon, type ContractMethods } from '@foton/candle';
+import { parseTon } from '@foton/candle';
 
 import styles from './page.module.css';
 import { setCounter } from './wallet-api/set-counter';
@@ -10,9 +10,6 @@ import type { Hex } from './public-api/types';
 import { walletClient, publicClient } from './ton-clients';
 
 import { AppHeader } from './components/header';
-
-import counterAbi from './counter-abi.ts';
-type CounterAbiMethods = ContractMethods<typeof counterAbi>;
 
 const useCounterAddress = (): [string | undefined, (arg: string) => void] => {
   const [counterAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem('counterAddress') as Hex || undefined);
@@ -51,16 +48,13 @@ export const App: FC = () => {
   }, [counterAddress]);
 
   const onDeploy = async () => {
-    const payload: CounterAbiMethods['Deploy'] = {
-      queryId: 15n,
-    };
-
     const contractAddress = await walletClient.deployContract({
       contract: fotonClient.counter,
       value: parseTon('0.05'),
-      payload,
+      payload: {
+        queryId: 3n,
+      },
     });
-    console.log('contractAddress', contractAddress);
 
     if (!contractAddress) return;
     setCounterAddress(contractAddress);

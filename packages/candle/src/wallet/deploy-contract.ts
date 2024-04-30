@@ -1,8 +1,9 @@
-import { Contract, Address, beginCell, storeStateInit } from '@ton/core';
+import { Contract, beginCell, storeStateInit } from '@ton/core';
 
 import type { WalletClientBase } from './types.js';
 import { bocToHash } from '../shared/utils/index.js';
 import { composePayload } from '../shared/abi/index.js';
+import type { CompiledContract, ContractMethod } from '../shared/abi/index.js';
 
 const getStateInit = (contract: Contract): string => {
   const stateInitBuilder = beginCell();
@@ -12,15 +13,10 @@ const getStateInit = (contract: Contract): string => {
   return stateInit.toBoc().toString("base64");
 };
 
-export interface CompiledContract {
-  fromInit(): Promise<Contract>;
-  fromAddress(address: Address): Contract;
-}
-
 export interface DeployContractOptions<CONTRACT extends CompiledContract> {
   contract: CONTRACT;
   value: bigint;
-  payload: Record<string, unknown>;
+  payload: ContractMethod<CONTRACT, 'Deploy'>;
 }
 
 export async function deployContract <CONTRACT extends CompiledContract>(
