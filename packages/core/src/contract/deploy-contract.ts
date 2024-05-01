@@ -1,9 +1,11 @@
 import { Contract, beginCell, storeStateInit } from '@ton/core';
 
-import type { WalletClientBase } from './types.js';
+import type { WalletClientBase } from '../wallet/types.js';
 import { bocToHash } from '../shared/utils/index.js';
-import { composePayload } from '../shared/abi/index.js';
-import type { CompiledContract, ContractMethod } from '../shared/abi/index.js';
+
+import type { CompiledContract, ContractMethod } from './helper-types.js';
+import type { ContractClient } from './types.js';
+import { composePayload } from './abi/index.js';
 
 const getStateInit = (contract: Contract): string => {
   const stateInitBuilder = beginCell();
@@ -50,4 +52,11 @@ export async function deployContract <CONTRACT extends CompiledContract>(
   });
 
   return bocToHash(res.boc);
+}
+
+export function deployPredefinedContract <CONTRACT extends CompiledContract>(
+  this: ContractClient<CONTRACT>,
+  options: Omit<DeployContractOptions<CONTRACT>, 'contract'>,
+): Promise<string> {
+  return deployContract.call(this._walletClient, { contract: this._contract, ...options });
 }

@@ -23,6 +23,7 @@ import { transactionsByMessage } from './transactionsByMessage.js';
 import { wallet } from './wallet.js';
 
 export const adaptClientRpc = (client: OpenapiClient) => {
+  // TODO: create a wrapper for each function, as a middleware to handle many request for free/authorized/paid versions
   return {
     account: account.bind(null, client),
     addressBook: addressBook.bind(null, client),

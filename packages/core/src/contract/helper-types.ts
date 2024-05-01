@@ -1,4 +1,4 @@
-import { Contract, Address } from '@ton/core';
+import type { Address, Contract } from '@ton/core';
 
 interface ContractMethodArgs extends Record<string, unknown> {
   $$type: string;
@@ -31,7 +31,7 @@ export type ContractMethods<CONTRACT extends CompiledContract> = Parameters<GetE
  */
 export type ContractMethod<CONTRACT extends CompiledContract, KEY extends string>
   = ContractMethods<CONTRACT> extends { $$type: infer TYPE }
-    ? TYPE extends KEY
-      ? Omit<Extract<ContractMethods<CONTRACT>, { $$type: TYPE }>, '$$type'>
-      : never
+  ? TYPE extends KEY
+    ? Omit<Extract<ContractMethods<CONTRACT>, { $$type: TYPE }>, '$$type'>
+    : never
   : never;

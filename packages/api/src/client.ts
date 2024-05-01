@@ -9,6 +9,7 @@ export interface CreateClientOptions {
 }
 
 // TODO: add support for custom RPC nodes
+// TODO: add support for API keys
 const CHAIN_API_MAP: Record<Chain, string> = {
   mainnet: 'https://toncenter.com',
   testnet: 'https://testnet.toncenter.com',

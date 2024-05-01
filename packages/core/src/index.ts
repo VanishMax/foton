@@ -20,11 +20,12 @@ export type {
 
 export { parseTon } from './shared/utils/index.js';
 
-export { composePayload } from './shared/abi/index.js';
+export { composePayload } from './contract/abi/index.js';
+
 export type {
   CompiledContract,
   ExtendedContract,
   ContractMethods,
   ContractMethod,
   GetExtendedContract,
-} from './shared/abi/index.js';
+} from './contract/index.js';

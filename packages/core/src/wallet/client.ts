@@ -1,13 +1,14 @@
 import { TonConnect, type TonConnectOptions } from '@tonconnect/sdk';
 
-import type { WalletClient } from './types.js';
+import { deployContract } from '../contract/deploy-contract.js';
 import type { Chain } from '../shared/chains.js';
+
+import type { WalletClient } from './types.js';
 import { connect } from './connect.js';
 import { disconnect } from './disconnect.js';
 import { reconnect } from './reconnect.js';
 import { getWallets } from './get-wallets.js';
 import { sendTransaction } from './send-transaction.js';
-import { deployContract } from './deploy-contract.js';
 import { onStatusChange } from './on-status-change.js';
 
 export interface CreateWalletClientOptions extends TonConnectOptions {
