@@ -24,6 +24,14 @@ export type GetExtendedContract<CONTRACT extends CompiledContract> = CONTRACT ex
 export type ContractMethods<CONTRACT extends CompiledContract> = Parameters<GetExtendedContract<CONTRACT>['send']>[3];
 
 /**
+ * Takes a contract and returns a union-type of the available method names, without deploy method.
+ *
+ * For example, given contract (in Tact) has two receivers `receive(msg: Add)` and `receive(msg: Subtract)`,
+ * then the type will be `Add | Subtract`.
+ */
+export type ContractMethodNames<CONTRACT extends CompiledContract> = Exclude<ContractMethods<CONTRACT>['$$type'], 'Deploy'>;
+
+/**
  * Takes a contract and a key of the method, and returns the method's arguments.
  *
  * For example, given contract (in Tact) has only one receiver `receive(msg: Add)`,

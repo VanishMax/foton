@@ -1,13 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 
-import fotonClient from '@foton/client';
 import { parseTon } from '@foton/core';
 
 import styles from './page.module.css';
-import { setCounter } from './wallet-api/set-counter';
 import { getCounter } from './public-api/get-counter';
 import type { Hex } from './public-api/types';
-import { walletClient, publicClient } from './ton-clients';
+import { walletClient, publicClient, counterClient } from './ton-clients';
 
 import { AppHeader } from './components/header';
 
@@ -48,8 +46,7 @@ export const App: FC = () => {
   }, [counterAddress]);
 
   const onDeploy = async () => {
-    const contractAddress = await walletClient.deployContract({
-      contract: fotonClient.counter,
+    const contractAddress = await counterClient.deployContract({
       value: parseTon('0.05'),
       payload: {
         queryId: 3n,
@@ -57,6 +54,7 @@ export const App: FC = () => {
     });
 
     if (!contractAddress) return;
+    counterClient.setAddress(contractAddress);
     setCounterAddress(contractAddress);
   };
 
@@ -85,7 +83,14 @@ export const App: FC = () => {
   const onCount = async () => {
     if (!counterAddress) return;
     setLoading(true);
-    const txHash = await setCounter(counterAddress);
+    const txHash = await counterClient.writeContract({
+      method: 'Add',
+      value: parseTon('0.05'),
+      payload: {
+        queryId: 1n,
+        amount: 1n,
+      },
+    });
     if (txHash) {
       await publicClient.waitForTransactionReceipt(txHash);
     }

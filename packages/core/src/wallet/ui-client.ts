@@ -6,7 +6,6 @@ import { connectUI } from './ui-connect.js';
 import { disconnect } from './disconnect.js';
 import { getWallets } from './get-wallets.js';
 import { sendTransaction } from './send-transaction.js';
-import { deployContract } from '../contract/deploy-contract.js';
 import { onStatusChange } from './on-status-change.js';
 
 export interface CreateWalletClientUIOptions extends TonConnectUiOptionsWithManifest {
@@ -30,7 +29,6 @@ export function createWalletClientUI (options?: CreateWalletClientUIOptions): Wa
   client.disconnect = disconnect.bind(client);
 
   client.sendTransaction = sendTransaction.bind(client);
-  client.deployContract = deployContract.bind(client);
 
   // Subscribe to wallet connection changes
   onStatusChange.call(client);

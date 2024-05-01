@@ -1,6 +1,5 @@
 import { TonConnect, type TonConnectOptions } from '@tonconnect/sdk';
 
-import { deployContract } from '../contract/deploy-contract.js';
 import type { Chain } from '../shared/chains.js';
 
 import type { WalletClient } from './types.js';
@@ -33,7 +32,6 @@ export function createWalletClient (options?: CreateWalletClientOptions): Wallet
   client.reconnect = reconnect.bind(client);
 
   client.sendTransaction = sendTransaction.bind(client);
-  client.deployContract = deployContract.bind(client);
 
   // Subscribe to wallet connection changes
   onStatusChange.call(client);

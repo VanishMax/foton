@@ -1,45 +1,34 @@
-import { Contract, beginCell, storeStateInit } from '@ton/core';
-
-import type { WalletClientBase } from '../wallet/types.js';
 import { bocToHash } from '../shared/utils/index.js';
 
 import type { CompiledContract, ContractMethod } from './helper-types.js';
 import type { ContractClient } from './types.js';
 import { composePayload } from './abi/index.js';
-
-const getStateInit = (contract: Contract): string => {
-  const stateInitBuilder = beginCell();
-  storeStateInit({ code: contract.init!.code, data: contract.init!.data })(stateInitBuilder);
-  const stateInit = stateInitBuilder.endCell();
-
-  return stateInit.toBoc().toString("base64");
-};
+import { getStateInit } from './utils/get-state-init.js';
 
 export interface DeployContractOptions<CONTRACT extends CompiledContract> {
-  contract: CONTRACT;
   value: bigint;
   payload: ContractMethod<CONTRACT, 'Deploy'>;
 }
 
 export async function deployContract <CONTRACT extends CompiledContract>(
-  this: WalletClientBase,
+  this: ContractClient<CONTRACT>,
   options: DeployContractOptions<CONTRACT>,
 ): Promise<string> {
-  if (!this.connected || !this.address) {
+  if (!this._walletClient.connected || !this._walletClient.address) {
     throw new Error('Not authorized. Please, connect the wallet first');
   }
 
-  const fullContract = await options.contract.fromInit();
+  const fullContract = await this._contract.fromInit();
 
   if (!fullContract.init?.code || !fullContract.init?.data || !fullContract.abi) {
-    throw new Error('Incorrect contract. Please, compile your Tact or Func contract provide the generated class as the `contract` option to this function');
+    throw new Error('Incorrect contract. Please, provide the contract class compiled from your Tact or Func contract');
   }
 
-  const contractAddress = fullContract.address.toString() as string;
+  const contractAddress = fullContract.address.toString();
 
   // TODO: control the state of sending the transaction: throw error if rejected, etc.
-  const res = await this.connection.sendTransaction({
-    from: this.address,
+  const res = await this._walletClient.connection.sendTransaction({
+    from: this._walletClient.address,
     validUntil: Date.now() + 5 * 60 * 1000,
     messages: [
       {
@@ -52,11 +41,4 @@ export async function deployContract <CONTRACT extends CompiledContract>(
   });
 
   return bocToHash(res.boc);
-}
-
-export function deployPredefinedContract <CONTRACT extends CompiledContract>(
-  this: ContractClient<CONTRACT>,
-  options: Omit<DeployContractOptions<CONTRACT>, 'contract'>,
-): Promise<string> {
-  return deployContract.call(this._walletClient, { contract: this._contract, ...options });
 }

@@ -9,7 +9,6 @@ import type { connectUI } from './ui-connect.js';
 import type { reconnect } from './reconnect.js';
 import type { disconnect } from './disconnect.js';
 import type { sendTransaction } from './send-transaction.js';
-import type { deployContract } from '../contract/deploy-contract.js';
 
 export interface WalletClientBase {
   _connectionCallbacks: ((wallet: Error | Wallet | null) => void)[];
@@ -23,7 +22,6 @@ export interface WalletClientBase {
   getWallets: typeof getWallets;
   disconnect: typeof disconnect;
   sendTransaction: typeof sendTransaction;
-  deployContract: typeof deployContract;
 }
 
 export interface WalletClient extends WalletClientBase {
