@@ -16,8 +16,8 @@ export const createContractClient = <CONTRACT extends CompiledContract>(options:
     address: options.address,
   } as ContractClient<CONTRACT>;
 
-  client.deployContract = deployContract.bind(client);
-  client.writeContract = writeContract.bind(client);
+  client.deploy = deployContract.bind(client);
+  client.write = writeContract.bind(client) as typeof writeContract;
   client.setAddress = setAddress.bind(client);
 
   return client;

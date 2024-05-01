@@ -46,10 +46,11 @@ export const App: FC = () => {
   }, [counterAddress]);
 
   const onDeploy = async () => {
-    const res = await counterClient.deployContract({
+    const res = await counterClient.deploy({
       value: parseTon('0.05'),
+      arguments: [1n, 1n],
       payload: {
-        queryId: 300n,
+        queryId: 1n,
       },
     });
 
@@ -83,7 +84,7 @@ export const App: FC = () => {
   const onCount = async () => {
     if (!counterAddress) return;
     setLoading(true);
-    const txHash = await counterClient.writeContract({
+    const txHash = await counterClient.write({
       method: 'Add',
       value: parseTon('0.05'),
       payload: {

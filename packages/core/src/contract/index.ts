@@ -10,5 +10,7 @@ export type {
   ContractMethods,
   ContractMethod,
   ExtendedContract,
-  GetExtendedContract,
+  ContractMethodNames,
+  ContractGetterNames,
+  ContractDeployArguments,
 } from './helper-types.js';

@@ -1,12 +1,13 @@
 import { bocToHash } from '../shared/utils/index.js';
 
-import type { CompiledContract, ContractMethod } from './helper-types.js';
+import type { CompiledContract, ContractDeployArguments, ContractMethod } from './helper-types.js';
 import type { ContractClient } from './types.js';
 import { composePayload } from './abi/index.js';
 import { getStateInit } from './utils/get-state-init.js';
 
 export interface DeployContractOptions<CONTRACT extends CompiledContract> {
   value: bigint;
+  arguments: ContractDeployArguments<CONTRACT>;
   payload: ContractMethod<CONTRACT, 'Deploy'>;
 }
 
@@ -23,7 +24,7 @@ export async function deployContract <CONTRACT extends CompiledContract>(
     throw new Error('Not authorized. Please, connect the wallet first');
   }
 
-  const fullContract = await this._contract.fromInit();
+  const fullContract = await this._contract.fromInit(...options.arguments);
 
   if (!fullContract.init?.code || !fullContract.init?.data || !fullContract.abi) {
     throw new Error('Incorrect contract. Please, provide the contract class compiled from your Tact or Func contract');
@@ -45,6 +46,7 @@ export async function deployContract <CONTRACT extends CompiledContract>(
     ],
   });
 
+  this.setAddress(contractAddress);
   return {
     address: contractAddress,
     txHash: bocToHash(res.boc),

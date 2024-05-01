@@ -29,6 +29,9 @@ export type {
   ExtendedContract,
   ContractMethods,
   ContractMethod,
+  ContractMethodNames,
+  ContractGetterNames,
+  ContractDeployArguments,
 } from './contract/index.js';
 
 // Utils

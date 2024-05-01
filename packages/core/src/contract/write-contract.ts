@@ -6,15 +6,15 @@ import type { CompiledContract, ContractMethod, ContractMethodNames } from './he
 import type { ContractClient } from './types.js';
 import { composePayload } from './abi/index.js';
 
-export interface WriteContractOptions<CONTRACT extends CompiledContract, METHOD extends string> {
+export interface WriteContractOptions<CONTRACT extends CompiledContract, METHOD extends ContractMethodNames<CONTRACT>> {
   value: bigint;
-  method: ContractMethodNames<CONTRACT>;
+  method: METHOD;
   payload: ContractMethod<CONTRACT, METHOD>;
 }
 
 export async function writeContract <CONTRACT extends CompiledContract, METHOD extends ContractMethodNames<CONTRACT>>(
   this: ContractClient<CONTRACT>,
-  options: Omit<WriteContractOptions<CONTRACT, METHOD>, 'contract'>,
+  options: WriteContractOptions<CONTRACT, METHOD>,
 ): Promise<string> {
   if (!this.address) {
     throw new Error('The contract address is not provided');

@@ -1,4 +1,4 @@
-import { Address, beginCell, Builder, Cell, Contract } from '@ton/core';
+import { ABIType, Address, beginCell, Builder, Cell, Contract } from '@ton/core';
 import type { ABITypeRef, ContractABI } from '@ton/core';
 
 import type { AbiFieldType } from './abi-types.js';
@@ -14,9 +14,11 @@ const getAvailableMethods = (abi: ContractABI): string[] => {
   }, [] as string[]);
 };
 
-const getMethodSchema = (abi: ContractABI, method: string): PayloadSchema => {
-  const abiType = (abi.types || []).find((type) => type.name === method);
+const getAbiType = (abi: ContractABI, method: string): ABIType | undefined => {
+  return (abi.types || []).find((type) => type.name === method);
+};
 
+const getMethodSchema = (abi: ContractABI, abiType: ABIType): PayloadSchema => {
   return (abiType?.fields || [])
     .reduce((accum, currentValue) => {
       accum[currentValue.name] = currentValue.type;
@@ -80,7 +82,7 @@ const fieldTypeValidators: Record<AbiFieldType, (builder: Builder, value: unknow
   },
 }
 
-const validateSchema = (schema: PayloadSchema, payload: Record<string, unknown>, header: number | undefined): string => {
+const validateSchema = (schema: PayloadSchema, payload: Record<string, unknown>, header?: number): string => {
   const payloadBuilder = beginCell();
 
   if (header) {
@@ -112,7 +114,7 @@ const validateSchema = (schema: PayloadSchema, payload: Record<string, unknown>,
 };
 
 // TODO: simplify the function to allow it for external use – without the contract instance or method
-export const composePayload = (contract: Contract, method: string, payload: Record<string, unknown>): string => {
+export const composePayload = (contract: Contract, method: 'empty' | string, payload?: Record<string, unknown>): string => {
   if (!contract.abi) {
     throw new Error('Contract class must have an ABI');
   }
@@ -122,9 +124,19 @@ export const composePayload = (contract: Contract, method: string, payload: Reco
     throw new Error(`Method ${method} is not available for this contract's ABI`);
   }
 
-  const schema = getMethodSchema(contract.abi, method);
+  if (method === 'empty') {
+    return new Cell().toBoc().toString('base64');
+  }
+
+  const abiType = getAbiType(contract.abi, method);
+  if (!abiType) {
+    const cell = beginCell().storeUint(0, 32).storeStringTail(method).endCell();
+    return cell.toBoc().toString('base64');
+  }
+
+  const schema = getMethodSchema(contract.abi, abiType);
   const header = getMethodHeader(contract.abi, method);
 
   // TODO: methods might also need to add `value` and `bounce` fields to the Builder
-  return validateSchema(schema, payload, header);
+  return validateSchema(schema, payload || {}, header);
 };

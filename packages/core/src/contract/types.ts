@@ -21,6 +21,6 @@ export interface ContractClient<CONTRACT extends CompiledContract> {
   address?: string;
   setAddress: typeof setAddress;
 
-  deployContract: typeof deployContract;
-  writeContract: typeof writeContract;
+  deploy: typeof deployContract;
+  write: typeof writeContract;
 }
