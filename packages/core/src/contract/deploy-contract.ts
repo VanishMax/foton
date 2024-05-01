@@ -10,10 +10,15 @@ export interface DeployContractOptions<CONTRACT extends CompiledContract> {
   payload: ContractMethod<CONTRACT, 'Deploy'>;
 }
 
+export interface DeployContractReturn {
+  address: string;
+  txHash: string;
+}
+
 export async function deployContract <CONTRACT extends CompiledContract>(
   this: ContractClient<CONTRACT>,
   options: DeployContractOptions<CONTRACT>,
-): Promise<string> {
+): Promise<DeployContractReturn> {
   if (!this._walletClient.connected || !this._walletClient.address) {
     throw new Error('Not authorized. Please, connect the wallet first');
   }
@@ -40,5 +45,8 @@ export async function deployContract <CONTRACT extends CompiledContract>(
     ],
   });
 
-  return bocToHash(res.boc);
+  return {
+    address: contractAddress,
+    txHash: bocToHash(res.boc),
+  };
 }

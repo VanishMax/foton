@@ -14,4 +14,5 @@ export const counterClient = createContractClient({
   contract: fotonClient.counter,
   publicClient,
   walletClient,
+  address: localStorage.getItem('counterAddress') as string || undefined
 });

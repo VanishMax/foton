@@ -46,16 +46,16 @@ export const App: FC = () => {
   }, [counterAddress]);
 
   const onDeploy = async () => {
-    const contractAddress = await counterClient.deployContract({
+    const res = await counterClient.deployContract({
       value: parseTon('0.05'),
       payload: {
-        queryId: 3n,
+        queryId: 300n,
       },
     });
 
-    if (!contractAddress) return;
-    counterClient.setAddress(contractAddress);
-    setCounterAddress(contractAddress);
+    if (!res.address) return;
+    counterClient.setAddress(res.address);
+    setCounterAddress(res.address);
   };
 
   const getCounterAmount = async () => {

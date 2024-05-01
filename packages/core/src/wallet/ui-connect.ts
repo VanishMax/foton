@@ -49,6 +49,7 @@ export async function connectUI (this: WalletClientBase, connector?: WalletInfo)
       }
     });
 
+    // TODO: fix the error if modal closing is before the connection change
     // If the modal is closed, reject the promise with the error
     const unsubscribe = this.connection.onModalStateChange((state) => {
       if (state.status === 'closed') {
