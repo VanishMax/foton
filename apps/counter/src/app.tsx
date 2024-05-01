@@ -3,14 +3,12 @@ import { FC, useEffect, useState } from 'react';
 import { parseTon } from '@foton/core';
 
 import styles from './page.module.css';
-import { getCounter } from './public-api/get-counter';
-import type { Hex } from './public-api/types';
 import { walletClient, publicClient, counterClient } from './ton-clients';
 
 import { AppHeader } from './components/header';
 
 const useCounterAddress = (): [string | undefined, (arg: string) => void] => {
-  const [counterAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem('counterAddress') as Hex || undefined);
+  const [counterAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem('counterAddress') as string || undefined);
 
   const setCounterAddress = (address: string) => {
     localStorage.setItem('counterAddress', address);
@@ -64,7 +62,10 @@ export const App: FC = () => {
       return;
     }
 
-    setCounterAmount(await getCounter(counterAddress));
+    setCounterAmount(await counterClient.read({
+      getter: 'counter',
+      arguments: [],
+    }));
   };
 
   const onConnect = async () => {

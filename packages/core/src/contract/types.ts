@@ -4,6 +4,7 @@ import type { CompiledContract } from './helper-types.js';
 
 import type { deployContract } from './deploy-contract.js';
 import type { writeContract } from './write-contract.js';
+import type { readContract } from './read-contract.js';
 import type { setAddress } from './set-address.js';
 
 export interface CreateContractClientOptions<CONTRACT extends CompiledContract> {
@@ -23,4 +24,5 @@ export interface ContractClient<CONTRACT extends CompiledContract> {
 
   deploy: typeof deployContract;
   write: typeof writeContract;
+  read: typeof readContract;
 }

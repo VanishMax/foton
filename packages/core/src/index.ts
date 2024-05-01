@@ -31,6 +31,7 @@ export type {
   ContractMethod,
   ContractMethodNames,
   ContractGetterNames,
+  ContractGetterReturn,
   ContractDeployArguments,
 } from './contract/index.js';
 

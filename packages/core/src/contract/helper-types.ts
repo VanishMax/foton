@@ -83,30 +83,52 @@ export type ContractDeployArguments<CONTRACT extends CompiledContract> = Paramet
 
 // Types for the contract getters (actions that read the state)
 
-// type WithoutFirst<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never;
+type WithoutFirst<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never;
 
-type ExtractGetterName<GETTER extends string | number | symbol> = // Transforms getters like `getCounter` to `counter`
-  GETTER extends `get${infer Rest}` // Check if the name starts with 'get'
-    ? Uncapitalize<Rest> // Remove 'get' and uncapitalize the first letter of the rest
-    : never;
+type ExtractGetterNames<CONTRACT extends CompiledContract> = Exclude<{
+  [K in keyof GetExtendedContract<CONTRACT>]: GetExtendedContract<CONTRACT>[K] extends Function // Check if the property is a function
+    ? K extends `get${string}`
+      ? K
+      : never
+    : never
+}[keyof GetExtendedContract<CONTRACT>], undefined>;
+
+type CapitalizeGetter<GETTER extends string> = `get${Capitalize<GETTER>}`;
+type GetCapitalizedGetter<GETTER extends string, CONTRACT extends ExtendedContract> =
+  CapitalizeGetter<GETTER> extends keyof CONTRACT ? CONTRACT[CapitalizeGetter<GETTER>] : never;
 
 /**
- * Takes a contract and returns a union-type of the getter method names.
+ * Takes a contract and returns a union-type of the getter names.
+ * Contract getters request data from the contract without modifying it.
  *
  * For example, given contract (in Tact) has two getters `get fun balance` and `get fun counter`,
  * then the type will be `balance | counter`.
  */
-export type ContractGetterNames<CONTRACT extends CompiledContract> = Exclude<{
-  [K in keyof GetExtendedContract<CONTRACT>]: GetExtendedContract<CONTRACT>[K] extends Function // Check if the property is a function
-    ? ExtractGetterName<K>
-    : never
-}[keyof GetExtendedContract<CONTRACT>], undefined>;
+export type ContractGetterNames<CONTRACT extends CompiledContract> =
+  ExtractGetterNames<CONTRACT> extends `get${infer REST}` // Check if the name starts with 'get'
+    ? Uncapitalize<REST> // Remove 'get' and uncapitalize the first letter of the rest
+    : never;
 
 /**
- * Takes a contract and returns an object with the getter method names as keys and their arguments as values.
+ * Takes a contract and returns a record of the getter names and their arguments.
+ * Contract getters request data from the contract without modifying it.
  *
- * For example, given contract (in Tact) has two getters `get fun balance` and `get fun counter(addition: Int)`,
- * then the type will be `{ balance: {}, counter: { addition: bigint } }`.
+ * For example, given contract (in Tact) has two getters `get fun balance(initial: Int): Int` and `get fun counter(): Int`,
+ * then the type will be `{ balance: [bigint], counter: [] }`.
  */
-// export type ContractGetters<CONTRACT extends CompiledContract>
-//   = keyof GetExtendedContract<CONTRACT>;
+export type ContractGetters<CONTRACT extends CompiledContract> = {
+  [key in ContractGetterNames<CONTRACT>]: GetCapitalizedGetter<key, GetExtendedContract<CONTRACT>> extends (...args: any) => any
+    ? WithoutFirst<Parameters<GetCapitalizedGetter<key, GetExtendedContract<CONTRACT>>>>
+    : never;
+}
+
+/**
+ * Takes a contract with a getter name, and gets the return type of the getter.
+ *
+ * For example, for a contract (in Tact) with a getter `get fun balance(initial: Int): Int`,
+ * the type will be `bigint`.
+ */
+export type ContractGetterReturn<CONTRACT extends CompiledContract, GETTER extends ContractGetterNames<CONTRACT>> =
+  GetCapitalizedGetter<GETTER, GetExtendedContract<CONTRACT>> extends (...args: any) => any
+    ? ReturnType<GetCapitalizedGetter<GETTER, GetExtendedContract<CONTRACT>>>
+    : unknown;

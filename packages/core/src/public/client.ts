@@ -12,6 +12,7 @@ export const createPublicClient = (options?: CreatePublicClientOptions): PublicC
   const apiClient = createClient(options);
 
   return {
+    _api: apiClient,
     waitForTransactionReceipt: waitForTransactionReceipt.bind(null, apiClient),
   };
 };

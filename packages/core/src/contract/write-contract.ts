@@ -27,7 +27,7 @@ export async function writeContract <CONTRACT extends CompiledContract, METHOD e
   const fullContract = this._contract.fromAddress(Address.parseFriendly(this.address).address);
 
   if (!fullContract.abi) {
-    throw new Error('Incorrect contract. Please, provide the contract class compiled from your Tact or Func contract');
+    throw new Error('Incorrect contract. Please, provide the class of a contract compiled from your Tact or Func files');
   }
 
   // TODO: control the state of sending the transaction: throw error if rejected, etc.
