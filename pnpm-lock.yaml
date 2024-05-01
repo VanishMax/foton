@@ -37,7 +37,7 @@ importers:
         version: link:../../packages/cli
       '@foton/core':
         specifier: workspace:*
-        version: link:../../packages/candle
+        version: link:../../packages/core
       '@tact-lang/compiler':
         specifier: ^1.2.0
         version: 1.2.0
@@ -91,28 +91,6 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2(typescript@5.4.5)
 
-  packages/candle:
-    dependencies:
-      '@foton/api':
-        specifier: workspace:*
-        version: link:../api
-      '@ton/core':
-        specifier: ^0.56.3
-        version: 0.56.3(@ton/crypto@3.2.0)
-      '@tonconnect/sdk':
-        specifier: ^3.0.2
-        version: 3.0.2
-      '@tonconnect/ui':
-        specifier: ^2.0.2
-        version: 2.0.2
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
-    devDependencies:
-      tsup:
-        specifier: ^8.0.2
-        version: 8.0.2(typescript@5.4.5)
-
   packages/cli:
     dependencies:
       '@oclif/core':
@@ -143,6 +121,28 @@ importers:
       typescript:
         specifier: ^5
         version: 5.4.3
+
+  packages/core:
+    dependencies:
+      '@foton/api':
+        specifier: workspace:*
+        version: link:../api
+      '@ton/core':
+        specifier: ^0.56.3
+        version: 0.56.3(@ton/crypto@3.2.0)
+      '@tonconnect/sdk':
+        specifier: ^3.0.2
+        version: 3.0.2
+      '@tonconnect/ui':
+        specifier: ^2.0.2
+        version: 2.0.2
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+    devDependencies:
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.4.5)
 
 packages:
 
