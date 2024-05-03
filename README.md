@@ -42,7 +42,7 @@ export const walletClient = createWalletClient({
 const userWallet = await walletClient.connect();
 
 export const publicClient = createPublicClient({
-  chain: 'mainnet',
+  api: 'mainnet',
 });
 
 const txHash = await walletClient.sendTransaction({

@@ -1,10 +1,9 @@
 export {
   createClient,
-  type CreateClientOptions,
 } from './client.js';
 
 export type { RpcClient } from './requests/index.js';
-export type { Chain } from './types.js';
+export type { SupportedApiUrls, CreateClientOptions } from './types.js';
 
 export type { AccountOptions, AccountResponse } from './requests/account.js';
 export type { AddressBookEntry, AddressBookOptions, AddressBookResponse } from './requests/addressBook.js';

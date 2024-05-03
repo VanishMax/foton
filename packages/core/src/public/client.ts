@@ -1,14 +1,11 @@
-import { createClient } from '@fotonjs/api';
+import { createClient, type CreateClientOptions } from '@fotonjs/api';
 
 import { waitForTransactionReceipt } from './wait-for-transaction-receipt.js';
 import type { PublicClient } from './types.js';
-import type { Chain } from '../shared/chains.js';
 
-export interface CreatePublicClientOptions {
-  chain?: Chain;
-}
+export type CreatePublicClientOptions = CreateClientOptions;
 
-export const createPublicClient = (options?: CreatePublicClientOptions): PublicClient => {
+export const createPublicClient = (options?: CreateClientOptions): PublicClient => {
   const apiClient = createClient(options);
 
   return {

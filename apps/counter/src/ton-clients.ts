@@ -7,7 +7,7 @@ export const walletClient = createWalletClientUI({
 });
 
 export const publicClient = createPublicClient({
-  chain: 'testnet',
+  api: 'testnet',
 });
 
 export const counterClient = createContractClient({
