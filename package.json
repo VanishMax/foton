@@ -1,6 +1,6 @@
 {
-  "name": "@foton/monorepo",
-  "version": "0.1.0",
+  "name": "@fotonjs/monorepo",
+  "version": "0.0.1",
   "description": "Foton – a TON development ecosystem",
   "license": "ISC",
   "author": "Max Korsunov (https://t.me/vanishmax)",
@@ -21,6 +21,9 @@
     "pnpm": ">=8.0.0"
   },
   "scripts": {
-    "cli": "pnpm --filter @foton/cli dev"
+    "cli": "pnpm --filter @fotonjs/cli dev",
+    "build:core": "pnpm --filter @fotonjs/core build",
+    "prepublish": "pnpm build:core",
+    "publish:core": "pnpm publish --filter @fotonjs/core"
   }
 }

@@ -29,13 +29,13 @@ importers:
         specifier: ^2.9.28
         version: 2.9.28(typescript@5.4.5)
     devDependencies:
-      '@foton/api':
+      '@fotonjs/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@foton/cli':
+      '@fotonjs/cli':
         specifier: workspace:*
         version: link:../../packages/cli
-      '@foton/core':
+      '@fotonjs/core':
         specifier: workspace:*
         version: link:../../packages/core
       '@tact-lang/compiler':
@@ -124,7 +124,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@foton/api':
+      '@fotonjs/api':
         specifier: workspace:*
         version: link:../api
       '@ton/core':

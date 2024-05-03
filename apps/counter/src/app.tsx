@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 
-import { parseTon } from '@foton/core';
+import { parseTon } from '@fotonjs/core';
 
 import styles from './page.module.css';
 import { walletClient, publicClient, counterClient } from './ton-clients';
 
 import { AppHeader } from './components/header';
-import { beginCell } from '@ton/core';
 
 const useCounterAddress = (): [string | undefined, (arg: string) => void] => {
   const [counterAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem('counterAddress') as string || undefined);

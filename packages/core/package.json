@@ -1,6 +1,6 @@
 {
-  "name": "@foton/core",
-  "version": "0.1.0",
+  "name": "@fotonjs/core",
+  "version": "0.0.1",
   "description": "Foton: build TON dApps with ease",
   "keywords": [
     "TON",
@@ -37,7 +37,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@foton/api": "workspace:*",
+    "@fotonjs/api": "workspace:*",
     "@ton/core": "^0.56.3",
     "@tonconnect/sdk": "^3.0.2",
     "@tonconnect/ui": "^2.0.2",

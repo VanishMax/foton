@@ -1,5 +1,5 @@
 import { Cell, ContractABI } from '@ton/core';
-import type { RunGetMethodResponse, GetMethodParameterOutput } from '@foton/api';
+import type { RunGetMethodResponse, GetMethodParameterOutput } from '@fotonjs/api';
 
 type ContractReadReturn = number | string | ContractReadReturn[];
 

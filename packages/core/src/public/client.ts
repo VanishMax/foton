@@ -1,4 +1,4 @@
-import { createClient } from '@foton/api';
+import { createClient } from '@fotonjs/api';
 
 import { waitForTransactionReceipt } from './wait-for-transaction-receipt.js';
 import type { PublicClient } from './types.js';

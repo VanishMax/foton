@@ -1,4 +1,4 @@
-import type { GetMethodParameterInput } from '@foton/api';
+import type { GetMethodParameterInput } from '@fotonjs/api';
 import type { ContractABI } from '@ton/core';
 
 export const composeReadPayload = (

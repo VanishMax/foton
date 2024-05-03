@@ -1,7 +1,7 @@
 {
-  "name": "@foton/counter",
+  "name": "@fotonjs/counter",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,9 +19,9 @@
     "viem": "^2.9.28"
   },
   "devDependencies": {
-    "@foton/api": "workspace:*",
-    "@foton/core": "workspace:*",
-    "@foton/cli": "workspace:*",
+    "@fotonjs/api": "workspace:*",
+    "@fotonjs/core": "workspace:*",
+    "@fotonjs/cli": "workspace:*",
     "@tact-lang/compiler": "^1.2.0",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",

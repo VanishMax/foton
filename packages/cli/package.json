@@ -1,6 +1,6 @@
 {
-  "name": "@foton/cli",
-  "version": "0.1.0",
+  "name": "@fotonjs/cli",
+  "version": "0.0.1",
   "description": "Foton CLI: compile, run test Tact smart contracts",
   "keywords": [
     "The Open Network",

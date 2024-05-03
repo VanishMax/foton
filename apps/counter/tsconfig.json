@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@foton/client": ["./.foton/index.ts"]
+      "@fotonjs/client": ["./.foton/index.ts"]
     }
   },
   "include": ["src"],

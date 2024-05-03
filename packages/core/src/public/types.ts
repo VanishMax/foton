@@ -1,4 +1,4 @@
-import type { RpcClient } from '@foton/api';
+import type { RpcClient } from '@fotonjs/api';
 
 import type { Transaction } from '../shared/types.js';
 import type { WaitForTransactionReceiptOptions } from './wait-for-transaction-receipt.js';

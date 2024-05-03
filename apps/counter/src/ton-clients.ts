@@ -1,5 +1,5 @@
-import { createWalletClientUI, createPublicClient, createContractClient } from '@foton/core';
-import fotonClient from '@foton/client';
+import { createWalletClientUI, createPublicClient, createContractClient } from '@fotonjs/core';
+import fotonClient from '@fotonjs/client';
 
 export const walletClient = createWalletClientUI({
   manifestUrl: 'https://photon-counter.vercel.app/tonconnect-manifest.json',

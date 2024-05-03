@@ -7,9 +7,9 @@ _Foton tends to be a fundamental toolset to a TON ecosystem just like photon is 
 A family of TypeScript libraries for rapid app development on TON blockchain. Heavily inspired by [Viem](https://viem.sh/) in Ethereum, Foton aims to provide the best developer experience to the TON community.  
 
 The toolset consists of:
-1. `@foton/core` – a library for interacting with TON blockchain and smart contracts.
-2. `@foton/cli` (under construction) for compiling, testing and deploying smart contracts.
-3. `@foton/api` – a wrapper around the [TON Center v3](https://toncenter.com/) API.
+1. `@fotonjs/core` – a library for interacting with TON blockchain and smart contracts.
+2. `@fotonjs/cli` (under construction) for compiling, testing and deploying smart contracts.
+3. `@fotonjs/api` – a wrapper around the [TON Center v3](https://toncenter.com/) API.
 
 ## Core
 
@@ -18,20 +18,20 @@ The core library provides a set of clients for communicating with the TON blockc
 To get started, install the core library:
 
 ```bash
-npm install @foton/core
+npm install @fotonjs/core
 
 # or
-yarn add @foton/core
+yarn add @fotonjs/core
 
 # or
-pnpm add @foton/core
+pnpm add @fotonjs/core
 ```
 
 Now, you can create public, wallet, or contract client and interact with TON:
 
 ```ts
 // Import Foton client creators
-import { createPublicClient, createWalletClient, createContractClient } from '@foton/core';
+import { createPublicClient, createWalletClient, createContractClient } from '@fotonjs/core';
 
 // Import smart contract compiled from Tact or FunC language
 import counterContract from './contracts/Counter.ts';

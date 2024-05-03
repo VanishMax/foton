@@ -13,7 +13,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@foton/client': path.join(__dirname, './.foton/index.ts'),
+      '@fotonjs/client': path.join(__dirname, './.foton/index.ts'),
     }
   },
   server: {
