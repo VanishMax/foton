@@ -6,6 +6,7 @@ import styles from './page.module.css';
 import { walletClient, publicClient, counterClient } from './ton-clients';
 
 import { AppHeader } from './components/header';
+import { beginCell } from '@ton/core';
 
 const useCounterAddress = (): [string | undefined, (arg: string) => void] => {
   const [counterAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem('counterAddress') as string || undefined);
@@ -39,7 +40,6 @@ export const App: FC = () => {
   useEffect(() => {
     getCounterAmount();
     const interval = setInterval(getCounterAmount, 5000);
-
     return () => clearInterval(interval);
   }, [counterAddress]);
 
@@ -61,11 +61,11 @@ export const App: FC = () => {
     if (!counterAddress) {
       return;
     }
-
-    setCounterAmount(await counterClient.read({
+    const res = await counterClient.read({
       getter: 'counter',
       arguments: [],
-    }));
+    });
+    setCounterAmount(res);
   };
 
   const onConnect = async () => {

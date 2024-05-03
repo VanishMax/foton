@@ -130,6 +130,7 @@ export const composePayload = (contract: Contract, method: 'empty' | string, pay
 
   const abiType = getAbiType(contract.abi, method);
   if (!abiType) {
+    // if !abiType – the method should be sent as a string
     const cell = beginCell().storeUint(0, 32).storeStringTail(method).endCell();
     return cell.toBoc().toString('base64');
   }

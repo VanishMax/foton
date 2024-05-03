@@ -53,19 +53,52 @@ export default {
     }, {'name': 'cashback', 'type': {'kind': 'simple', 'type': 'address', 'optional': false}}]
   },
     {
+    'name': 'ChangeOwner',
+    'header': 2174598809,
+    'fields': [{
+      'name': 'queryId',
+      'type': {'kind': 'simple', 'type': 'uint', 'optional': false, 'format': 64}
+    }, {'name': 'newOwner', 'type': {'kind': 'simple', 'type': 'address', 'optional': false}}]
+  },
+    {
+    'name': 'ChangeOwnerOk',
+    'header': 846932810,
+    'fields': [{
+      'name': 'queryId',
+      'type': {'kind': 'simple', 'type': 'uint', 'optional': false, 'format': 64}
+    }, {'name': 'newOwner', 'type': {'kind': 'simple', 'type': 'address', 'optional': false}}]
+  },
+    {
     'name': 'Add',
     'header': 2335447074,
     'fields': [{
       'name': 'queryId',
       'type': {'kind': 'simple', 'type': 'uint', 'optional': false, 'format': 64}
     }, {'name': 'amount', 'type': {'kind': 'simple', 'type': 'uint', 'optional': false, 'format': 32}}]
+  },
+    {
+    'name': 'User',
+    'header': null,
+    'fields': [{'name': 'address', 'type': {'kind': 'simple', 'type': 'address', 'optional': false}}, {
+      'name': 'name',
+      'type': {'kind': 'simple', 'type': 'string', 'optional': false}
+    }, {'name': 'age', 'type': {'kind': 'simple', 'type': 'int', 'optional': true, 'format': 257}}]
   }],
+
   'receivers': [
     {'receiver': 'internal', 'message': {'kind': 'typed', 'type': 'Add'}},
-    {'receiver': 'internal', 'message': {'kind': 'empty'} },
+    {
+    'receiver': 'internal',
+    'message': {'kind': 'empty'}
+  },
     {'receiver': 'internal', 'message': {'kind': 'text', 'text': 'increment'}},
-    {'receiver': 'internal', 'message': {'kind': 'text'}},
-    {'receiver': 'internal', 'message': {'kind': 'typed', 'type': 'Deploy'}}],
+    {
+    'receiver': 'internal',
+    'message': {'kind': 'text'}
+  },
+    {'receiver': 'internal', 'message': {'kind': 'typed', 'type': 'Deploy'}}
+  ],
+
   'getters': [{
     'name': 'counter',
     'arguments': [],
@@ -75,13 +108,36 @@ export default {
     'arguments': [],
     'returnType': {'kind': 'simple', 'type': 'int', 'optional': false, 'format': 257}
   }, {
+    'name': 'getOwner',
+    'arguments': [],
+    'returnType': {'kind': 'simple', 'type': 'address', 'optional': false}
+  }, {
     'name': 'multiplier',
     'arguments': [{
       'name': 'factor',
       'type': {'kind': 'simple', 'type': 'int', 'optional': false, 'format': 257}
     }, {'name': 'subtract', 'type': {'kind': 'simple', 'type': 'int', 'optional': false, 'format': 257}}],
     'returnType': {'kind': 'simple', 'type': 'int', 'optional': false, 'format': 257}
-  }],
+  }, {
+    'name': 'params',
+    'arguments': [{
+      'name': 'address',
+      'type': {'kind': 'simple', 'type': 'address', 'optional': false}
+    }, {'name': 'name', 'type': {'kind': 'simple', 'type': 'string', 'optional': false}}, {
+      'name': 'age',
+      'type': {'kind': 'simple', 'type': 'int', 'optional': true, 'format': 257}
+    }],
+    'returnType': {'kind': 'simple', 'type': 'User', 'optional': false}
+  }, {
+    'name': 'isOdd',
+    'arguments': [{'name': 'amount', 'type': {'kind': 'simple', 'type': 'int', 'optional': false, 'format': 257}}],
+    'returnType': {'kind': 'simple', 'type': 'bool', 'optional': false}
+  },
+    {
+      'name': 'owner',
+      'arguments': [],
+      'returnType': {'kind': 'simple', 'type': 'address', 'optional': false}}
+  ],
   'errors': {
     '2': {'message': 'Stack undeflow'},
     '3': {'message': 'Stack overflow'},
@@ -108,5 +164,5 @@ export default {
     '136': {'message': 'Invalid address'},
     '137': {'message': 'Masterchain support is not enabled for this contract'}
   },
-  'interfaces': ['org.ton.introspection.v0', 'org.ton.abi.ipfs.v0', 'org.ton.deploy.lazy.v0', 'org.ton.chain.workchain.v0']
+  'interfaces': ['org.ton.introspection.v0', 'org.ton.abi.ipfs.v0', 'org.ton.deploy.lazy.v0', 'org.ton.chain.workchain.v0', 'org.ton.ownable']
 } as const;
