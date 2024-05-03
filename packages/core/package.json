@@ -34,6 +34,7 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --dts --minify --format cjs,esm --out-dir ./dist",
+    "prepare": "pnpm run build",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {

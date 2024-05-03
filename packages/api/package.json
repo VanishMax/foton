@@ -32,6 +32,7 @@
   "scripts": {
     "generate": "openapi-typescript https://toncenter.com/api/v3/openapi.json -o src/schemas/toncenter-v3.ts",
     "build": "tsup src/index.ts --dts --minify --format cjs,esm --out-dir ./dist",
+    "prepare": "pnpm run build",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
