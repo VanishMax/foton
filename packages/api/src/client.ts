@@ -1,26 +1,34 @@
 import createOpenapiClient from 'openapi-fetch';
 
 import type { paths } from './schemas/toncenter-v3.js';
-import type { Chain } from './types.js';
+import type { CreateClientOptions, SupportedApiUrls } from './types.js';
 import { adaptClientRpc, type RpcClient } from './requests/index.js';
 
-export interface CreateClientOptions {
-  chain?: Chain;
-}
-
-// TODO: add support for custom RPC nodes
-// TODO: add support for API keys
-const CHAIN_API_MAP: Record<Chain, string> = {
+const CHAIN_API_MAP: Record<SupportedApiUrls, string> = {
   mainnet: 'https://toncenter.com',
   testnet: 'https://testnet.toncenter.com',
 }
 
 export const createClient = (options?: CreateClientOptions): RpcClient => {
-  const { chain = 'mainnet' } = options || {};
+  const { api = 'mainnet', authToken } = options || {};
 
-  const baseUrl = CHAIN_API_MAP[chain];
+  let baseUrl: string;
+  if (typeof api === 'object') {
+    baseUrl = api.url;
+  } else {
+    baseUrl = CHAIN_API_MAP[api];
+  }
 
   const openapiClient = createOpenapiClient<paths>({ baseUrl });
+
+  if (authToken) {
+    openapiClient.use({
+      onRequest: (req) => {
+        req.headers.set('X-API-Key', authToken);
+        return req;
+      },
+    });
+  }
 
   return adaptClientRpc(openapiClient);
 };

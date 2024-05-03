@@ -3,4 +3,11 @@ import type { paths } from './schemas/toncenter-v3.js';
 
 export type OpenapiClient = ReturnType<typeof createOpenapiClient<paths>>;
 
-export type Chain = 'mainnet' | 'testnet';
+export type SupportedApiUrls = 'mainnet' | 'testnet';
+
+export type ClientCustomApiOptions = { url: string };
+
+export interface CreateClientOptions {
+  api?: SupportedApiUrls | ClientCustomApiOptions;
+  authToken?: string;
+}
