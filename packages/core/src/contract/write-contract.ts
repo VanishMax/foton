@@ -5,6 +5,7 @@ import { bocToHash } from '../shared/utils/index.js';
 import type { CompiledContract, ContractMethod, ContractMethodNames } from './helper-types.js';
 import type { ContractClient } from './types.js';
 import { composePayload } from './abi/index.js';
+import { getNetwork } from '../shared/chains.js';
 
 export interface WriteContractOptions<CONTRACT extends CompiledContract, METHOD extends ContractMethodNames<CONTRACT>> {
   value: bigint;
@@ -32,6 +33,7 @@ export async function writeContract <CONTRACT extends CompiledContract, METHOD e
 
   // TODO: control the state of sending the transaction: throw error if rejected, etc.
   const res = await this._walletClient.connection.sendTransaction({
+    network: getNetwork(this._walletClient._chain),
     validUntil: Date.now() + 5 * 60 * 1000,
     from: this.address,
     messages: [

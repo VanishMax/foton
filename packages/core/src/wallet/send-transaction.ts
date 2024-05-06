@@ -1,5 +1,6 @@
 import type { WalletClientBase } from './types.js';
 import { bocToHash } from '../shared/utils/index.js';
+import { getNetwork } from '../shared/chains.js';
 
 export interface SendTransactionOptions {
   to: string;
@@ -12,6 +13,7 @@ export async function sendTransaction (this: WalletClientBase, options: SendTran
   }
 
   const res = await this.connection.sendTransaction({
+    network: getNetwork(this._chain),
     from: this.address,
     validUntil: Date.now() + 5 * 60 * 1000,
     messages: [

@@ -4,6 +4,7 @@ import type { CompiledContract, ContractDeployArguments, ContractMethod } from '
 import type { ContractClient } from './types.js';
 import { composePayload } from './abi/index.js';
 import { getStateInit } from './utils/get-state-init.js';
+import { getNetwork } from '../shared/chains.js';
 
 export interface DeployContractOptions<CONTRACT extends CompiledContract> {
   value: bigint;
@@ -34,6 +35,7 @@ export async function deployContract <CONTRACT extends CompiledContract>(
 
   // TODO: control the state of sending the transaction: throw error if rejected, etc.
   const res = await this._walletClient.connection.sendTransaction({
+    network: getNetwork(this._walletClient._chain),
     from: this._walletClient.address,
     validUntil: Date.now() + 5 * 60 * 1000,
     messages: [

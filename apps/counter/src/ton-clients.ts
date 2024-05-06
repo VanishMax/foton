@@ -2,6 +2,7 @@ import { createWalletClientUI, createPublicClient, createContractClient } from '
 import fotonClient from '@fotonjs/client';
 
 export const walletClient = createWalletClientUI({
+  chain: 'testnet',
   manifestUrl: 'https://photon-counter.vercel.app/tonconnect-manifest.json',
   restoreConnection: true,
 });
