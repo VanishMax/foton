@@ -49,7 +49,7 @@ const txHash = await walletClient.sendTransaction({
   to: '0:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
   value: 1000000000n,
 });
-const transaction = await publicClient.waitForTransactionReceipt(txHash);
+const transaction = await publicClient.waitForTransactionReceipt({ hash: txHash });
 
 export const counterClient = createContractClient({
   contract: counterContract,

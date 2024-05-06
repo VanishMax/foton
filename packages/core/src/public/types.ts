@@ -1,11 +1,12 @@
 import type { RpcClient } from '@fotonjs/api';
 
-import type { Transaction } from '../shared/types.js';
-import type { WaitForTransactionReceiptOptions } from './wait-for-transaction-receipt.js';
+import type { waitForTransactionReceipt } from './wait-for-transaction-receipt.js';
+import type { getBalance } from './get-balance.js';
 
 export type { RpcClient };
 
 export interface PublicClient {
   _api: RpcClient;
-  waitForTransactionReceipt: (txHash: string, options?: WaitForTransactionReceiptOptions) => Promise<Transaction | undefined>;
+  waitForTransactionReceipt: typeof waitForTransactionReceipt;
+  getBalance: typeof getBalance;
 }

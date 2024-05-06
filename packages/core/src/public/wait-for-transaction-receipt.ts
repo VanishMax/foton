@@ -1,5 +1,5 @@
 import type { Transaction } from '@fotonjs/api';
-import type { RpcClient } from './types.js';
+import type { PublicClient, RpcClient } from './types.js';
 
 const getTransactionsByMessageHash = async (api: RpcClient, hash: string) => {
   const res = await api.transactionsByMessage({
@@ -11,23 +11,23 @@ const getTransactionsByMessageHash = async (api: RpcClient, hash: string) => {
 };
 
 export interface WaitForTransactionReceiptOptions {
+  hash: string;
   refetchInterval?: number;
   refetchLimit?: number;
 }
 
-export const waitForTransactionReceipt = async (
-  api: RpcClient,
-  hash: string,
-  options?: WaitForTransactionReceiptOptions,
-): Promise<Transaction | undefined> => {
-  const { refetchInterval = 1000, refetchLimit = undefined } = options || {};
+export async function waitForTransactionReceipt (
+  this: PublicClient,
+  options: WaitForTransactionReceiptOptions,
+): Promise<Transaction | undefined> {
+  const { hash, refetchInterval = 1000, refetchLimit = undefined } = options || {};
 
   return new Promise((resolve) => {
     let refetches = 0;
 
     const interval = setInterval(async () => {
       refetches += 1;
-      const res = await getTransactionsByMessageHash(api, hash);
+      const res = await getTransactionsByMessageHash(this._api, hash);
       if (res?.transactions.length) {
         clearInterval(interval);
         resolve(res.transactions[0]);
@@ -39,4 +39,4 @@ export const waitForTransactionReceipt = async (
       }
     }, refetchInterval);
   });
-};
+}

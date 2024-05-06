@@ -93,7 +93,7 @@ export const App: FC = () => {
       },
     });
     if (txHash) {
-      await publicClient.waitForTransactionReceipt(txHash);
+      await publicClient.waitForTransactionReceipt({ hash: txHash });
     }
     setLoading(false);
   };
