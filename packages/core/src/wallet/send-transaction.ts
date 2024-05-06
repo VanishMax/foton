@@ -1,15 +1,19 @@
 import type { WalletClientBase } from './types.js';
 import { bocToHash } from '../shared/utils/index.js';
 import { getNetwork } from '../shared/chains.js';
+import { returnError, returnData, type DataOrTypedError } from '../shared/errors/index.js';
 
 export interface SendTransactionOptions {
   to: string;
   value: bigint;
 }
 
-export async function sendTransaction (this: WalletClientBase, options: SendTransactionOptions): Promise<string> {
+export async function sendTransaction (
+  this: WalletClientBase,
+  options: SendTransactionOptions,
+): Promise<DataOrTypedError<string, 'UserUnauthorizedError'>> {
   if (!this.connected || !this.address) {
-    throw new Error('Not authorized. Please, connect the wallet first');
+    return returnError('UserUnauthorizedError');
   }
 
   const res = await this.connection.sendTransaction({
@@ -24,5 +28,6 @@ export async function sendTransaction (this: WalletClientBase, options: SendTran
     ],
   });
 
-  return bocToHash(res.boc);
+  const hash = bocToHash(res.boc);
+  return returnData(hash);
 }
