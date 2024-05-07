@@ -1,51 +1,49 @@
 import type { Wallet, WalletClientBase, WalletInfo } from './types.js';
 import { isTonConnectUI } from './utils.js';
-
-const UNAVAILABLE_ERROR = 'This function is only available for UI-based wallet connections';
+import { returnError, DataOrTypedError, returnData } from '../shared/errors/index.js';
+import { TonConnectUI } from '@tonconnect/ui';
 
 const openConnectionModal = async (client: WalletClientBase, connector?: WalletInfo): Promise<void> => {
-  if (!isTonConnectUI(client.connection)) {
-    throw new Error(UNAVAILABLE_ERROR);
-  }
-
+  const connection = client.connection as TonConnectUI;
   if (connector) {
-    await client.connection.openSingleWalletModal(connector.appName);
+    await connection.openSingleWalletModal(connector.appName);
   } else {
-    await client.connection.openModal();
+    await connection.openModal();
   }
 }
 
 const closeConnectionModal = async (client: WalletClientBase, connector?: WalletInfo): Promise<void> => {
-  if (!isTonConnectUI(client.connection)) {
-    throw new Error(UNAVAILABLE_ERROR);
-  }
-
+  const connection = client.connection as TonConnectUI;
   if (connector) {
-    client.connection.closeSingleWalletModal();
+    connection.closeSingleWalletModal();
   } else {
-    client.connection.closeModal();
+    connection.closeModal();
   }
 }
 
-export async function connectUI (this: WalletClientBase, connector?: WalletInfo): Promise<Wallet> {
+type ConnectUiReturn = DataOrTypedError<Wallet, 'ConnectUIFunctionUnavailableError' | 'TonConnectUIError' | 'TonWalletConnectionError' | 'UserRejectedConnectionError'>;
+
+export async function connectUI (
+  this: WalletClientBase,
+  connector?: WalletInfo
+): Promise<ConnectUiReturn> {
   return new Promise(async (resolve, reject) => {
     if (!isTonConnectUI(this.connection)) {
-      return reject(new Error(UNAVAILABLE_ERROR));
+      return resolve(returnError('ConnectUIFunctionUnavailableError'));
     }
 
     // Send a callback for a onStatusChange function to finish the connection on wallet change
     this._connectionCallbacks.push((wallet) => {
       if (wallet instanceof Error) {
         closeConnectionModal(this, connector);
-        reject(wallet);
-        return;
+        return resolve({ error: wallet, data: undefined });
       }
 
       if (wallet) {
-        resolve(wallet);
+        return resolve(returnData(wallet));
       } else {
         closeConnectionModal(this, connector);
-        reject(new Error('Wallet connection failed'));
+        return resolve(returnError('TonWalletConnectionError'));
       }
     });
 
@@ -54,7 +52,7 @@ export async function connectUI (this: WalletClientBase, connector?: WalletInfo)
     const unsubscribe = this.connection.onModalStateChange((state) => {
       if (state.status === 'closed') {
         unsubscribe();
-        reject(new Error('User closed the connection modal'));
+        resolve(returnError('UserRejectedConnectionError'));
       }
     });
 

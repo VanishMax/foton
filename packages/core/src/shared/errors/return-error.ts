@@ -9,5 +9,5 @@ export const returnError = <TYPE extends keyof typeof supportedErrors>(
 ): DataOrError<any, SupportedErrors[TYPE]> => {
   const error = new supportedErrors[type]();
 
-  return { data: undefined, error };
+  return { data: undefined, error: error as SupportedErrors[TYPE] };
 };

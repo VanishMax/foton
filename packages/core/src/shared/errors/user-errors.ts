@@ -11,3 +11,10 @@ export class UserUnauthorizedError extends UserError {
     this.name = 'UserUnauthorizedError';
   }
 }
+
+export class UserRejectedConnectionError extends UserError {
+  constructor() {
+    super('User rejected the connection to their wallet');
+    this.name = 'UserRejectedConnectionError';
+  }
+}

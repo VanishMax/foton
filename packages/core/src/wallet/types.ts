@@ -1,5 +1,5 @@
-import type { TonConnect, Wallet, WalletInfo } from '@tonconnect/sdk';
-import type { TonConnectUI } from '@tonconnect/ui';
+import type { TonConnect, TonConnectError, Wallet, WalletInfo } from '@tonconnect/sdk';
+import type { TonConnectUI, TonConnectUIError } from '@tonconnect/ui';
 
 import type { Chain } from '../shared/chains.js';
 
@@ -14,7 +14,7 @@ export type { WalletInfo, Wallet };
 
 export interface WalletClientBase {
   _chain: Chain;
-  _connectionCallbacks: ((wallet: Error | Wallet | null) => void)[];
+  _connectionCallbacks: ((wallet: TonConnectError | TonConnectUIError | Wallet | null) => void)[];
 
   address?: string;
   connected: boolean;
