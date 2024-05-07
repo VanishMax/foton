@@ -22,6 +22,20 @@ export class TonWalletConnectionError extends TonError {
   }
 }
 
+export class TonWalletDisconnectError extends TonError {
+  constructor() {
+    super('Could not disconnect from the wallet');
+    this.name = 'TonWalletDisconnectError';
+  }
+}
+
+export class TonReadError extends TonError {
+  constructor() {
+    super('Cannot process the read request. Either the request returned a non-zero exit code or the data could not be parsed');
+    this.name = 'TonReadError';
+  }
+}
+
 export {
   TonConnectError,
 };

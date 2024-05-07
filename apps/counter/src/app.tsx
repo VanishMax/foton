@@ -51,9 +51,10 @@ export const App: FC = () => {
       },
     });
 
-    if (!res.address) return;
-    counterClient.setAddress(res.address);
-    setCounterAddress(res.address);
+    if (res.data) {
+      counterClient.setAddress(res.data.address);
+      setCounterAddress(res.data.address);
+    }
   };
 
   const getCounterAmount = async () => {
@@ -64,17 +65,13 @@ export const App: FC = () => {
       getter: 'counter',
       arguments: [],
     });
-    setCounterAmount(res);
+    if (res.data) {
+      setCounterAmount(res.data);
+    }
   };
 
   const onConnect = async () => {
-    try {
-      await walletClient.connect();
-    } catch (e) {
-      if (e instanceof Error) {
-        console.error(e.message);
-      }
-    }
+    await walletClient.connect();
   };
 
   const onDisconnect = async () => {
@@ -84,7 +81,7 @@ export const App: FC = () => {
   const onCount = async () => {
     if (!counterAddress) return;
     setLoading(true);
-    const txHash = await counterClient.write({
+    const res = await counterClient.write({
       method: 'Add',
       value: parseTon('0.05'),
       payload: {
@@ -92,8 +89,8 @@ export const App: FC = () => {
         amount: 1n,
       },
     });
-    if (txHash) {
-      await publicClient.waitForTransactionReceipt({ hash: txHash });
+    if (res.data) {
+      await publicClient.waitForTransactionReceipt({ hash: res.data });
     }
     setLoading(false);
   };

@@ -122,6 +122,9 @@ export type ContractGetters<CONTRACT extends CompiledContract> = {
     : never;
 }
 
+// Simple utility that extract the type from a promise
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
+
 /**
  * Takes a contract with a getter name, and gets the return type of the getter.
  *
@@ -131,5 +134,5 @@ export type ContractGetters<CONTRACT extends CompiledContract> = {
 export type ContractGetterReturn<CONTRACT extends CompiledContract, GETTER extends ContractGetterNames<CONTRACT>> =
   GetCapitalizedGetter<GETTER, GetExtendedContract<CONTRACT>> extends (...args: any) => any
     // TODO: types coming from ReturnType do not always match the actual return type. For example, Address should be mapped to plain string
-    ? ReturnType<GetCapitalizedGetter<GETTER, GetExtendedContract<CONTRACT>>>
+    ? UnwrapPromise<ReturnType<GetCapitalizedGetter<GETTER, GetExtendedContract<CONTRACT>>>>
     : unknown;

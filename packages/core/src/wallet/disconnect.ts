@@ -1,22 +1,20 @@
 import type { WalletClientBase } from './types.js';
+import { DataOrTypedError, returnData, returnError } from '../shared/errors/index.js';
 
-export interface DisconnectOptions {
+type DisconnectReturn = DataOrTypedError<boolean, 'TonWalletDisconnectError' | 'TonConnectError'>;
 
-}
-
-export async function disconnect (this: WalletClientBase, options?: DisconnectOptions): Promise<void> {
+export async function disconnect (this: WalletClientBase): Promise<DisconnectReturn> {
   return new Promise(async (resolve, reject) => {
     // Send a callback for a onStatusChange function to finish the connection on wallet change
     this._connectionCallbacks.push((wallet) => {
       if (wallet instanceof Error) {
-        reject(wallet);
-        return;
+        return resolve({ error: wallet, data: undefined });
       }
 
       if (!wallet) {
-        resolve();
+        resolve(returnData(true));
       } else {
-        reject(new Error('Could not disconnect from the wallet'));
+        resolve(returnError('TonWalletDisconnectError'));
       }
     });
 

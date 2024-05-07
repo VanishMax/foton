@@ -6,6 +6,7 @@ import type { CompiledContract, ContractMethod, ContractMethodNames } from './he
 import type { ContractClient } from './types.js';
 import { composePayload } from './abi/index.js';
 import { getNetwork } from '../shared/chains.js';
+import { DataOrTypedError, returnData, returnError } from '../shared/errors/index.js';
 
 export interface WriteContractOptions<CONTRACT extends CompiledContract, METHOD extends ContractMethodNames<CONTRACT>> {
   value: bigint;
@@ -13,22 +14,24 @@ export interface WriteContractOptions<CONTRACT extends CompiledContract, METHOD 
   payload: ContractMethod<CONTRACT, METHOD>;
 }
 
+type WriteContractReturn = DataOrTypedError<string, 'MissingContractAddressError' | 'UserUnauthorizedError' | 'IncorrectContractError'>;
+
 export async function writeContract <CONTRACT extends CompiledContract, METHOD extends ContractMethodNames<CONTRACT>>(
   this: ContractClient<CONTRACT>,
   options: WriteContractOptions<CONTRACT, METHOD>,
-): Promise<string> {
+): Promise<WriteContractReturn> {
   if (!this.address) {
-    throw new Error('The contract address is not provided');
+    return returnError('MissingContractAddressError');
   }
 
   if (!this._walletClient.connected || !this._walletClient.address) {
-    throw new Error('Not authorized. Please, connect the wallet first');
+    return returnError('UserUnauthorizedError');
   }
 
   const fullContract = this._contract.fromAddress(Address.parseFriendly(this.address).address);
 
   if (!fullContract.abi) {
-    throw new Error('Incorrect contract. Please, provide the class of a contract compiled from your Tact or Func files');
+    return returnError('IncorrectContractError');
   }
 
   // TODO: control the state of sending the transaction: throw error if rejected, etc.
@@ -45,6 +48,6 @@ export async function writeContract <CONTRACT extends CompiledContract, METHOD e
     ],
   });
 
-  return bocToHash(res.boc);
+  return returnData(bocToHash(res.boc));
 }
 

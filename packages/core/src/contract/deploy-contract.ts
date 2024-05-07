@@ -1,10 +1,12 @@
 import { bocToHash } from '../shared/utils/index.js';
 
+import { getNetwork } from '../shared/chains.js';
+import { DataOrTypedError, returnData, returnError } from '../shared/errors/index.js';
+
 import type { CompiledContract, ContractDeployArguments, ContractMethod } from './helper-types.js';
 import type { ContractClient } from './types.js';
 import { composePayload } from './abi/index.js';
 import { getStateInit } from './utils/get-state-init.js';
-import { getNetwork } from '../shared/chains.js';
 
 export interface DeployContractOptions<CONTRACT extends CompiledContract> {
   value: bigint;
@@ -12,23 +14,25 @@ export interface DeployContractOptions<CONTRACT extends CompiledContract> {
   payload: ContractMethod<CONTRACT, 'Deploy'>;
 }
 
-export interface DeployContractReturn {
+export interface DeployContractData {
   address: string;
   txHash: string;
 }
+
+type DeployContractReturn = DataOrTypedError<DeployContractData, 'UserUnauthorizedError' | 'IncorrectContractError'>;
 
 export async function deployContract <CONTRACT extends CompiledContract>(
   this: ContractClient<CONTRACT>,
   options: DeployContractOptions<CONTRACT>,
 ): Promise<DeployContractReturn> {
   if (!this._walletClient.connected || !this._walletClient.address) {
-    throw new Error('Not authorized. Please, connect the wallet first');
+    return returnError('UserUnauthorizedError');
   }
 
   const fullContract = await this._contract.fromInit(...options.arguments);
 
   if (!fullContract.init?.code || !fullContract.init?.data || !fullContract.abi) {
-    throw new Error('Incorrect contract. Please, provide the contract class compiled from your Tact or Func contract');
+    return returnError('IncorrectContractError');
   }
 
   const contractAddress = fullContract.address.toString();
@@ -49,8 +53,8 @@ export async function deployContract <CONTRACT extends CompiledContract>(
   });
 
   this.setAddress(contractAddress);
-  return {
+  return returnData({
     address: contractAddress,
     txHash: bocToHash(res.boc),
-  };
+  });
 }
