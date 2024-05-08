@@ -45,11 +45,11 @@ export const publicClient = createPublicClient({
   api: 'mainnet',
 });
 
-const txHash = await walletClient.sendTransaction({
+const { data: hash } = await walletClient.sendTransaction({
   to: '0:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
   value: 1000000000n,
 });
-const transaction = await publicClient.waitForTransactionReceipt({ hash: txHash });
+const { data: transaction } = await publicClient.waitForTransactionReceipt({ hash: txHash });
 
 export const counterClient = createContractClient({
   contract: counterContract,
@@ -57,7 +57,7 @@ export const counterClient = createContractClient({
   walletClient,
 });
 
-const { address } = await counterClient.deploy({
+const { data: { address } } = await counterClient.deploy({
   value: 1000000000n,
   arguments: [],
   payload: { queryId: 1n },
@@ -69,7 +69,7 @@ await counterContract.write({
   payload: { queryId: 2n },
 });
 
-const counterValue = await counterContract.read({
+const { data: counterValue } = await counterContract.read({
   method: 'counter',
   arguments: [],
 });
