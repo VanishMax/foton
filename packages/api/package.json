@@ -1,11 +1,13 @@
 {
   "name": "@fotonjs/api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Foton API: comfortable public APIs to connect to the TON blockchain",
   "keywords": [
     "TON",
+    "The Open Network",
     "Blockchain",
-    "API"
+    "API",
+    "RPC"
   ],
   "license": "ISC",
   "author": "vanishmax",

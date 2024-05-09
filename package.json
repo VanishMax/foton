@@ -24,6 +24,7 @@
     "cli": "pnpm --filter @fotonjs/cli dev",
     "build:core": "pnpm --filter @fotonjs/core build",
     "prepublish": "pnpm build:core",
-    "publish:core": "pnpm publish --filter @fotonjs/core"
+    "publish:core": "pnpm publish --filter @fotonjs/core",
+    "publish:api": "pnpm publish --filter @fotonjs/api"
   }
 }
