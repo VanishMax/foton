@@ -1,5 +1,5 @@
 {
-  "url": "https://photon-counter.vercel.app",
   "name": "Foton Counter",
-  "iconUrl": "https://photon-counter.vercel.app/photon.png"
+  "url": "https://counter.foton.sh",
+  "iconUrl": "https://counter.foton.sh/foton.png"
 }
