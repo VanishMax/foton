@@ -1,6 +1,6 @@
 {
   "name": "@fotonjs/api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Foton API: comfortable public APIs to connect to the TON blockchain",
   "keywords": [
     "TON",
@@ -19,7 +19,8 @@
   "bugs": "https://github.com/vanishmax/foton/issues",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "readme.md"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

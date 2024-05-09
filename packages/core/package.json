@@ -1,6 +1,6 @@
 {
   "name": "@fotonjs/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Foton: build TON dApps with ease",
   "keywords": [
     "TON",
@@ -21,7 +21,8 @@
   "bugs": "https://github.com/vanishmax/foton/issues",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "readme.md"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -39,7 +40,7 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@fotonjs/api": "workspace:*",
+    "@fotonjs/api": "workspace:^",
     "@ton/core": "^0.56.3",
     "@tonconnect/sdk": "^3.0.2",
     "@tonconnect/ui": "^2.0.2",

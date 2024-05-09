@@ -156,7 +156,7 @@ importers:
   packages/core:
     dependencies:
       '@fotonjs/api':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../api
       '@ton/core':
         specifier: ^0.56.3
