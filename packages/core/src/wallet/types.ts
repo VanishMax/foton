@@ -14,6 +14,7 @@ export type { WalletInfo, Wallet };
 
 export interface WalletClientBase {
   _chain: Chain;
+  _wallet: Wallet | undefined;
   _connectionCallbacks: ((wallet: TonConnectError | TonConnectUIError | Wallet | null) => void)[];
 
   address?: string;

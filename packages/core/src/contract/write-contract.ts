@@ -14,6 +14,7 @@ export interface WriteContractOptions<CONTRACT extends CompiledContract, METHOD 
   payload: ContractMethod<CONTRACT, METHOD>;
 }
 
+// TODO: fix the return type – somehow data.error returns `undefined | MissingContractAddressError | UserUnauthorizedError | IncorrectContractError`
 type WriteContractReturn = DataOrTypedError<string, 'MissingContractAddressError' | 'UserUnauthorizedError' | 'IncorrectContractError'>;
 
 export async function writeContract <CONTRACT extends CompiledContract, METHOD extends ContractMethodNames<CONTRACT>>(

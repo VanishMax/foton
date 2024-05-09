@@ -10,7 +10,11 @@ export async function connect (
   this: WalletClientBase,
   connector: WalletInfo,
 ): Promise<ConnectReturn> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
+    if (this._wallet) {
+      return resolve(returnData(this._wallet));
+    }
+
     if (!isTonConnect(this.connection)) {
       return resolve(returnError('ConnectFunctionUnavailableError'));
     }

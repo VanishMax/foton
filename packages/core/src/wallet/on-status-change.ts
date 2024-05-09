@@ -8,9 +8,11 @@ export function onStatusChange (this: WalletClientBase): void {
   this.connection.onStatusChange((wallet) => {
     if (wallet) {
       this.connected = true;
+      this._wallet = wallet;
       this.address = wallet.account.address;
     } else {
       this.connected = false;
+      this._wallet = undefined;
       this.address = undefined;
     }
     this._connectionCallbacks.forEach((cb) => cb(wallet));

@@ -27,7 +27,11 @@ export async function connectUI (
   this: WalletClientBase,
   connector?: WalletInfo
 ): Promise<ConnectUiReturn> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
+    if (this._wallet) {
+      return resolve(returnData(this._wallet));
+    }
+
     if (!isTonConnectUI(this.connection)) {
       return resolve(returnError('ConnectUIFunctionUnavailableError'));
     }
@@ -47,12 +51,13 @@ export async function connectUI (
       }
     });
 
-    // TODO: fix the error if modal closing is before the connection change
     // If the modal is closed, reject the promise with the error
     const unsubscribe = this.connection.onModalStateChange((state) => {
       if (state.status === 'closed') {
-        unsubscribe();
-        resolve(returnError('UserRejectedConnectionError'));
+        setTimeout(() => { // Set timeout, so the function fires after the wallet state change
+          unsubscribe();
+          resolve(returnError('UserRejectedConnectionError'));
+        });
       }
     });
 
