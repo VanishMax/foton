@@ -1,0 +1,209 @@
+import { Tabs } from 'nextra/components';
+
+# Counter React dApp tutorial
+
+This tutorial goes through the process of setting up the application that implements the on-chain counter with increment feature in React.
+
+As a result of this tutorial, we are going to create a dApp that can connect to a TON wallet, deploy counter smart contract, read its state and run the Add or Subtract contract functions. You will get to know TON and specifically Foton development with this hands-on experience.
+
+Make sure you have a [Node.js](https://nodejs.org/) version 18 or higher installed on your machine.
+
+## Create Vite app
+
+[Vite](https://vitejs.dev/) is a modern bundler for single-page web applications. The following command will help you to create a template application that we are going to fill with decentralization later. It will prompt you to select a project name, framework, whether TypeScript is needed or not.
+
+For this tutorial, select React framework (TypeScript + SWC preset). Notice that Foton is not tied to any of the frameworks and can work both in the browser and in the server environment.
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tabs.Tab>
+```bash
+npm create vite@latest
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+yarn create vite
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+pnpm create vite
+```
+</Tabs.Tab>
+</Tabs>
+
+Since the application deals with cryptography, we need to adjust the template by adding Buffer polyfill. Install the Vite plugin for it:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tabs.Tab>
+```bash
+npm install -D vite-plugin-node-polyfills
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+yarn add -D vite-plugin-node-polyfills
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+pnpm add -D vite-plugin-node-polyfills
+```
+</Tabs.Tab>
+</Tabs>
+
+Now, head to the `vite.config.ts` file and update the `plugins` section.
+
+```ts {3,8-10}
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    nodePolyfills({
+      include: ['buffer'],
+    }),
+  ],
+})
+```
+
+## Add and compile your first contract
+
+TON blockchain supports three smart contract languages: Fift, FunC, and [Tact](https://tact-lang.org/). This tutorial focuses on the Tact since it is the only high-level language from the list and the easiest of them to get started with.
+
+Let's write the first contract in the `contracts/counter.tact` file:
+
+```tact
+import "@stdlib/deploy";
+
+message Add {
+  queryId: Int as uint64;
+  amount: Int as uint32;
+}
+
+message Subtract {
+  queryId: Int as uint64;
+  amount: Int as uint32;
+}
+
+contract Counter with Deployable {
+  counter: Int as uint32;
+
+  init() {
+    self.counter = 0;
+  }
+
+  receive(msg: Add) {
+    self.counter += msg.amount;
+  }
+
+  receive(msg: Subtract) {
+    self.counter -= msg.amount;
+  }
+
+  get fun counter(): Int {
+    return self.counter;
+  }
+}
+```
+
+We are not going to cover the language features here, so please refer to the [Tact book](https://docs.tact-lang.org/book) for learning its syntax and semantics.
+
+To put it simply, the Counter contract has only one variable in its state called `counter` with type `uint32`. It also has two methods (receivers) `Add` and `Subtract`, which increase or decrease the `counter` value by the provided amount. Lastly, the `counter` getter returns the value of the `counter` state.
+
+Now, we need to install the Tact compiler to process the smart contract:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tabs.Tab>
+```bash
+npm install -D @tact-lang/compiler
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+yarn add -D @tact-lang/compiler
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+pnpm add -D @tact-lang/compiler
+```
+</Tabs.Tab>
+</Tabs>
+
+Then, let's create a configuration file `tact.config.json` for the Tact compiler that will point to the `.tact` files and define the output folder.
+
+```json
+{
+  "$schema": "http://raw.githubusercontent.com/tact-lang/tact/main/grammar/configSchema.json",
+  "projects": [
+    {
+      "name": "counter",
+      "path": "./contracts/counter.tact",
+      "output": "./contracts/counter"
+    }
+  ]
+}
+```
+
+When the configuration is ready, we only need to modify the `scripts` object of the `package.json`:
+
+```json
+{
+  "scripts": {
+    "compile": "tact --config ./tact.config.json"
+  }
+}
+```
+
+Compile your first smart contract:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tabs.Tab>
+```bash
+npm run compile
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+yarn compile
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+pnpm compile
+```
+</Tabs.Tab>
+</Tabs>
+
+If you open the `contracts/counter` directory, you will see many files created by Tact: ABI file, MD file, PKG file, results of compilation to FunC and Fift languages. However, the most important file of all compilation is the `counter_Counter.ts`. Take a moment to look and read the resulting `Counter` class.
+
+Let's export the `Counter` class for the future usage. Create `contracts/index.ts` file:
+
+```ts
+export { Counter } from './counter/counter_Counter';
+```
+
+## Making a dApp
+
+To create a dApp, let's install the `@fotonjs/core` library:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tabs.Tab>
+```bash
+npm install @fotonjs/core
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+yarn add @fotonjs/core
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+pnpm add @fotonjs/core
+```
+</Tabs.Tab>
+</Tabs>

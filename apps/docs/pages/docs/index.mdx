@@ -1,3 +1,35 @@
-# Welcome to Foton
+import { Tabs } from 'nextra/components'
 
-Let's get started!
+# Get started with Foton
+
+
+Foton is a TypeScript toolkit for interacting with TON wallets and blockchain as a whole. The library wraps existing solutions into one comfortable API. It supports:
+
+- ✅ Wallet connection
+- ✅ Sending transactions
+- ✅ Querying the blockchain
+- ✅ Deploying and interacting with smart contracts
+
+Foton works best with [Blueprint](https://github.com/ton-org/blueprint) – a tool for compiling and testing smart contracts. It can be easily integrated into the existing project and, step by step, replace the usage of [Ton Connect](https://github.com/ton-connect), [Tonweb](https://github.com/toncenter/tonweb) and [Ton Core](https://github.com/ton-org/ton-core).
+
+## Set up
+
+To install Foton, run:
+
+<Tabs items={['pnpm', 'npm', 'yarn']} defaultIndex="1">
+<Tabs.Tab>
+```bash
+pnpm add @fotonjs/core
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+npm install @fotonjs/core
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+yarn add @fotonjs/core
+```
+</Tabs.Tab>
+</Tabs>
