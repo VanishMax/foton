@@ -1,4 +1,8 @@
-import { UserUnauthorizedError, UserRejectedConnectionError } from './user-errors.js';
+import {
+  UserUnauthorizedError,
+  UserRejectedConnectionError,
+  UserRejectedTransactionError,
+} from './user-errors.js';
 import {
   ConnectFunctionUnavailableError,
   ConnectUIFunctionUnavailableError,
@@ -11,6 +15,7 @@ import {
   TonWalletConnectionError,
   TonWalletDisconnectError,
   TonReadError,
+  TonRateLimitError,
 } from './ton-errors.js';
 
 export type SupportedErrors = {
@@ -22,12 +27,14 @@ export type SupportedErrors = {
   // User errors
   UserUnauthorizedError: UserUnauthorizedError,
   UserRejectedConnectionError: UserRejectedConnectionError,
+  UserRejectedTransactionError: UserRejectedTransactionError,
   // TON errors
   TonConnectError: TonConnectError,
   TonConnectUIError: TonConnectUIError,
   TonWalletConnectionError: TonWalletConnectionError,
   TonWalletDisconnectError: TonWalletDisconnectError,
   TonReadError: TonReadError,
+  TonRateLimitError: TonRateLimitError,
 };
 
 export const supportedErrors = {
@@ -39,10 +46,12 @@ export const supportedErrors = {
   // User errors
   UserUnauthorizedError: UserUnauthorizedError,
   UserRejectedConnectionError: UserRejectedConnectionError,
+  UserRejectedTransactionError: UserRejectedTransactionError,
   // TON errors
   TonConnectError: TonConnectError,
   TonConnectUIError: TonConnectUIError,
   TonWalletConnectionError: TonWalletConnectionError,
   TonWalletDisconnectError: TonWalletDisconnectError,
   TonReadError: TonReadError,
+  TonRateLimitError: TonRateLimitError,
 }

@@ -15,7 +15,7 @@ export interface WriteContractOptions<CONTRACT extends CompiledContract, METHOD 
 }
 
 // TODO: fix the return type – somehow data.error returns `undefined | MissingContractAddressError | UserUnauthorizedError | IncorrectContractError`
-type WriteContractReturn = DataOrTypedError<string, 'MissingContractAddressError' | 'UserUnauthorizedError' | 'IncorrectContractError'>;
+type WriteContractReturn = DataOrTypedError<string, 'MissingContractAddressError' | 'UserUnauthorizedError' | 'IncorrectContractError' | 'UserRejectedTransactionError'>;
 
 export async function writeContract <CONTRACT extends CompiledContract, METHOD extends ContractMethodNames<CONTRACT>>(
   this: ContractClient<CONTRACT>,
@@ -36,19 +36,24 @@ export async function writeContract <CONTRACT extends CompiledContract, METHOD e
   }
 
   // TODO: control the state of sending the transaction: throw error if rejected, etc.
-  const res = await this._walletClient.connection.sendTransaction({
-    network: getNetwork(this._walletClient._chain),
-    validUntil: Date.now() + 5 * 60 * 1000,
-    from: this.address,
-    messages: [
-      {
-        address: this.address,
-        amount: options.value.toString(),
-        payload: composePayload(fullContract, options.method, options.payload),
-      },
-    ],
-  });
+  try {
+    const res = await this._walletClient.connection.sendTransaction({
+      network: getNetwork(this._walletClient._chain),
+      validUntil: Date.now() + 5 * 60 * 1000,
+      from: this.address,
+      messages: [
+        {
+          address: this.address,
+          amount: options.value.toString(),
+          payload: composePayload(fullContract, options.method, options.payload),
+        },
+      ],
+    });
 
-  return returnData(bocToHash(res.boc));
+    return returnData(bocToHash(res.boc));
+  } catch (error) {
+    // TODO: add more error handlers for different scenarios
+    return returnError('UserRejectedTransactionError');
+  }
 }
 

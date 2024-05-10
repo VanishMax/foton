@@ -11,23 +11,27 @@ export interface SendTransactionOptions {
 export async function sendTransaction (
   this: WalletClientBase,
   options: SendTransactionOptions,
-): Promise<DataOrTypedError<string, 'UserUnauthorizedError'>> {
+): Promise<DataOrTypedError<string, 'UserUnauthorizedError' | 'UserRejectedTransactionError'>> {
   if (!this.connected || !this.address) {
     return returnError('UserUnauthorizedError');
   }
 
-  const res = await this.connection.sendTransaction({
-    network: getNetwork(this._chain),
-    from: this.address,
-    validUntil: Date.now() + 5 * 60 * 1000,
-    messages: [
-      {
-        address: options.to,
-        amount: options.value.toString(),
-      }
-    ],
-  });
+  try {
+    const res = await this.connection.sendTransaction({
+      network: getNetwork(this._chain),
+      from: this.address,
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address: options.to,
+          amount: options.value.toString(),
+        }
+      ],
+    });
 
-  const hash = bocToHash(res.boc);
-  return returnData(hash);
+    const hash = bocToHash(res.boc);
+    return returnData(hash);
+  }  catch (error) {
+    return returnError('UserRejectedTransactionError');
+  }
 }

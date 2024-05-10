@@ -18,3 +18,10 @@ export class UserRejectedConnectionError extends UserError {
     this.name = 'UserRejectedConnectionError';
   }
 }
+
+export class UserRejectedTransactionError extends UserError {
+  constructor() {
+    super('User rejected the transaction request from their wallet');
+    this.name = 'UserRejectedTransactionError';
+  }
+}

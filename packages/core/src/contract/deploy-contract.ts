@@ -19,7 +19,7 @@ export interface DeployContractData {
   txHash: string;
 }
 
-type DeployContractReturn = DataOrTypedError<DeployContractData, 'UserUnauthorizedError' | 'IncorrectContractError'>;
+type DeployContractReturn = DataOrTypedError<DeployContractData, 'UserUnauthorizedError' | 'IncorrectContractError' | 'UserRejectedTransactionError'>;
 
 export async function deployContract <CONTRACT extends CompiledContract>(
   this: ContractClient<CONTRACT>,
@@ -37,24 +37,28 @@ export async function deployContract <CONTRACT extends CompiledContract>(
 
   const contractAddress = fullContract.address.toString();
 
-  // TODO: control the state of sending the transaction: throw error if rejected, etc.
-  const res = await this._walletClient.connection.sendTransaction({
-    network: getNetwork(this._walletClient._chain),
-    from: this._walletClient.address,
-    validUntil: Date.now() + 5 * 60 * 1000,
-    messages: [
-      {
-        address: contractAddress,
-        amount: options.value.toString(),
-        stateInit: getStateInit(fullContract),
-        payload: composePayload(fullContract, 'Deploy', options.payload),
-      }
-    ],
-  });
+  try {
+    const res = await this._walletClient.connection.sendTransaction({
+      network: getNetwork(this._walletClient._chain),
+      from: this._walletClient.address,
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address: contractAddress,
+          amount: options.value.toString(),
+          stateInit: getStateInit(fullContract),
+          payload: composePayload(fullContract, 'Deploy', options.payload),
+        }
+      ],
+    });
 
-  this.setAddress(contractAddress);
-  return returnData({
-    address: contractAddress,
-    txHash: bocToHash(res.boc),
-  });
+    this.setAddress(contractAddress);
+    return returnData({
+      address: contractAddress,
+      txHash: bocToHash(res.boc),
+    });
+  } catch (error) {
+    // TODO: add more error handlers for different scenarios
+    return returnError('UserRejectedTransactionError');
+  }
 }

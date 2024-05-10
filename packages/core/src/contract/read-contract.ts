@@ -13,7 +13,7 @@ export interface ReadContractOptions<CONTRACT extends CompiledContract, GETTER e
 }
 
 type ReadContractReturn<CONTRACT extends CompiledContract, GETTER extends ContractGetterNames<CONTRACT>> =
-  DataOrTypedError<ContractGetterReturn<CONTRACT, GETTER> | undefined, 'MissingContractAddressError' | 'IncorrectContractError' | 'TonReadError'>;
+  DataOrTypedError<ContractGetterReturn<CONTRACT, GETTER> | undefined, 'MissingContractAddressError' | 'IncorrectContractError' | 'TonReadError' | 'TonRateLimitError'>;
 
 export async function readContract<CONTRACT extends CompiledContract, GETTER extends ContractGetterNames<CONTRACT>> (
   this: ContractClient<CONTRACT>,
@@ -34,20 +34,23 @@ export async function readContract<CONTRACT extends CompiledContract, GETTER ext
   const res = await this._publicClient._api.runGetMethod({
     address: this.address,
     method: options.getter,
-    // TODO: connect the inputs with the contract ABI
     // TODO: add better support for slice and cell types
     stack: args,
   });
 
-  // TODO: handle the read error correctly
+  // TODO: handle the read with more details
   if (res.error) {
+    if (res.response.status === 429) {
+      return returnError('TonRateLimitError');
+    }
     return returnError('TonReadError');
   }
 
   try {
-    return returnData(parseReadReturn(fullContract.abi, options.getter, res.data) as ContractGetterReturn<CONTRACT, GETTER>);
+    return returnData(
+      parseReadReturn(fullContract.abi, options.getter, res.data) as ContractGetterReturn<CONTRACT, GETTER>
+    );
   } catch (error) {
-    console.error(error);
     return returnError('TonReadError');
   }
 }

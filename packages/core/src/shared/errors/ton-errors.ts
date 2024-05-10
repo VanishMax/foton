@@ -36,6 +36,13 @@ export class TonReadError extends TonError {
   }
 }
 
+export class TonRateLimitError extends TonError {
+  constructor() {
+    super('Rate limit is exceeded. Provide the `authKey` to the public client with a better Ton Center plan to get more requests per second');
+    this.name = 'TonRateLimitError';
+  }
+}
+
 export {
   TonConnectError,
 };
