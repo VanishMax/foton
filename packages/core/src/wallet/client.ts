@@ -10,14 +10,28 @@ import { getWallets } from './get-wallets.js';
 import { sendTransaction } from './send-transaction.js';
 import { onStatusChange } from './on-status-change.js';
 
-export interface CreateWalletClientOptions extends TonConnectOptions {
+interface CreateWalletClientOptionsBase {
   chain?: Chain;
 }
+interface CreateWalletClientOptionsWithTC extends CreateWalletClientOptionsBase {
+  connection: TonConnect;
+  manifestUrl?: never;
+}
+interface CreateWalletClientOptionsFull extends TonConnectOptions, CreateWalletClientOptionsBase {
+  connection?: never;
+}
+
+export type CreateWalletClientOptions = CreateWalletClientOptionsFull | CreateWalletClientOptionsWithTC;
 
 export function createWalletClient (options?: CreateWalletClientOptions): WalletClient {
   const { chain, ...tonConnectOptions } = options || {};
 
-  const connection = new TonConnect(tonConnectOptions);
+  let connection: TonConnect;
+  if ((tonConnectOptions as CreateWalletClientOptionsWithTC).connection) {
+    connection = (tonConnectOptions as CreateWalletClientOptionsWithTC).connection;
+  } else {
+    connection = new TonConnect(tonConnectOptions as CreateWalletClientOptionsFull);
+  }
 
   const client = {
     connection,

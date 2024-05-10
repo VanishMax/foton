@@ -1,0 +1,6 @@
+{
+  "create-contract-client": "createContractClient",
+  "deploy": "deploy",
+  "write": "write",
+  "read": "read"
+}

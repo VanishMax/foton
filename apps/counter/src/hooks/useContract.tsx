@@ -69,7 +69,7 @@ export const useContract = () => {
       },
     });
     if (res.data) {
-      await publicClient.waitForTransactionReceipt({ hash: res.data });
+      await publicClient.waitForTransaction({ hash: res.data });
     } else {
       alert(res.error?.message || '');
     }

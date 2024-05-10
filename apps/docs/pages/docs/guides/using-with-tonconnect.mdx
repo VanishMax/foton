@@ -1,0 +1,21 @@
+# Using with TON Connect
+
+[TON Connect](https://github.com/ton-connect) is a JavaScript library for connecting a web application to the TON blockchain. It implements [TEP-115](https://github.com/ton-blockchain/TEPs/blob/master/text/0115-ton-connect.md) – a unified connection protocol for TON wallets.
+
+Foton uses TON Connect for wallet connection. Therefore, integrating Foton into a project with existing TON Connect libraries is straightforward. All you need to do is to pass the TON Connect instance to the Foton wallet client:
+
+```ts
+import { TonConnect } from '@tonconnect/sdk';
+import { createWalletClient } from '@fotonjs/core';
+
+export const tonConnect = new TonConnect({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+
+export const walletClient = createWalletClient({
+  chain: 'mainnet',
+  connection: tonConnect,
+});
+```
+
+Now you can use all the methods from `walletClient` to connect to a wallet, send transactions and more!

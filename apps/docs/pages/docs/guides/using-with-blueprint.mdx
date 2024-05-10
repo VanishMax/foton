@@ -1,0 +1,31 @@
+# Using with Blueprint
+
+[Blueprint](https://github.com/ton-org/blueprint/) is a tool for compiling, testing and deploying smart contracts in TON. If you have Blueprint installed in your project, it would be easy to integrate smart contract compiled by Blueprint with Foton.
+
+When Blueprint builds a contract, it generates a `wrappers` directory with a set of `.ts` files. For example, if you compiled a contract named Counter, then Blueprint will produce the following `wrappers/Counter.ts` file:
+
+```ts filename="wrappers/Counter.ts"
+export * from '../build/Counter/tact_Counter';
+```
+
+To use the contract with Foton, all you need to do is import the generated file and pass it to the `createContractClient` function:
+
+```ts
+import { createWalletClient, createPublicClient, createContractClient } from '@fotonjs/core';
+import { Counter } from './wrappers/Counter';
+
+export const walletClient = createWalletClient({
+  chain: 'mainnet',
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+
+export const publicClient = createPublicClient({
+  api: 'mainnet',
+});
+
+export const counterClient = createContractClient({
+  contract: Counter,
+  publicClient,
+  walletClient,
+});
+```

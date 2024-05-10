@@ -193,17 +193,17 @@ To create a dApp, let's install the `@fotonjs/core` library:
 <Tabs items={['npm', 'yarn', 'pnpm']}>
 <Tabs.Tab>
 ```bash
-npm install @fotonjs/core
+npm install @fotonjs/core @ton/core
 ```
 </Tabs.Tab>
 <Tabs.Tab>
 ```bash
-yarn add @fotonjs/core
+yarn add @fotonjs/core @ton/core
 ```
 </Tabs.Tab>
 <Tabs.Tab>
 ```bash
-pnpm add @fotonjs/core
+pnpm add @fotonjs/core @ton/core
 ```
 </Tabs.Tab>
 </Tabs>
@@ -402,7 +402,7 @@ export const useContract = () => {
 
     // If the transaction was successful, wait for the transaction receipt with the help of the publicClient
     if (res.data) {
-      await publicClient.waitForTransactionReceipt({ hash: res.data });
+      await publicClient.waitForTransaction({ hash: res.data });
     } else {
       alert(res.error?.message || '');
     }

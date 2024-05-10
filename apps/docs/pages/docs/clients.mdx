@@ -1,0 +1,11 @@
+import { Callout } from 'nextra/components';
+
+# What are clients
+
+Clients, in terms of Foton, are logical gates into different parts of the TON blockchain. Instead of exporting many functions from the library, we decided to group the logical parts of blockchain together in the easy-to-use API.
+
+There are four main clients in Foton:
+1. `WalletClientUI` – connect to a wallet on TON and send basic transactions with a user interface. To connect, user will choose in a modal window from one of many wallets. Available only in browser environment.
+2. `WalletClient` – connect to any wallet on TON without user interface. Available in both server and browser environments. Usually, you will call `getWallets` to and then provide a selected wallet to `connect` function.
+3. `PublicClient` – read data from the blockchain. Does not require a wallet connection.
+4. `ContractClient` – deploy smart contracts to the blockchain, call their methods, and read their states.

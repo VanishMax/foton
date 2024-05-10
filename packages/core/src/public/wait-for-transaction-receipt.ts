@@ -10,15 +10,15 @@ const getTransactionsByMessageHash = async (api: RpcClient, hash: string) => {
   return res.data;
 };
 
-export interface WaitForTransactionReceiptOptions {
+export interface WaitForTransactionOptions {
   hash: string;
   refetchInterval?: number;
   refetchLimit?: number;
 }
 
-export async function waitForTransactionReceipt (
+export async function waitForTransaction (
   this: PublicClient,
-  options: WaitForTransactionReceiptOptions,
+  options: WaitForTransactionOptions,
 ): Promise<Transaction | undefined> {
   const { hash, refetchInterval = 1000, refetchLimit = undefined } = options || {};
 

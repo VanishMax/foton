@@ -15,7 +15,7 @@ const withNextra = nextra({
         getHighlighter({
           ...options,
           langs: [
-            ...BUNDLED_LANGUAGES.filter((language) => ['typescript', 'tsx', 'json', 'shellscript'].includes(language.id)),
+            ...BUNDLED_LANGUAGES.filter((language) => ['typescript', 'tsx', 'json', 'shellscript', 'css'].includes(language.id)),
             {
               id: 'tact',
               scopeName: 'source.tact',

@@ -1,7 +1,11 @@
-import { Tabs } from 'nextra/components'
+import { Tabs } from 'nextra/components';
+import { Callout } from 'nextra/components';
 
 # Get started with Foton
 
+<Callout type="warning" emoji="⚠️">
+  Be careful, Foton is still in the early stages of development and may have breaking changes in the future.
+</Callout>
 
 Foton is a TypeScript toolkit for interacting with TON wallets and blockchain as a whole. The library wraps existing solutions into one comfortable API. It supports:
 
@@ -10,7 +14,7 @@ Foton is a TypeScript toolkit for interacting with TON wallets and blockchain as
 - ✅ Querying the blockchain
 - ✅ Deploying and interacting with smart contracts
 
-Foton works best with [Blueprint](https://github.com/ton-org/blueprint) – a tool for compiling and testing smart contracts. It can be easily integrated into the existing project and, step by step, replace the usage of [Ton Connect](https://github.com/ton-connect), [Tonweb](https://github.com/toncenter/tonweb) and [Ton Core](https://github.com/ton-org/ton-core).
+Try creating a simple Counter dApp with React and Foton by following [the tutorial](./docs/guides/tutorial.mdx).
 
 ## Set up
 
@@ -33,3 +37,5 @@ yarn add @fotonjs/core
 ```
 </Tabs.Tab>
 </Tabs>
+
+The next main thing is creating

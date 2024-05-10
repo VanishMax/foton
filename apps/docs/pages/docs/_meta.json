@@ -1,4 +1,8 @@
 {
   "index": "Get started",
-  "tutorial": "React Counter dApp tutorial"
+  "clients": "What are clients?",
+  "guides": "Guides",
+  "wallet-client": "Wallet Client",
+  "public-client": "Public Client",
+  "contract-client": "Contract Client"
 }

@@ -1,4 +1,4 @@
-import { TonConnectUI, type TonConnectUiOptionsWithManifest } from '@tonconnect/ui';
+import { TonConnectUI, TonConnectUiOptionsWithManifest } from '@tonconnect/ui';
 
 import type { WalletClientUI } from './types.js';
 import type { Chain } from '../shared/chains.js';
@@ -8,14 +8,28 @@ import { getWallets } from './get-wallets.js';
 import { sendTransaction } from './send-transaction.js';
 import { onStatusChange } from './on-status-change.js';
 
-export interface CreateWalletClientUIOptions extends TonConnectUiOptionsWithManifest {
+interface CreateWalletClientUIOptionsBase {
   chain?: Chain;
 }
+interface CreateWalletClientUIOptionsWithTC extends CreateWalletClientUIOptionsBase {
+  connection: TonConnectUI;
+  manifestUrl?: never;
+}
+interface CreateWalletClientOptionsFull extends TonConnectUiOptionsWithManifest, CreateWalletClientUIOptionsBase {
+  connection?: never;
+}
+
+export type CreateWalletClientUIOptions = CreateWalletClientOptionsFull | CreateWalletClientUIOptionsWithTC;
 
 export function createWalletClientUI (options?: CreateWalletClientUIOptions): WalletClientUI {
   const { chain, ...tonConnectUIOptions } = options || {};
 
-  const connection = new TonConnectUI(tonConnectUIOptions);
+  let connection: TonConnectUI;
+  if ((tonConnectUIOptions as CreateWalletClientUIOptionsWithTC).connection) {
+    connection = (tonConnectUIOptions as CreateWalletClientUIOptionsWithTC).connection;
+  } else {
+    connection = new TonConnectUI(tonConnectUIOptions as CreateWalletClientOptionsFull);
+  }
 
   const client = {
     connection,
