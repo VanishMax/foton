@@ -1,6 +1,6 @@
 import { Tabs } from 'nextra/components';
 
-# Counter React dApp tutorial
+# React Counter dApp tutorial
 
 This tutorial goes through the process of setting up the application that implements the on-chain counter with increment feature in React.
 
@@ -54,7 +54,7 @@ pnpm add -D vite-plugin-node-polyfills
 
 Now, head to the `vite.config.ts` file and update the `plugins` section.
 
-```ts {3,8-10}
+```ts  filename="vite.config.ts" {3,8-10}
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
@@ -75,7 +75,7 @@ TON blockchain supports three smart contract languages: Fift, FunC, and [Tact](h
 
 Let's write the first contract in the `contracts/counter.tact` file:
 
-```tact
+```tact filename="contracts/counter.tact"
 import "@stdlib/deploy";
 
 message Add {
@@ -135,7 +135,7 @@ pnpm add -D @tact-lang/compiler
 
 Then, let's create a configuration file `tact.config.json` for the Tact compiler that will point to the `.tact` files and define the output folder.
 
-```json
+```json filename="tact.config.json"
 {
   "$schema": "http://raw.githubusercontent.com/tact-lang/tact/main/grammar/configSchema.json",
   "projects": [
@@ -150,7 +150,7 @@ Then, let's create a configuration file `tact.config.json` for the Tact compiler
 
 When the configuration is ready, we only need to modify the `scripts` object of the `package.json`:
 
-```json
+```json filename="package.json"
 {
   "scripts": {
     "compile": "tact --config ./tact.config.json"
@@ -182,7 +182,7 @@ If you open the `contracts/counter` directory, you will see many files created b
 
 Let's export the `Counter` class for the future usage. Create `contracts/index.ts` file:
 
-```ts
+```ts filename="contracts/index.ts"
 export { Counter } from './counter/counter_Counter';
 ```
 
@@ -207,3 +207,325 @@ pnpm add @fotonjs/core
 ```
 </Tabs.Tab>
 </Tabs>
+
+In order to allow the app to be connected to wallets in TON, the app must provide a **manifest**. The manifest is a JSON file with a name, URL and icon of the dApp. In Vite, the best place to put it is `public/tonconnect-manifest.json`:
+
+```json filename="public/tonconnect-manifest.json"
+{
+  "name": "Counter",
+  "url": "https://example.com",
+  "icon": "https://example.com/icon.png"
+}
+```
+
+The manifest must be accessible via its URL. That means that you should deploy the Counter dApp with the manifest file, get the link and use it with Foton. If you are not ready to deploy the app, you can use the Foton's manifest: https://counter.foton.sh/tonconnect-manifest.json.
+
+Foton library lets you create clients – interfaces to interact with the TON blockchain. There are four main clients:
+1. `WalletClientUI` – connect to a wallet on TON and send basic transactions with a user interface. To connect, user will choose in a modal window from one of many wallets. Available only in browser environment.
+2. `WalletClient` – connect to any wallet on TON without user interface. Available in both server and browser environments.
+3. `PublicClient` – read data from the blockchain. Does not require a wallet connection.
+4. `ContractClient` – deploy smart contracts to the blockchain, call their methods, and read their states.
+
+For this tutorial, we will need a wallet client with UI, public client, and a contract client. Let's define them in `src/ton-clients.ts`:
+
+```ts filename="src/ton-clients.ts"
+import { createWalletClientUI, createPublicClient, createContractClient } from '@fotonjs/core';
+
+import { Counter } from '../contracts';
+
+export const walletClient = createWalletClientUI({
+  // Use TON testnet for development purposes
+  chain: 'testnet',
+  // Provide a link to the deployed manifest file
+  manifestUrl: 'https://counter.foton.sh/tonconnect-manifest.json',
+  // If the wallet was already connected, restore the connection immediately
+  restoreConnection: true,
+});
+
+export const publicClient = createPublicClient({
+  api: 'testnet',
+  // Provide your API key from Ton Center to increase the rate limits
+  // authToken: 'token'
+});
+
+export const counterClient = createContractClient({
+  // Use compiled Counter contract for the contractClient
+  contract: Counter,
+  // Provide the public and wallet clients to the contract client,
+  // so it can access both the public method and the wallet connection
+  publicClient,
+  walletClient,
+});
+```
+
+Having the clients defined, you can easily interact with the blockchain! We can start by connecting to the wallet in `src/use-wallet.tsx`:
+
+```tsx filename="src/use-wallet.tsx"
+import { useMemo, useState } from 'react';
+
+import { walletClient } from './ton-clients.ts';
+
+export const useWallet = () => {
+  const [loading, setLoading] = useState(false);
+  const [userAddress, setUserAddress] = useState<string>();
+
+  // Don't show the full address, only the first and last characters. It also saves space
+  const shortAddress = useMemo(() => {
+    if (!userAddress) return '';
+    return userAddress.slice(0, 5) + '...' + (userAddress || '').slice(-4);
+  }, [userAddress]);
+
+  // Open wallet connection modal and wait while users connects. Show loading spinner meanwhile.
+  const onConnect = async () => {
+    setLoading(true);
+
+    const res = await walletClient.connect();
+    if (res.error) {
+      alert(res.error.message);
+    } else {
+      setUserAddress(res.data.account.address);
+    }
+
+    setLoading(false);
+  };
+
+  const onDisconnect = async () => {
+    setLoading(true);
+    const res = await walletClient.disconnect();
+    if (res.data) {
+      setUserAddress(undefined);
+    }
+    setLoading(false);
+  };
+
+  const connectButton = (
+    <button disabled={loading} onClick={onConnect}>
+      {loading ? 'Loading...' : 'Connect'}
+    </button>
+  );
+
+  const disconnectButton = (
+    <button disabled={loading} onClick={onDisconnect}>
+      {loading ? 'Loading...' : 'Disconnect'}
+    </button>
+  );
+
+  return {
+    userAddress: shortAddress,
+    connectButton,
+    disconnectButton,
+  };
+};
+```
+
+In this hook we defined the basic logic for connecting and disconnecting the wallet. The same can be easily done with the Counter contract. Create a new file `src/use-contract.tsx`:
+
+```tsx filename="src/use-contract.tsx"
+import { useEffect, useState } from 'react';
+import { parseTon } from '@fotonjs/core';
+
+import { counterClient, publicClient } from './ton-clients.ts';
+
+// Define localStorage key for storing the deployed smart contract address without deploying it each time.
+const LS_KEY = 'counter-contract-address';
+
+export const useContract = () => {
+  const [loading, setLoading] = useState(false);
+
+  const [contractAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem(LS_KEY) || undefined);
+  const [counterAmount, setCounterAmount] = useState<number | undefined>(undefined);
+
+  // When the contract address is set, update the localStorage too
+  const setAddress = (address: string) => {
+    localStorage.setItem(LS_KEY, address);
+    setContractAddress(address);
+  };
+
+  // Set contract address for the contractClient on initial render.
+  // This way Foton will know to which contract to send the requests.
+  useEffect(() => {
+    counterClient.setAddress(contractAddress);
+  }, []);
+
+  // Subscribe to the counter state with interval
+  useEffect(() => {
+    getCounterAmount();
+
+    const interval = setInterval(getCounterAmount, 5000);
+    return () => clearInterval(interval);
+  }, [contractAddress]);
+
+  // Read the counter state from the contract with the getter 'counter'
+  const getCounterAmount = async () => {
+    if (!contractAddress) return;
+
+    const res = await counterClient.read({
+      getter: 'counter',
+      arguments: [],
+    });
+    if (typeof res.data === 'number') {
+      setCounterAmount(res.data);
+    }
+  };
+
+  // Deploy the contract with 0.05 TON and with random queryId (alternative to `seqno`)
+  const onDeploy = async () => {
+    const res = await counterClient.deploy({
+      value: parseTon('0.05'),
+      arguments: [],
+      payload: {
+        queryId: BigInt(Math.floor(Math.random() * 1000)),
+      },
+    });
+
+    if (res.data) {
+      setAddress(res.data.address);
+    } else {
+      alert(res.error.message);
+    }
+  };
+
+  // Increment the counter by amount:1 on-chain with 0.05 TON
+  const onIncrement = async () => {
+    if (!contractAddress) return;
+
+    setLoading(true);
+
+    const res = await counterClient.write({
+      method: 'Add',
+      value: parseTon('0.05'),
+      payload: {
+        queryId: 1n,
+        amount: 1n,
+      },
+    });
+
+    // If the transaction was successful, wait for the transaction receipt with the help of the publicClient
+    if (res.data) {
+      await publicClient.waitForTransactionReceipt({ hash: res.data });
+    } else {
+      alert(res.error?.message || '');
+    }
+
+    setLoading(false);
+  };
+
+  const deployButton = (
+    <button onClick={onDeploy}>
+      Deploy Counter contract
+    </button>
+  );
+
+  const counterButtons = (
+    <>
+      <span>Counter: {counterAmount?.toString()}</span>
+      <button disabled={loading} onClick={onIncrement}>
+        {loading ? 'Loading...' : 'Increment'}
+      </button>
+    </>
+  );
+
+  return {
+    contractAddress,
+    deployButton,
+    counterButtons,
+  };
+};
+```
+
+Here is a breakdown of the Foton features used in the hook:
+- `contractClient.setAddress()` – sets the address of a contract for the contract client. Without this address, the `write` and `read` methods will throw an error.
+- `contractClient.deploy()` – deploys the contract to the blockchain. It requires the value to be sent with the contract, the arguments for the contract constructor, and the payload with the queryId.
+
+This hook deploys the Counter contract, then queries it each 5 seconds to get the current counter value. It also provides a button to increment the counter by 1. Notice how the `counterClient` and `publicClient` are both used for its purposes.
+
+Finally, let's update the main component `src/App.tsx`:
+
+```tsx filename="src/App.tsx"
+import './App.css'
+import { useWallet } from './use-wallet.tsx';
+import { useContract } from './use-contract.tsx';
+
+function App() {
+  const { userAddress, connectButton, disconnectButton } = useWallet();
+  const { contractAddress, deployButton, counterButtons} = useContract();
+
+  return (
+    <>
+      <h1>Counter dApp</h1>
+
+      {!userAddress && (
+        <div className="card">
+          {connectButton}
+        </div>
+      )}
+
+      {!!userAddress && (
+        <div className="card">
+          <span>{userAddress}</span>
+          {disconnectButton}
+        </div>
+      )}
+
+      {!!userAddress && !contractAddress && (
+        <div className="card">
+          {deployButton}
+        </div>
+      )}
+
+      {!!userAddress && !!contractAddress && (
+        <div className="card">
+          {counterButtons}
+        </div>
+      )}
+    </>
+  )
+}
+
+export default App
+```
+
+The App component uses two hooks that we defined before to render the Counter dApp in the simplest way. If the user is not connected to the wallet, the connect button is shown. If the user is connected, the address is displayed along with the disconnect button. If the contract is not deployed, the deploy button is shown. Otherwise, the counter value and the increment button are displayed in the component.
+
+And just one final touch. Let's change the styles in `src/App.css`:
+
+```css filename="src/App.css"
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 2em;
+}
+```
+
+The application is ready! We can now run it to check the logic. Start the development server:
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+<Tabs.Tab>
+```bash
+npm run dev
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+yarn dev
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```bash
+pnpm dev
+```
+</Tabs.Tab>
+</Tabs>
+
+Open the browser and navigate to `http://localhost:5173` or another link the Vite will give you. You should be able to connect to the wallet, deploy the Counter contract, and increment the counter value. All of this is on chain!
+
+

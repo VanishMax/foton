@@ -7,13 +7,18 @@ const LS_KEY = 'counter-contract-address';
 
 export const useContract = () => {
   const [loading, setLoading] = useState(false);
-  const [contractAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem(LS_KEY) as string || undefined);
-  const [counterAmount, setCounterAmount] = useState<bigint | undefined>(undefined);
+  const [contractAddress, setContractAddress] = useState<string | undefined>(localStorage.getItem(LS_KEY) || undefined);
+  const [counterAmount, setCounterAmount] = useState<number | undefined>(undefined);
 
   const setAddress = (address: string) => {
     localStorage.setItem(LS_KEY, address);
     setContractAddress(address);
   };
+
+  // Set contract address for the contractClient on initial render
+  useEffect(() => {
+    counterClient.setAddress(contractAddress);
+  }, []);
 
   // Subscribe to the counter state with interval
   useEffect(() => {
