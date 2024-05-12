@@ -34,7 +34,7 @@ const config: DocsThemeConfig = {
     //     ? 'https://foton.sh/og.jpeg'
     //     : `https://foton.sh/api/og?title=${title}`
 
-    const description = 'Create TON dApps with the speed of a foton';
+    const description = 'Create TON dApps with the speed of a photon';
     const domain = 'foton.sh';
 
     return (

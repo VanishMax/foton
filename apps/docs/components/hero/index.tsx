@@ -5,7 +5,7 @@ export const Hero: FC = () => {
   return (
     <section className={styles.hero}>
       <h1>Foton</h1>
-      <p>Create TON dApps with the speed of a foton</p>
+      <p>Create TON dApps with the speed of a photon</p>
       <a href="/docs">Get started</a>
     </section>
   )

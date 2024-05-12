@@ -5,7 +5,17 @@ import { Callout } from 'nextra/components';
 Clients, in terms of Foton, are logical gates into different parts of the TON blockchain. Instead of exporting many functions from the library, we decided to group the logical parts of blockchain together in the easy-to-use API.
 
 There are four main clients in Foton:
-1. `WalletClientUI` – connect to a wallet on TON and send basic transactions with a user interface. To connect, user will choose in a modal window from one of many wallets. Available only in browser environment.
-2. `WalletClient` – connect to any wallet on TON without user interface. Available in both server and browser environments. Usually, you will call `getWallets` to and then provide a selected wallet to `connect` function.
-3. `PublicClient` – read data from the blockchain. Does not require a wallet connection.
-4. `ContractClient` – deploy smart contracts to the blockchain, call their methods, and read their states.
+1. [`WalletClientUI`](/docs/wallet-client/create-wallet-client-ui) – connect to a wallet on TON and send basic transactions with a user interface. To connect, user will choose in a modal window from one of many wallets. Available only in browser environment.
+2. [`WalletClient`](/docs/wallet-client/create-wallet-client) – connect to any wallet on TON without user interface. Available in both server and browser environments. Usually, you will call `getWallets` to and then provide a selected wallet to `connect` function.
+3. [`PublicClient`](/docs/public-client/create-public-client) – read data from the blockchain. Relies on TON Center API and does not require a wallet connection.
+4. [`ContractClient`](/docs/contract-client/create-contract-client) – deploy smart contracts to the blockchain, call their methods, and read their states.
+
+## Choosing a client
+
+When deciding on a client for your needs, consider the following:
+
+- When creating backends, use `WalletClient` instead of `WalletClientUI` since it does not require browser environment.
+- If you want to connect a wallet in a web app quickly, use `WalletClientUI`. It will provide a standard modal window for wallet selection.
+- If you want a custom wallet selection UI, use `WalletClient` and design your own wallet selection logic.
+- If you need to get account's balance or read any other data from the blockchain, use `PublicClient`.
+- If you work with smart contracts, use `ContractClient`.

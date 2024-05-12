@@ -1,5 +1,6 @@
 {
   "create-wallet-client": "createWalletClient",
+  "create-wallet-client-ui": "createWalletClientUI",
   "connect": "connect",
   "disconnect": "disconnect",
   "reconnect": "reconnect"
