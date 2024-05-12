@@ -1,0 +1,143 @@
+import { Tabs } from 'nextra/components';
+
+# `createContractClient`
+
+`ContractClient` provides a set of methods for interacting with TON smart contracts: deploy them, call their methods, read state, and more.
+
+## Import
+
+```ts
+import { createContractClient } from '@fotonjs/core';
+```
+
+## Usage
+
+Initialize the client with provided contract, public and wallet clients:
+
+<Tabs items={['example.ts', 'clients.ts', 'contract.ts']}>
+<Tabs.Tab>
+```ts
+import { walletClient, publicClient, createContractClient } from './client';
+import Contract from './Contract';
+
+const contractClient = createContractClient({
+  contract: Contract,
+  publicClient,
+  walletClient,
+  address: '0:123...def',
+});
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```ts
+import { createWalletClient, createPublicClient } from '@fotonjs/core';
+
+export const publicClient = createPublicClient();
+
+export const walletClient = createWalletClient({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```ts
+// ... many contract definitions compiled from Tact or FunC
+
+// Your contract should look similar to this.
+// Most likely, it will have more methods and getter but shouldn't be less.
+
+export class SimpleContract implements Contract {
+  static async init() {
+    return await SimpleContract_init();
+  }
+
+  static async fromInit() {
+    const init = await SimpleContract_init();
+    const address = contractAddress(0, init);
+    return new SimpleContract(address, init);
+  }
+
+  static fromAddress(address: Address) {
+    return new SimpleContract(address);
+  }
+
+  readonly address: Address;
+  readonly init?: { code: Cell, data: Cell };
+  readonly abi: ContractABI = {
+    types:  SimpleContract_types,
+    getters: SimpleContract_getters,
+    receivers: SimpleContract_receivers,
+    errors: SimpleContract_errors,
+  };
+
+  private constructor(address: Address, init?: { code: Cell, data: Cell }) {
+    this.address = address;
+    this.init = init;
+  }
+
+  async send(
+    provider: ContractProvider,
+    via: Sender,
+    args: { value: bigint, bounce?: boolean| null | undefined },
+    message: string | Deploy
+  ) {}
+}
+```
+</Tabs.Tab>
+</Tabs>
+
+Then you can call any of the contract's methods:
+
+```ts
+const state = await counterClient.read({
+  getter: 'getState',
+  arguments: [],
+});
+```
+
+## Parameters
+
+### contract
+- Type: `CompiledContract{:ts}`
+
+A contract class compiled from Tact or FunC language files. It must implement the `Contract` interface.
+
+```ts {2}
+const contractClient = createContractClient({
+  contract: Contract,
+  publicClient,
+  walletClient,
+});
+```
+
+### publicClient
+- Type: `PublicClient{:ts}`
+
+An instance of the [`PublicClient`](/docs/public-client).
+
+```ts {3}
+const contractClient = createContractClient({
+  contract: Contract,
+  publicClient,
+  walletClient,
+});
+```
+
+### walletClient
+- Type: `WalletClient{:ts}`
+
+An instance of the [`WalletClient`](/docs/wallet-client).
+
+```ts {4}
+const contractClient = createContractClient({
+  contract: Contract,
+  publicClient,
+  walletClient,
+});
+```
+
+### address (optional)
+- Type: `string{:ts}`
+- Default: `undefined`
+
+The address of the deployed contract on the blockchain. If not provided, `write` and `read` methods on the `CounterClient` will throw an error.

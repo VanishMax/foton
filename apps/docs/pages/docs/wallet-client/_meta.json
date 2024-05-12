@@ -1,5 +1,5 @@
 {
-  "create-wallet-client": "createWalletClient",
+  "index": "createWalletClient",
   "create-wallet-client-ui": "createWalletClientUI",
   "connect": "connect",
   "disconnect": "disconnect",

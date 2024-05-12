@@ -1,5 +1,5 @@
 {
-  "create-contract-client": "createContractClient",
+  "index": "createContractClient",
   "deploy": "deploy",
   "write": "write",
   "read": "read"

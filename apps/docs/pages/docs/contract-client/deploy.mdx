@@ -1,1 +1,109 @@
+import { Tabs } from 'nextra/components';
+
 # `deploy`
+
+A function of `ContractClient` to deploy a smart contract to the blockchain.
+
+## Usage
+
+Call the `deploy` method of `ContractClient` with deployment arguments and wait for the transaction to be confirmed with the `PublicClient`.
+
+<Tabs items={['example.ts', 'client.ts']}>
+<Tabs.Tab>
+```ts
+import { parseTon } from '@fotonjs/core';
+import { contractClient, publicClient } from './client';
+
+const res = await contractClient.deploy({
+  value: parseTon('0.05'),
+  arguments: [],
+  payload: { queryId: 1n },
+});
+
+if (res.data) {
+  const transactions = await publicClient.waitForTransaction(res.data.txHash);
+  console.log('Contract deployed:', res.data.address);
+}
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```ts
+import { createWalletClient, createPublicClient, createContractClient } from '@fotonjs/core';
+import Contract from './Contract';
+
+export const publicClient = createWalletClient();
+
+export const walletClient = createWalletClient({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+
+export const contractClient = createContractClient({
+  contract: Contract,
+  publicClient,
+  walletClient,
+});
+```
+</Tabs.Tab>
+</Tabs>
+
+## Returns
+
+```ts
+type DeployContractReturn = DataOrTypedError<
+  {
+    address: string;
+    txHash: string;
+  },
+  | 'UserUnauthorizedError'
+  | 'IncorrectContractError'
+  | 'UserRejectedTransactionError'
+>;
+ ```
+
+An object with contract address and transaction hash or one of the typed errors.
+
+## Parameters
+
+### value
+- Type: `bigint{:ts}`
+
+The amount of nanoTON to send with the deployment transaction. Should be enough to cover the transaction fees.
+You can use `parseTon` function to convert a string of TON to nanoTON.
+
+```ts {2}
+await contractClient.deploy({
+  value: parseTon('0.05'),
+  arguments: [],
+  payload: { queryId: 1n },
+});
+```
+
+### arguments
+- Type: `Array<Arguments>{:ts}`
+
+An array of arguments to pass to the contract constructor. This array is the same as the arguments of the `init`
+function in the compiled contract's.
+
+```ts {3-4}
+await contractClient.deploy({
+  value: parseTon('0.05'),
+  // If the contract has `init(id: bigint, count: bigint)` signature, the arguments could be:
+  arguments: [1n, 10n],
+  payload: { queryId: 1n },
+});
+```
+
+### payload
+- Type: `Record<PayloadKeys, any>{:ts}`
+
+In TON, smart contract deployment also triggers a Deploy method of the contract
+(if the smart contract uses the [`Deployable` trait](https://tact-by-example.org/01-the-deployable-trait)).
+This method usually accepts a payload with `queryId` field – a unique identifier of the deployment to distinguish your smart contract from the others'.
+
+```ts {4}
+await contractClient.deploy({
+  value: parseTon('0.05'),
+  arguments: [],
+  payload: { queryId: 1n },
+});
+```

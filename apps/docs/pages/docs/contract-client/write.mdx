@@ -1,1 +1,107 @@
+import { Tabs } from 'nextra/components';
+
 # `write`
+
+A function of `ContractClient` to call a method of the contract that writes to the blockchain.
+
+## Usage
+
+Call the `write` method of `ContractClient` with the method name and its payload,
+then wait for the transaction to be confirmed with the `PublicClient`.
+
+<Tabs items={['example.ts', 'client.ts']}>
+<Tabs.Tab>
+```ts
+import { parseTon } from '@fotonjs/core';
+import { contractClient, publicClient } from './client';
+
+// Imagine the contract is a counter with increment method accepting queryId and amount
+const res = await contractClient.write({
+  value: parseTon('0.05'),
+  method: 'increment',
+  payload: { queryId: 1n, amount: 1n },
+});
+
+if (res.data) {
+  const transactions = await publicClient.waitForTransaction(res.data);
+}
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```ts
+import { createWalletClient, createPublicClient, createContractClient } from '@fotonjs/core';
+import Contract from './Contract';
+
+export const publicClient = createWalletClient();
+
+export const walletClient = createWalletClient({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+
+export const contractClient = createContractClient({
+  contract: Contract,
+  publicClient,
+  walletClient,
+  address: '0:123...def',
+});
+```
+</Tabs.Tab>
+</Tabs>
+
+## Returns
+
+```ts
+type WriteContractReturn = DataOrTypedError<
+  string,
+  | 'MissingContractAddressError'
+  | 'UserUnauthorizedError'
+  | 'IncorrectContractError'
+  | 'UserRejectedTransactionError'
+>;
+ ```
+
+A transaction hash string or one of the typed errors.
+
+## Parameters
+
+### value
+- Type: `bigint{:ts}`
+
+The amount of nanoTON to send with the transaction. Should be enough to cover the transaction fees.
+You can use `parseTon` function to convert a string of TON to nanoTON.
+
+```ts {2}
+await contractClient.write({
+  value: parseTon('0.05'),
+  method: 'increment',
+  payload: { queryId: 1n, amount: 1n },
+});
+```
+
+### method
+- Type: `string{:ts}`
+
+A method name of the contract to call.
+
+```ts {3}
+await contractClient.write({
+  value: parseTon('0.05'),
+  method: 'increment',
+  payload: { queryId: 1n, amount: 1n },
+});
+```
+
+### payload
+- Type: `Record<PayloadKeys, any>{:ts}`
+
+Payload of the smart contract method. The payload declaration can be found in the contract's ABI or contract class' method `send`.
+
+If the contracts method's declaration in Tact is `receive (msg: Add)`, then the payload is an object with the `Add` type.
+
+```ts {4}
+await contractClient.write({
+  value: parseTon('0.05'),
+  method: 'increment',
+  payload: { queryId: 1n, amount: 1n },
+});
+```
