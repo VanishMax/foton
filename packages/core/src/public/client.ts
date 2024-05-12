@@ -1,6 +1,6 @@
 import { createClient, type CreateClientOptions } from '@fotonjs/api';
 
-import { waitForTransaction } from './wait-for-transaction-receipt.js';
+import { waitForTransaction } from './wait-for-transaction.js';
 import { getBalance } from './get-balance.js';
 import type { PublicClient } from './types.js';
 

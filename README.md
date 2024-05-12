@@ -74,3 +74,7 @@ const { data: counterValue } = await counterContract.read({
   arguments: [],
 });
 ```
+
+## License
+
+The source code is licensed under the terms of [MIT License](./LICENSE). 2024, Max Korsunov.

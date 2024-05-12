@@ -1,6 +1,6 @@
 import type { RpcClient } from '@fotonjs/api';
 
-import type { waitForTransaction } from './wait-for-transaction-receipt.js';
+import type { waitForTransaction } from './wait-for-transaction.js';
 import type { getBalance } from './get-balance.js';
 
 export type { RpcClient };
