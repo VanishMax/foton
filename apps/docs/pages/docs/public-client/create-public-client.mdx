@@ -1,1 +1,66 @@
 # `createPublicClient`
+
+`PublicClient` is used to query the TON blockchain. Since TON nodes use [ADNL protocol](https://docs.ton.org/learn/networking/adnl), it cannot be queried
+directly from the browser. To do so, developers have to connect to an indexer server with a REST API and rely on this server's availability.
+
+Foton supports [TON Center API V3](https://toncenter.com/) through `@fotonjs/api` package. This API limits the rate of requests depending on the subscription plan:
+- Free without access key: 1rps
+- Free with access key: 10rps
+- Plus for 2.5 TON/month: 25rps
+- Advanced for 25 TON/month: 100rps
+
+To you want to change a subscription plan or get the access key, consult [@tonapibot in Telegram](https://t.me/tonapibot).
+
+As an alternative option, you can set up [your own indexer server](https://github.com/toncenter/ton-http-api) based on the TON Center API.
+
+## Import
+
+```ts
+import { createPublicClient } from '@fotonjs/core';
+```
+
+## Usage
+
+Initialize the client on the mainnet (by default) with the TON Center API access token:
+```ts
+import { createPublicClient } from '@fotonjs/core';
+
+const publicClient = createPublicClient({
+  api: 'mainnet',
+  authToken: 'your-token',
+});
+```
+
+Then you can consume the public actions:
+
+```ts
+const balance = await publicClient.getBalance({
+  address: '0:123...',
+});
+```
+
+## Parameters
+
+### api (optional)
+- Type: `'mainnet' | 'testnet' | { url: string }{:ts}`
+
+The chain of the public client or the URL of the custom API.
+
+```ts {2}
+const publicClient = createPublicClient({
+  api: 'mainnet',
+  authToken: 'your-token',
+});
+```
+
+### authToken (optional)
+- Type: `string{:ts}`
+
+The access token for the TON Center API.
+
+```ts {3}
+const publicClient = createPublicClient({
+  api: 'mainnet',
+  authToken: 'your-token',
+});
+```

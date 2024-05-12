@@ -1,0 +1,49 @@
+import { Tabs } from 'nextra/components';
+
+# `getBalance`
+
+Gets the account balance in nanoTON.
+
+## Usage
+
+<Tabs items={['example.ts', 'client.ts']}>
+<Tabs.Tab>
+```ts
+import { publicClient } from './client';
+
+const balance = await publicClient.getBalance({
+  address: '0:123...',
+});
+// > 1000000000n – 1 TON
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```ts
+import { createPublicClient } from '@fotonjs/core';
+
+export const publicClient = createPublicClient({
+  api: 'mainnet',
+  authToken: 'your-token',
+});
+```
+</Tabs.Tab>
+</Tabs>
+
+## Returns
+
+`bigint | undefined{:ts}`
+
+The account balance in nanoTON.
+
+## Parameters
+
+### address
+- Type: `string{:ts}`
+
+The address of the account.
+
+```ts {2}
+const balance = await publicClient.getBalance({
+  address: '0:123...',
+});
+```

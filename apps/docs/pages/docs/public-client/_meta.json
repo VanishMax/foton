@@ -1,5 +1,5 @@
 {
   "create-public-client": "createPublicClient",
-  "getBalance": "getBalance",
+  "get-balance": "getBalance",
   "wait-for-transaction": "waitForTransaction"
 }

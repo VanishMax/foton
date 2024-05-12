@@ -1,1 +1,74 @@
+import { Tabs } from 'nextra/components';
+
 # `waitForTransaction`
+
+Waits until the transaction is processed, added to the block and indexed by the blockchain explorer.
+
+## Usage
+
+<Tabs items={['example.ts', 'client.ts']}>
+<Tabs.Tab>
+```ts
+import { publicClient } from './client';
+
+const transaction = await publicClient.waitForTransaction({
+  hash: '0:123...',
+});
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```ts
+import { createPublicClient } from '@fotonjs/core';
+
+export const publicClient = createPublicClient({
+  api: 'mainnet',
+  authToken: 'your-token',
+});
+```
+</Tabs.Tab>
+</Tabs>
+
+## Returns
+
+`Transaction | undefined{:ts}`
+
+The information about the transaction.
+
+## Parameters
+
+### hash
+- Type: `string{:ts}`
+
+Transaction hash. Returned by the `sendTransaction` method and others.
+
+```ts {2}
+const transaction = await publicClient.waitForTransaction({
+  hash: '0:123...',
+});
+```
+
+### refetchInterval (optional)
+- Type: `number{:ts}`
+- Default: `1000`
+
+Configures how often the transaction is fetched.
+
+```ts {3}
+const transaction = await publicClient.waitForTransaction({
+  hash: '0:123...',
+  refetchInterval: 5000,
+});
+```
+
+### refetchLimit (optional)
+- Type: `number{:ts}`
+- Default: `undefined`
+
+Set this parameter to limit the number of fetches. If the transaction is not found after the limit is reached, the method returns `undefined`.
+
+```ts {3}
+const transaction = await publicClient.waitForTransaction({
+  hash: '0:123...',
+  refetchLimit: 5,
+});
+```
