@@ -1,1 +1,46 @@
+import { Tabs } from 'nextra/components';
+
 # `disconnect`
+
+A function of wallet clients to disconnect from the wallet.
+
+## Usage
+
+<Tabs items={['example.ts', 'client.ts']}>
+<Tabs.Tab>
+```ts
+import { walletClient } from './client';
+
+const isDisconnected = await walletClient.disconnect();
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```ts
+import { createWalletClient } from '@fotonjs/core';
+
+export const walletClient = createWalletClient({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+
+// OR
+
+import { createWalletClientUI } from '@fotonjs/core';
+
+export const walletClient = createWalletClientUI({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+```
+</Tabs.Tab>
+</Tabs>
+
+## Returns
+
+```ts
+DataOrTypedError<
+  boolean,
+  | 'TonWalletDisconnectError'
+  | 'TonConnectError'
+>
+ ```
+
+A boolean indicating that the disconnection was successful or one of the typed errors.

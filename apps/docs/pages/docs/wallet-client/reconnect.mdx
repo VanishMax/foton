@@ -1,1 +1,42 @@
+import { Tabs } from 'nextra/components';
+
 # `reconnect`
+
+A function of `WalletClient` to reconnect to the wallet if the connection was previously established.
+
+This method is not available for `WalletClientUI`. Instead, pass `reconnect: true{:ts}` option to `createWalletClientUI` function.
+
+## Usage
+
+<Tabs items={['example.ts', 'client.ts']}>
+<Tabs.Tab>
+```ts
+import { walletClient } from './client';
+
+const walletConnection = await walletClient.reconnect();
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```ts
+import { createWalletClient } from '@fotonjs/core';
+
+export const walletClient = createWalletClient({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+```
+</Tabs.Tab>
+</Tabs>
+
+## Returns
+
+```ts
+DataOrTypedError<
+  Wallet,
+  | 'ReconnectFunctionUnavailableError'
+  | 'TonWalletConnectionError'
+  | 'TonConnectError'
+  | 'TonConnectUIError'
+>;
+ ```
+
+A `Wallet` object with connection information or one of the typed errors.

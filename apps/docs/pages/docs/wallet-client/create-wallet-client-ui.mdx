@@ -1,1 +1,98 @@
 # `createWalletClientUI`
+
+`WalletClientUI` provides the same set of methods [`WalletClient`](./create-wallet-client.mdx): connect to wallets, send transactions, and more.
+Renders a standard modal window for wallet connection that supports browser-extension wallets along with the native desktop and mobile wallets.
+Moreover, it renders the blocking screen while the user performs operations in the wallet.
+
+## Import
+
+```ts
+import { createWalletClientUI } from '@fotonjs/core';
+```
+
+## Usage
+
+Initialize the UI client on the mainnet (by default) with the link to manifest:
+
+```ts
+import { createWalletClientUI } from '@fotonjs/core';
+
+const walletClient = createWalletClientUI({
+  chain: 'mainnet',
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+```
+
+Then you can call the connection modal window
+
+```ts
+const walletConnection = await walletClient.connect();
+```
+
+## Parameters
+
+### manifestUrl
+- Type: `string{:ts}`
+- Required if `connection` is not provided
+
+The URL of a published [manifest file](https://docs.ton.org/develop/dapps/ton-connect/manifest). A Manifest is a JSON file with the following fields:
+
+```json
+{
+    "url": "<app-url>",                        // required
+    "name": "<app-name>",                      // required
+    "iconUrl": "<app-icon-url>",               // required
+    "termsOfUseUrl": "<terms-of-use-url>",     // optional
+    "privacyPolicyUrl": "<privacy-policy-url>" // optional
+}
+```
+
+```ts {2}
+const walletClient = createWalletClientUI({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+```
+
+### connection
+- Type: `TonConnectUI{:ts}`
+- Required if `manifestUrl` is not provided
+
+An instance of the [`@tonconnect/ui`](https://www.npmjs.com/package/@tonconnect/ui). Needed for integration between Foton and Ton Connect UI.
+
+```ts
+import { TonConnectUI } from '@tonconnect/ui';
+
+const tonConnect = new TonConnectUI({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+
+const walletClient = createWalletClient({
+  connection: tonConnect,
+});
+```
+
+### chain (optional)
+- Type: `'mainnet' | 'testnet'{:ts}`
+- Default: `'mainnet'`
+
+TON blockchain network to use for sending the transactions.
+
+```ts {2}
+const walletClient = createWalletClientUI({
+  chain: 'mainnet',
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+```
+
+### restoreConnection (optional)
+- Type: `boolean{:ts}`
+- Default: `false{:ts}`
+
+If `true`, the connection will be restored from the browser storage on initial render.
+
+```ts {3}
+const walletClient = createWalletClientUI({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+  restoreConnection: true,
+});
+```

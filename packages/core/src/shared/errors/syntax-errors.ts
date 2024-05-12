@@ -19,6 +19,14 @@ export class ConnectUIFunctionUnavailableError extends SyntaxError {
   }
 }
 
+
+export class ReconnectFunctionUnavailableError extends SyntaxError {
+  constructor() {
+    super('The reconnect is not available for UI-based wallet connections. Pass `restoreConnection: true` to the `createWalletClientUI` function to enable it');
+    this.name = 'ReconnectFunctionUnavailableError';
+  }
+}
+
 export class IncorrectContractError extends SyntaxError {
   constructor() {
     super('The contract is incorrect. Provide the contract class compiled from your Tact or Func files');

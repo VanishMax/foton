@@ -1,27 +1,29 @@
 import type { WalletClient, Wallet } from './types.js';
 import { isTonConnectUI } from './utils.js';
+import { DataOrTypedError, returnError, returnData } from '../shared/errors/index.js';
 
-export interface ReconnectOptions {
+type ReconnectReturn = DataOrTypedError<Wallet, 'ReconnectFunctionUnavailableError' | 'TonWalletConnectionError' | 'TonConnectError' | 'TonConnectUIError'>;
 
-}
-
-export async function reconnect (this: WalletClient, options?: ReconnectOptions): Promise<Wallet> {
-  return new Promise(async (resolve, reject) => {
+export async function reconnect (this: WalletClient): Promise<ReconnectReturn> {
+  return new Promise(async (resolve) => {
     if (isTonConnectUI(this.connection)) {
-      return reject(new Error('The reconnect is not available for UI-based wallet connections. Pass `restoreConnection: true` to the `createWalletClientUI` function to enable it.'));
+      return resolve(returnError('ReconnectFunctionUnavailableError'));
+    }
+
+    if (this._wallet) {
+      return returnData(this._wallet);
     }
 
     // Send a callback for a onStatusChange function to finish the connection on wallet change
     this._connectionCallbacks.push((wallet) => {
       if (wallet instanceof Error) {
-        reject(wallet);
-        return;
+        return resolve({ error: wallet, data: undefined });
       }
 
       if (wallet) {
-        resolve(wallet);
+        return resolve(returnData(wallet));
       } else {
-        reject(new Error('Wallet connection failed'));
+        return resolve(returnError('TonWalletConnectionError'));
       }
     });
 
