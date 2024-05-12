@@ -1,8 +1,17 @@
 {
+  "-- Intro": {
+    "type": "separator",
+    "title": "Introduction"
+  },
   "why-foton": "Why Foton",
   "index": "Get started",
-  "clients": "What are clients",
+  "contribution-and-donation": "Contribution and donation",
   "guides": "Guides",
+  "-- Clients": {
+    "type": "separator",
+    "title": "Clients"
+  },
+  "clients": "What are clients",
   "wallet-client": "Wallet Client",
   "public-client": "Public Client",
   "contract-client": "Contract Client"
