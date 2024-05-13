@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/vanishmax/foton/main/apps/docs/public/logo.png" alt="Foton Logo" width="64" height="64">
+  <a href="https://foton.sh" target="_blank">
+    <img src="https://raw.githubusercontent.com/vanishmax/foton/main/apps/docs/public/logo.png" alt="Foton Logo" width="64" height="64">
+  </a>
 </p>
 
 <h1 style="margin-top: 0">Foton</h1>
