@@ -53,14 +53,19 @@ const config: DocsThemeConfig = {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta httpEquiv="Content-Language" content="en" />
         <meta name="description" content={description} />
-        <meta name="og:description" content={description} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site:domain" content={domain} />
-        <meta name="twitter:url" content={`https://${domain}`} />
+
         <meta
           name="og:title"
           content={title ? title + ' · Foton' : 'Foton'}
         />
+        <meta name="og:description" content={description} />
+        <meta name="og:image" content="https://foton.sh/logo-square.png" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site:domain" content={domain} />
+        <meta name="twitter:url" content={`https://${domain}`} />
+        <meta name="twitter:image" content="https://foton.sh/logo-square.png" />
+
         <meta name="apple-mobile-web-app-title" content="Foton" />
         <link rel="icon" href="/logo.png" type="image/png" />
       </>

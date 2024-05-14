@@ -9,7 +9,13 @@
   },
   "docs": {
     "type": "page",
-    "title": "Documentation"
+    "title": "Documentation",
+    "display": "hidden"
+  },
+  "tutorial": {
+    "title": "Tutorial",
+    "type": "page",
+    "href": "/docs/guides/tutorial"
   },
   "404": {
     "type": "page",
