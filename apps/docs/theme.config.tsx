@@ -1,6 +1,7 @@
 import { useConfig } from 'nextra-theme-docs';
 import type { DocsThemeConfig } from 'nextra-theme-docs';
 import { useRouter } from 'next/router';
+import { inject } from '@vercel/analytics';
 
 const config: DocsThemeConfig = {
   logo: (
@@ -45,6 +46,8 @@ const config: DocsThemeConfig = {
 
     const description = 'Create TON dApps with the speed of a photon';
     const domain = 'foton.sh';
+
+    inject();
 
     return (
       <>
