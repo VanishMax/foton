@@ -1,8 +1,8 @@
-## Why Foton?
+# Why Foton?
 
 This article explains the motivation behind the Foton project and its goals.
 
-TL;DR: Developers struggle with the TON development ecosystem because of the lack of beginner-friendly and high-level tools. Foton aims to solve this problem by adapting proven solutions from the Ethereum ecosystem.
+TL;DR: Developers struggle with the TON development ecosystem because of the lack of beginner-friendly and high-level tools. Foton aims to solve this problem by combining proven solutions from the Ethereum ecosystem with the best from TON.
 
 ## Problem statement
 
@@ -29,7 +29,35 @@ The libraries like Viem and Thirdweb abstract the complexity of the blockchain a
 
 **Foton takes the best from Ethereum and applies it to the best of TON.**
 
-Take a look at how easy it is to connect to any of supported wallets with Foton:
+## Wallet connection before and after Foton
+
+Foton simplifies TON development by reducing both the complexity and the amount of boilerplate code. Here is how a wallet would be connected before Foton:
+
+```ts
+import { TonConnectUI } from '@tonconnect/ui';
+
+const tonConnect = new TonConnect({
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+
+const connect = async () => {
+  tonConnect.openModal();
+
+  return new Promise((resolve, reject) => {
+    tonConnect.onStatusChange((wallet) => {
+      if (wallet) {
+        resolve(wallet);
+      } else {
+        reject();
+      }
+    });
+  });
+};
+
+const wallet = await connect();
+```
+
+Now, take a look at how easy it is to connect to any of supported wallets with Foton:
 
 ```ts
 import { createWalletClientUI } from '@fotonjs/core';
@@ -43,10 +71,51 @@ const wallet = await walletClient.connect();
 
 The snippet above creates a [WalletClient](/docs/wallet-client) instance and calls a `connect` method. In browser, user will see a modal with the list of supported wallets. They select one and immediately establish a connection.
 
-The same simplicity applies to other parts of the Foton library. For example, to deploy a contract, one can write:
+## Contract deployment before and after Foton
+
+Before Foton, deploying a smart contract would require much low-level code and understanding of the TON blockchain. The amount of code would be overwhelming, maintaining it would be a nightmare.
+
+Firstly, developers would need to construct a so-called `stateInit` cell representing the contract's code and initial state. Also, they would need to create a payload cell with the method arguments. Then, they would take a TON Connect instance (created in the previous section) and send a transaction:
+
+```ts
+import { beginCell, storeStateInit, toNano } from '@ton/core';
+import { Counter } from './contracts/Counter';
+import { tonConnect, userAddress } from './ton-connect';
+
+const contract = Counter.fromInit();
+const contractAddress = contract.address.toString();
+
+const stateInitBuilder = beginCell();
+storeStateInit({ code: contract.init!.code, data: contract.init!.data })(stateInitBuilder);
+const stateInit = stateInitBuilder.endCell().toBoc().toString('base64');
+
+const payloadBuilder = beginCell();
+const queryId = BigInt(Math.floor(Math.random() * 1000));
+payloadBuilder.storeUint(2490013878, 32);
+payloadBuilder.storeUint(queryId, 64);
+const payload = payloadBuilder.endCell().toBoc().toString('base64');
+
+await tonConnect.sendTransaction({
+  from: userAddress,
+  validUntil: Date.now() + 5 * 60 * 1000,
+  messages: [
+    {
+      address: contractAddress,
+      amount: toNano('0.05'),
+      stateInit,
+      payload,
+    }
+  ],
+});
+```
+
+This code uses TON Connect and `@ton/core` and is surely difficult to understand. It composes cells in a non-JavaScript way while introducing "magical" numbers. The code is hard to maintain, debug, and scale.
+
+In contrast, Foton keeps the deployment simple and readable:
 
 ```ts
 import { createContractClient, parseTon } from '@fotonjs/core';
+import { publicClient, walletClient } from './ton-clients';
 import { Counter } from './contracts/Counter';
 
 export const contractClient = createContractClient({
@@ -57,11 +126,18 @@ export const contractClient = createContractClient({
 
 const res = await counterClient.deploy({
   value: parseTon('0.05'),
+  payload: { queryId: 1n },
   arguments: [],
-  payload: {
-    queryId: BigInt(Math.floor(Math.random() * 1000)),
-  },
 });
 ```
 
-In here, Foton uses the compilation result of the Tact or FunC compiler – a TypeScript class describing the contract. This is all Foton needs to deploy, write and read from the contract.
+In here, Foton uses the compilation result of the Tact or FunC compiler – a TypeScript class `Counter` describing the contract. This is all Foton needs to deploy, write and read from the contract. Thanks to compilers, this API provides even better developer experience that Viem. In Ethereum, developers would need to provide the ABI and contract code as a string, reducing readability.
+
+## Conclusion
+
+Foton simplifies the TON dApp development by merging the best from Ethereum and TON together.
+
+The provided examples show how Foton reduces complex, low-level code into straightforward, maintainable, and scalable solutions. By abstracting away the technical complexities, Foton allows developers to focus on building effective and innovative dApps.
+
+Newcomers should be encouraged  to try Foton for their next TON projects. It will help the ecosystem grow and attract more developers.
+
