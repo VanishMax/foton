@@ -2,9 +2,11 @@ import fotonLogo from '/foton.png';
 
 import './App.css';
 import { useAccount } from './use-account.tsx';
+import { useContract } from './use-contract.tsx';
 
 function App() {
-  const { connectButton, disconnectButton, userAddress } = useAccount();
+  const { connectButton, disconnectButton, userAddress, address } = useAccount();
+  const { contractAddress, deployButton } = useContract(address);
 
   return (
     <>
@@ -25,6 +27,12 @@ function App() {
         <div className="card">
           <span>{userAddress}</span>
           {disconnectButton}
+        </div>
+      )}
+
+      {!!userAddress && !contractAddress && (
+        <div className="card">
+          {deployButton}
         </div>
       )}
     </>

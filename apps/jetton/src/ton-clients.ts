@@ -1,8 +1,9 @@
-import { createWalletClientUI, createPublicClient } from '@fotonjs/core';
+import { createWalletClientUI, createPublicClient, createContractClient } from '@fotonjs/core';
+import { SampleJetton } from './contract';
 
 export const walletClient = createWalletClientUI({
   chain: 'testnet',
-  manifestUrl: 'https://jetton.foton.sh/tonconnect-manifest.json',
+  manifestUrl: 'https://counter.foton.sh/tonconnect-manifest.json',
   restoreConnection: true,
 });
 
@@ -10,8 +11,8 @@ export const publicClient = createPublicClient({
   api: 'testnet',
 });
 
-// export const counterClient = createContractClient({
-//   contract: fotonClient.counter,
-//   publicClient,
-//   walletClient,
-// });
+export const counterClient = createContractClient({
+  contract: SampleJetton,
+  publicClient,
+  walletClient,
+});

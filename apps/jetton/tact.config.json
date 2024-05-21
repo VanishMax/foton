@@ -3,7 +3,7 @@
   "projects": [
     {
       "name": "jetton",
-      "path": "./src/contract/jetton.tact",
+      "path": "./src/contract/contract.tact",
       "output": "./build/jetton"
     }
   ]

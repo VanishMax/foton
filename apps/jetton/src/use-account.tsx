@@ -44,6 +44,7 @@ export const useAccount = () => {
   );
 
   return {
+    address: userAddress,
     userAddress: shortAddress,
     connectButton,
     disconnectButton,
