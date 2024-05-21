@@ -222,6 +222,9 @@ importers:
       '@ton/core':
         specifier: ^0.56.3
         version: 0.56.3(@ton/crypto@3.2.0)
+      '@ton/crypto':
+        specifier: ^3.2.0
+        version: 3.2.0
       '@tonconnect/sdk':
         specifier: ^3.0.2
         version: 3.0.2

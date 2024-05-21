@@ -37,6 +37,14 @@ export async function deployContract <CONTRACT extends CompiledContract>(
 
   const contractAddress = fullContract.address.toString();
 
+  let payload: string | undefined;
+  try {
+    payload = composePayload(fullContract, 'Deploy', options.payload);
+    // TODO: check for this errors and throw better (all except 'Deploy method doesn't exist')
+  } catch (_) {
+    payload = undefined;
+  }
+
   try {
     const res = await this._walletClient.connection.sendTransaction({
       network: getNetwork(this._walletClient._chain),
@@ -47,7 +55,7 @@ export async function deployContract <CONTRACT extends CompiledContract>(
           address: contractAddress,
           amount: options.value.toString(),
           stateInit: getStateInit(fullContract),
-          payload: composePayload(fullContract, 'Deploy', options.payload),
+          payload,
         }
       ],
     });
@@ -58,6 +66,7 @@ export async function deployContract <CONTRACT extends CompiledContract>(
       txHash: bocToHash(res.boc),
     });
   } catch (error) {
+    console.error('err', error);
     // TODO: add more error handlers for different scenarios
     return returnError('UserRejectedTransactionError');
   }

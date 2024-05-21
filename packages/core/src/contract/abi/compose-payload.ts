@@ -114,7 +114,7 @@ const validateSchema = (schema: PayloadSchema, payload: Record<string, unknown>,
 };
 
 // TODO: simplify the function to allow it for external use – without the contract instance or method
-export const composePayload = (contract: Contract, method: 'empty' | string, payload?: Record<string, unknown>): string => {
+export const composePayload = (contract: Contract, method: 'empty' | string, payload?: Record<string, unknown>): string | undefined => {
   if (!contract.abi) {
     throw new Error('Contract class must have an ABI');
   }

@@ -38,3 +38,4 @@ export type {
 // Utils
 export { parseTon } from './shared/utils/index.js';
 export { composePayload } from './contract/abi/index.js';
+export { getJettonDeployArguments } from './contract/index.js';
