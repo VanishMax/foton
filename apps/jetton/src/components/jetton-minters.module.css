@@ -1,0 +1,49 @@
+.section {
+  text-align: left;
+}
+
+.section h4 {
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+@media (min-width: 768px) {
+  .section h4 {
+    font-size: 28px;
+  }
+}
+
+.table {
+  overflow-x: auto;
+}
+
+.table, .table thead, .table tbody {
+  width: 100%;
+}
+
+.table tr {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: 100%;
+}
+
+.table a {
+  color: var(--hover-color);
+  text-decoration: underline;
+}
+
+.table th, .table td {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.table th {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  white-space: nowrap;
+  border-top: 1px solid var(--stroke-primary);
+  border-bottom: 1px solid var(--stroke-primary);
+}

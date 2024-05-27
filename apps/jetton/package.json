@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@fotonjs/core": "workspace:*",
+    "@fotonjs/api": "workspace:*",
     "@tact-lang/compiler": "^1.2.0",
     "@ton/blueprint": "^0.20.0",
     "@types/react": "^18.2.66",

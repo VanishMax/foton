@@ -1,33 +1,20 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { walletClient } from './ton-clients.ts';
+import { walletClient } from '../ton-clients.ts';
 
 export const useAccount = () => {
   const [loading, setLoading] = useState(false);
   const [userAddress, setUserAddress] = useState<string>();
 
-  const shortAddress = useMemo(() => {
-    if (!userAddress) return '';
-    return userAddress.slice(0, 6) + '...' + (userAddress || '').slice(-4);
-  }, [userAddress]);
-
   const onConnect = async () => {
     setLoading(true);
-    const res = await walletClient.connect();
-    if (res.error) {
-      alert(res.error.message);
-    } else {
-      setUserAddress(res.data.account.address);
-    }
+    await walletClient.connect();
     setLoading(false);
   };
 
   const onDisconnect = async () => {
     setLoading(true);
-    const res = await walletClient.disconnect();
-    if (res.data) {
-      setUserAddress(undefined);
-    }
+    await walletClient.disconnect();
     setLoading(false);
   };
 
@@ -43,9 +30,18 @@ export const useAccount = () => {
     </button>
   );
 
+  useEffect(() => {
+    walletClient.connection.onStatusChange((wallet) => {
+      if (wallet) {
+        setUserAddress(wallet.account.address);
+      } else {
+        setUserAddress(undefined);
+      }
+    });
+  }, []);
+
   return {
-    address: userAddress,
-    userAddress: shortAddress,
+    userAddress,
     connectButton,
     disconnectButton,
   };

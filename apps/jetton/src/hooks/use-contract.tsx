@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { parseTon, getJettonDeployArguments } from '@fotonjs/core';
 
-import { counterClient, publicClient } from './ton-clients.ts';
+import { counterClient, publicClient } from '../ton-clients.ts';
 
 const LS_KEY = 'jetton-contract-address';
 
@@ -21,24 +21,24 @@ export const useContract = (userAddress?: string) => {
   }, []);
 
   // Subscribe to the counter state with interval
-  useEffect(() => {
-    getCounterAmount();
+  // useEffect(() => {
+  //   getCounterAmount();
+  //
+  //   const interval = setInterval(getCounterAmount, 5000);
+  //   return () => clearInterval(interval);
+  // }, [contractAddress]);
 
-    const interval = setInterval(getCounterAmount, 5000);
-    return () => clearInterval(interval);
-  }, [contractAddress]);
-
-  const getCounterAmount = async () => {
-    if (!contractAddress) return;
-
-    const res = await counterClient.read({
-      getter: 'owner',
-      arguments: [],
-    });
-    if (res.data) {
-      setCounterOwner(res.data);
-    }
-  };
+  // const getCounterAmount = async () => {
+  //   if (!contractAddress) return;
+  //
+  //   const res = await counterClient.read({
+  //     getter: 'owner',
+  //     arguments: [],
+  //   });
+  //   if (res.data) {
+  //     setCounterOwner(res.data);
+  //   }
+  // };
 
   const onDeploy = async () => {
     const data = getJettonDeployArguments({
@@ -50,7 +50,6 @@ export const useContract = (userAddress?: string) => {
         description: 'Foton token',
       },
     });
-    console.log(data);
 
     const res = await counterClient.deploy({
       value: parseTon('0.05'),
@@ -65,16 +64,16 @@ export const useContract = (userAddress?: string) => {
     }
   };
 
-  const onIncrement = async () => {
+  const onMint = async () => {
     if (!contractAddress) return;
 
     setLoading(true);
     const res = await counterClient.write({
-      method: 'Add',
+      method: 'Mint',
       value: parseTon('0.05'),
       payload: {
-        queryId: 1n,
-        amount: 1n,
+        amount: 100n,
+        receiver: userAddress!,
       },
     });
     if (res.data) {
@@ -91,11 +90,10 @@ export const useContract = (userAddress?: string) => {
     </button>
   );
 
-  const counterButtons = (
+  const mintButton = (
     <>
-      <span>Counter: {counterOwner}</span>
-      <button disabled={loading} onClick={onIncrement}>
-        {loading ? 'Loading...' : 'Increment'}
+      <button disabled={loading} onClick={onMint}>
+        {loading ? 'Loading...' : 'Mint'}
       </button>
     </>
   );
@@ -103,6 +101,6 @@ export const useContract = (userAddress?: string) => {
   return {
     contractAddress,
     deployButton,
-    counterButtons,
+    mintButton,
   };
 };
