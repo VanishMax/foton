@@ -59,7 +59,7 @@ const fieldTypeValidators: Record<AbiFieldType, (builder: Builder, value: unknow
       return new Error('Address value must be a string');
     }
 
-    const address = Address.parseFriendly(value).address;
+    const address = Address.parse(value);
     builder.storeAddress(address);
   },
   cell: (builder, value, format) => {
