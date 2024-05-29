@@ -1,5 +1,5 @@
 import { FC, FormEventHandler, useState } from 'react';
-import styles from './manage-jetton.module.css';
+import styles from './styles.module.css';
 
 type ActionTabs = 'mint' | 'transfer' | 'burn';
 

@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { JettonMaster } from '@fotonjs/api';
-import { publicClient } from '../ton-clients.ts';
-import styles from './jetton-minters.module.css';
-import { shortenAddress } from '../utils/shortenAddress.ts';
+import { publicClient } from '../../ton-clients.ts';
+import styles from './styles.module.css';
+import { shortenAddress } from '../../utils/shortenAddress.ts';
+import { useUserStore } from '../../stores/user-store.ts';
 
 interface JettonMetadata {
   name: string;
@@ -20,11 +21,12 @@ interface JettonMinter extends JettonMaster {
   jetton_content: JettonMetadata;
 }
 
-export interface JettonMintersProps {
-  userAddress?: string;
-}
+export interface JettonMintersProps {}
 
-export const JettonMinters: FC<JettonMintersProps> = ({ userAddress }) => {
+export const JettonMinters: FC<JettonMintersProps> = () => {
+  const userAddress = useUserStore((state) => state.address);
+  const changeSection = useUserStore((state) => state.changeSection);
+
   const [minters, setMinters] = useState<JettonMinter[]>([]);
 
   const fetchJettonMinters = async (address: string): Promise<void> => {
@@ -37,6 +39,8 @@ export const JettonMinters: FC<JettonMintersProps> = ({ userAddress }) => {
   useEffect(() => {
     if (userAddress) {
       fetchJettonMinters(userAddress);
+    } else {
+      setMinters([]);
     }
   }, [userAddress]);
 
@@ -46,7 +50,10 @@ export const JettonMinters: FC<JettonMintersProps> = ({ userAddress }) => {
 
   return (
     <section className={styles.section}>
-      <h4>My jettons</h4>
+      <div className={styles.header}>
+        <h4>My jettons</h4>
+        <button type="button" onClick={() => changeSection('create')}>Create new jetton</button>
+      </div>
 
       <table className={styles.table}>
         <thead>
@@ -75,7 +82,7 @@ export const JettonMinters: FC<JettonMintersProps> = ({ userAddress }) => {
               </a>
             </td>
             <td>
-              <button>Manage</button>
+              <button type="button" onClick={() => changeSection('manage')}>Manage</button>
             </td>
           </tr>
         ))}

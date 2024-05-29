@@ -1,7 +1,7 @@
 import { FC, FormEventHandler, useState } from 'react';
-import styles from './create-jetton.module.css';
+import styles from './styles.module.css';
 import { getJettonDeployArguments, parseTon } from '@fotonjs/core';
-import { counterClient, publicClient, walletClient } from '../ton-clients.ts';
+import { counterClient, publicClient, walletClient } from '../../ton-clients.ts';
 
 export interface CreateJettonProps {
   userAddress?: string;

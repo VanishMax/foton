@@ -2,16 +2,12 @@
   text-align: left;
 }
 
-.section h4 {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 24px;
   margin-bottom: 8px;
-  font-size: 18px;
-}
-
-@media (min-width: 768px) {
-  .section h4 {
-    font-size: 28px;
-  }
 }
 
 .table {

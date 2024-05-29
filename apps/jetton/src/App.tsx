@@ -1,37 +1,27 @@
-import fotonLogo from '/foton.png';
-
+import { useEffect } from 'react';
+import { useUserStore } from './stores/user-store.ts';
+import { JettonMinters } from './components/jetton-minters';
+import { CreateJetton } from './components/create-jetton';
+import { ManageJetton } from './components/manage-jetton';
+import { AppHeader } from './components/header';
 import './App.css';
-import { useAccount } from './hooks/use-account.tsx';
-import { JettonMinters } from './components/jetton-minters.tsx';
-import { shortenAddress } from './utils/shortenAddress.ts';
-import { CreateJetton } from './components/create-jetton.tsx';
-import { ManageJetton } from './components/manage-jetton.tsx';
 
 function App() {
-  const { connectButton, disconnectButton, userAddress } = useAccount();
+  const userAddress = useUserStore((state) => state.address);
+  const activeSection = useUserStore((state) => state.activeSection);
+  const monitorAuth = useUserStore((state) => state.monitorAuth);
+
+  useEffect(() => {
+    monitorAuth();
+  }, [monitorAuth]);
 
   return (
     <>
-      <header>
-        <a href="https://github.com/VanishMax/foton" target="_blank">
-          <img src={fotonLogo} alt="Foton logo"/>
-          <h1>Jetton</h1>
-        </a>
+      <AppHeader />
 
-        {!userAddress
-          ? connectButton
-          : (
-            <div>
-              <span>{shortenAddress(userAddress)}</span>
-              {disconnectButton}
-            </div>
-          )}
-      </header>
-
-      <JettonMinters userAddress={userAddress} />
-      <CreateJetton userAddress={userAddress} />
-
-      <ManageJetton />
+      {activeSection === 'minters' && <JettonMinters />}
+      {activeSection === 'create' && <CreateJetton userAddress={userAddress} />}
+      {activeSection === 'manage' && <ManageJetton />}
     </>
   );
 }

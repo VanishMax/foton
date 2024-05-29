@@ -1,0 +1,47 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header > a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header img {
+  height: 40px;
+  width: 40px;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.header img:hover {
+  filter: drop-shadow(0 0 2em rgba(255, 154, 7, 0.89));
+}
+
+.header.down {
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .header > a {
+    gap: 24px;
+  }
+
+  .header img {
+    height: 60px;
+    width: 60px;
+  }
+
+  .header.down {
+    flex-direction: row;
+  }
+}

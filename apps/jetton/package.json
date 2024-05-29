@@ -13,11 +13,12 @@
   "dependencies": {
     "@ton/core": "^0.56.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@fotonjs/core": "workspace:*",
     "@fotonjs/api": "workspace:*",
+    "@fotonjs/core": "workspace:*",
     "@tact-lang/compiler": "^1.2.0",
     "@ton/blueprint": "^0.20.0",
     "@types/react": "^18.2.66",
