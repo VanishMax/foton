@@ -1,5 +1,6 @@
 import { createWalletClientUI, createPublicClient, createContractClient } from '@fotonjs/core';
 import { SampleJetton } from './contract';
+import { API_KEY } from './utils/constants.ts';
 
 export const walletClient = createWalletClientUI({
   chain: 'testnet',
@@ -9,9 +10,10 @@ export const walletClient = createWalletClientUI({
 
 export const publicClient = createPublicClient({
   api: 'testnet',
+  authToken: API_KEY || undefined,
 });
 
-export const counterClient = createContractClient({
+export const contractClient = createContractClient({
   contract: SampleJetton,
   publicClient,
   walletClient,

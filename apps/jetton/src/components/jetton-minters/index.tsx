@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { JettonMaster } from '@fotonjs/api';
-import { publicClient } from '../../ton-clients.ts';
-import styles from './styles.module.css';
+import { JettonMaster, JettonWallet } from '@fotonjs/api';
+import { contractClient, publicClient } from '../../ton-clients.ts';
 import { shortenAddress } from '../../utils/shortenAddress.ts';
 import { useUserStore } from '../../stores/user-store.ts';
+import { AppSection } from '../section';
+import styles from './styles.module.css';
 
 interface JettonMetadata {
   name: string;
@@ -19,6 +20,7 @@ interface JettonMetadata {
 
 interface JettonMinter extends JettonMaster {
   jetton_content: JettonMetadata;
+  balance: bigint;
 }
 
 export interface JettonMintersProps {}
@@ -30,10 +32,29 @@ export const JettonMinters: FC<JettonMintersProps> = () => {
   const [minters, setMinters] = useState<JettonMinter[]>([]);
 
   const fetchJettonMinters = async (address: string): Promise<void> => {
-    const res = await publicClient._api.jettonMasters({ admin_address: address });
-    if (res.data) {
-      setMinters(res.data.jetton_masters as JettonMinter[]);
-    }
+    const [minters, wallets] = await Promise.all([
+      publicClient._api.jettonMasters({ admin_address: address }),
+      publicClient._api.jettonWallets({ owner_address: address }),
+    ]);
+    let mintersData = (minters.data?.jetton_masters || []) as JettonMinter[];
+    const walletsData = (wallets.data?.jetton_wallets || []) as JettonWallet[];
+
+    mintersData = mintersData.map((minter) => {
+      const balance = walletsData.reduce((accum, wallet) => {
+        console.log(wallet.jetton, minter.address, wallet.jetton === minter.address, BigInt(wallet.balance));
+        if (wallet.jetton === minter.address) {
+          return accum + BigInt(wallet.balance);
+        }
+        return accum;
+      }, 0n);
+
+      return {
+        ...minter,
+        balance,
+      };
+    });
+
+    setMinters(mintersData);
   };
 
   useEffect(() => {
@@ -44,25 +65,29 @@ export const JettonMinters: FC<JettonMintersProps> = () => {
     }
   }, [userAddress]);
 
+  const onManage = (address: string) => {
+    contractClient.setAddress(address);
+    changeSection('manage');
+  };
+
   if (!minters.length) {
     return null;
   }
 
   return (
-    <section className={styles.section}>
-      <div className={styles.header}>
-        <h4>My jettons</h4>
-        <button type="button" onClick={() => changeSection('create')}>Create new jetton</button>
-      </div>
-
+    <AppSection
+      title="My jettons"
+      headerItem={<button type="button" onClick={() => changeSection('create')}>Create new jetton</button>}
+    >
       <table className={styles.table}>
         <thead>
         <tr>
           <th>Symbol</th>
           <th>Name</th>
           <th>Total supply</th>
+          <th>Balance</th>
           <th>Address</th>
-          <th />
+          <th/>
         </tr>
         </thead>
         <tbody>
@@ -71,6 +96,7 @@ export const JettonMinters: FC<JettonMintersProps> = () => {
             <td>${minter.jetton_content.symbol}</td>
             <td>{minter.jetton_content.name}</td>
             <td>{minter.total_supply}</td>
+            <td>{minter.balance?.toString() || '0'}</td>
             <td>
               <a
                 key={`symbol-${minter.address}`}
@@ -78,16 +104,16 @@ export const JettonMinters: FC<JettonMintersProps> = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-              {shortenAddress(minter.address)}
+                {shortenAddress(minter.address)}
               </a>
             </td>
             <td>
-              <button type="button" onClick={() => changeSection('manage')}>Manage</button>
+              <button type="button" onClick={() => onManage(minter.address)}>Manage</button>
             </td>
           </tr>
         ))}
         </tbody>
       </table>
-    </section>
+    </AppSection>
   );
 };

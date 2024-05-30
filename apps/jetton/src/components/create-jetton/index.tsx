@@ -1,14 +1,15 @@
 import { FC, FormEventHandler, useState } from 'react';
 import styles from './styles.module.css';
 import { getJettonDeployArguments, parseTon } from '@fotonjs/core';
-import { counterClient, publicClient, walletClient } from '../../ton-clients.ts';
+import { contractClient, publicClient, walletClient } from '../../ton-clients.ts';
+import { AppSection } from '../section';
+import { useUserStore } from '../../stores/user-store.ts';
 
-export interface CreateJettonProps {
-  userAddress?: string;
-}
+export interface CreateJettonProps {}
 
-export const CreateJetton: FC<CreateJettonProps> = ({ userAddress }) => {
-  const [address, setAddress] = useState<string | undefined>();
+export const CreateJetton: FC<CreateJettonProps> = () => {
+  const changeSection = useUserStore((state) => state.changeSection);
+  const userAddress = useUserStore((state) => state.address);
 
   const [name, setName] = useState('');
   const [symbol, setSymbol] = useState('');
@@ -41,16 +42,15 @@ export const CreateJetton: FC<CreateJettonProps> = ({ userAddress }) => {
     });
 
     setLoading(true);
-    const res = await counterClient.deploy({
+    const res = await contractClient.deploy({
       value: parseTon('0.05'),
       arguments: data,
       payload: undefined,
     });
 
-    console.log('addr', res.data?.address);
     if (res.data) {
-      setAddress(res.data.address);
       await publicClient.waitForTransaction({ hash: res.data.txHash });
+      changeSection('minters');
     } else {
       setError(res.error.message);
     }
@@ -58,8 +58,7 @@ export const CreateJetton: FC<CreateJettonProps> = ({ userAddress }) => {
   };
 
   return (
-    <>
-      <h4 className={styles.h4}>Create new jetton</h4>
+    <AppSection title="Create new jetton">
       <form onSubmit={onSubmit} className={styles.form}>
         <fieldset className={styles.field}>
           <label htmlFor="jetton-name">Project name</label>
@@ -105,6 +104,6 @@ export const CreateJetton: FC<CreateJettonProps> = ({ userAddress }) => {
           <button type="button" onClick={onConnect}>Connect wallet</button>
         )}
       </form>
-    </>
+    </AppSection>
   );
 };

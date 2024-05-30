@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { parseTon, getJettonDeployArguments } from '@fotonjs/core';
 
-import { counterClient, publicClient } from '../ton-clients.ts';
+import { contractClient, publicClient } from '../ton-clients.ts';
 
 const LS_KEY = 'jetton-contract-address';
 
@@ -17,7 +17,7 @@ export const useContract = (userAddress?: string) => {
 
   // Set contract address for the contractClient on initial render
   useEffect(() => {
-    counterClient.setAddress(contractAddress);
+    contractClient.setAddress(contractAddress);
   }, []);
 
   // Subscribe to the counter state with interval
@@ -31,7 +31,7 @@ export const useContract = (userAddress?: string) => {
   // const getCounterAmount = async () => {
   //   if (!contractAddress) return;
   //
-  //   const res = await counterClient.read({
+  //   const res = await contractClient.read({
   //     getter: 'owner',
   //     arguments: [],
   //   });
@@ -51,7 +51,7 @@ export const useContract = (userAddress?: string) => {
       },
     });
 
-    const res = await counterClient.deploy({
+    const res = await contractClient.deploy({
       value: parseTon('0.05'),
       arguments: data,
       payload: undefined,
@@ -68,7 +68,7 @@ export const useContract = (userAddress?: string) => {
     if (!contractAddress) return;
 
     setLoading(true);
-    const res = await counterClient.write({
+    const res = await contractClient.write({
       method: 'Mint',
       value: parseTon('0.05'),
       payload: {

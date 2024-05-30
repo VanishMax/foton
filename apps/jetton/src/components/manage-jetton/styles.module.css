@@ -45,3 +45,8 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+.error {
+  text-align: center;
+  color: #fa3636;
+}
