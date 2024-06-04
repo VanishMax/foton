@@ -29,14 +29,14 @@ export async function writeContract <CONTRACT extends CompiledContract, METHOD e
     return returnError('UserUnauthorizedError');
   }
 
-  const fullContract = this._contract.fromAddress(Address.parseFriendly(this.address).address);
-
-  if (!fullContract.abi) {
-    return returnError('IncorrectContractError');
-  }
-
   // TODO: control the state of sending the transaction: throw error if rejected, etc.
   try {
+    const fullContract = this._contract.fromAddress(Address.parse(this.address));
+
+    if (!fullContract.abi) {
+      return returnError('IncorrectContractError');
+    }
+
     const res = await this._walletClient.connection.sendTransaction({
       network: getNetwork(this._walletClient._chain),
       validUntil: Date.now() + 5 * 60 * 1000,

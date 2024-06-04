@@ -1,0 +1,33 @@
+.table {
+  overflow-x: auto;
+}
+
+.table, .table thead, .table tbody {
+  width: 100%;
+}
+
+.table tr {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  width: 100%;
+}
+
+.table a {
+  color: var(--hover-color);
+  text-decoration: underline;
+}
+
+.table th, .table td {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.table th {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  white-space: nowrap;
+  border-top: 1px solid var(--stroke-primary);
+  border-bottom: 1px solid var(--stroke-primary);
+}

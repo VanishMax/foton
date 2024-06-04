@@ -16,3 +16,6 @@ export type {
   ContractGetters,
   ContractGetterReturn,
 } from './helper-types.js';
+
+export { buildJettonOffChainMetadata, buildJettonOnchainMetadata } from './utils/build-jetton-metadata.js';
+export { getJettonDeployArguments } from './utils/get-jetton-deploy-arguments.js';

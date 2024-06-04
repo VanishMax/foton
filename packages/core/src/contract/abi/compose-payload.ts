@@ -59,7 +59,7 @@ const fieldTypeValidators: Record<AbiFieldType, (builder: Builder, value: unknow
       return new Error('Address value must be a string');
     }
 
-    const address = Address.parseFriendly(value).address;
+    const address = Address.parse(value);
     builder.storeAddress(address);
   },
   cell: (builder, value, format) => {
@@ -114,7 +114,7 @@ const validateSchema = (schema: PayloadSchema, payload: Record<string, unknown>,
 };
 
 // TODO: simplify the function to allow it for external use – without the contract instance or method
-export const composePayload = (contract: Contract, method: 'empty' | string, payload?: Record<string, unknown>): string => {
+export const composePayload = (contract: Contract, method: 'empty' | string, payload?: Record<string, unknown>): string | undefined => {
   if (!contract.abi) {
     throw new Error('Contract class must have an ABI');
   }

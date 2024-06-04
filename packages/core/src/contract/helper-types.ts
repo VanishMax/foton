@@ -18,6 +18,13 @@ export type GetExtendedContract<CONTRACT extends CompiledContract> = CONTRACT ex
 
 // Types for the contract methods (actions that write state, require fees)
 
+// A helper method that transforms any Address type to string in a contract's payload
+type MapMethodPayload<T> = {
+  [K in keyof T]: T[K] extends Address
+    ? string
+    : T[K];
+};
+
 /**
  * Takes a contract and returns a union-type of the method arguments that a contract can run.
  *
@@ -69,7 +76,7 @@ export type ContractMethodNames<CONTRACT extends CompiledContract> =
 export type ContractMethod<CONTRACT extends CompiledContract, KEY extends string>
   = Exclude<ContractMethods<CONTRACT>, string | null> extends { $$type: infer TYPE } // If receiver is a message
     ? TYPE extends KEY // find specific message to get the arguments
-      ? Omit<Extract<ContractMethods<CONTRACT>, { $$type: TYPE }>, '$$type'> // store argument of the specific message without $$type
+      ? MapMethodPayload<Omit<Extract<ContractMethods<CONTRACT>, { $$type: TYPE }>, '$$type'>> // store argument of the specific message without $$type, map Address to string
       : undefined
     : undefined; // else – receive is a string (str: String), no payload is required
 

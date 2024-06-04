@@ -1,0 +1,23 @@
+#root {
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 3rem;
+}
+
+@media (min-width: 768px) {
+  #root {
+    width: 720px;
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 2em;
+}
+
+form {
+  margin-top: 2em;
+}
