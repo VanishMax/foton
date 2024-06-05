@@ -92,6 +92,17 @@ export type ContractDeployArguments<CONTRACT extends CompiledContract> = Paramet
 
 type WithoutFirst<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never;
 
+type SnakeCaseHelper<S extends string> = S extends `${infer First}${infer Rest}`
+  ? `${First extends Capitalize<First> ? `_${Lowercase<First>}` : First}${SnakeCaseHelper<Rest>}`
+  : S;
+type SnakeCase<S extends string> = S extends `${infer First}${infer Rest}` // changes ThisLiteralType to this_literal_type
+  ? `${Lowercase<First>}${SnakeCaseHelper<Rest>}`
+  : S;
+
+export type CamelCase<S extends string> = S extends `${infer First}_${infer Next}${infer Rest}`
+  ? `${First}${Capitalize<Next>}${CamelCase<Rest>}` // transforms snake_case to camelCase
+  : S;
+
 type ExtractGetterNames<CONTRACT extends CompiledContract> = Exclude<{
   [K in keyof GetExtendedContract<CONTRACT>]: GetExtendedContract<CONTRACT>[K] extends Function // Check if the property is a function
     ? K extends `get${string}`
@@ -113,7 +124,7 @@ type GetCapitalizedGetter<GETTER extends string, CONTRACT extends ExtendedContra
  */
 export type ContractGetterNames<CONTRACT extends CompiledContract> =
   ExtractGetterNames<CONTRACT> extends `get${infer REST}` // Check if the name starts with 'get'
-    ? Uncapitalize<REST> // Remove 'get' and uncapitalize the first letter of the rest
+    ? SnakeCase<REST> | Uncapitalize<REST> // Remove 'get' and uncapitalize the first letter of the rest + make the same type of snake_case because Tact compiler transforms such casing to camelCase
     : never;
 
 /**
@@ -124,7 +135,7 @@ export type ContractGetterNames<CONTRACT extends CompiledContract> =
  * then the type will be `{ balance: [bigint], counter: [] }`.
  */
 export type ContractGetters<CONTRACT extends CompiledContract> = {
-  [key in ContractGetterNames<CONTRACT>]: GetCapitalizedGetter<key, GetExtendedContract<CONTRACT>> extends (...args: any) => any
+  [key in CamelCase<ContractGetterNames<CONTRACT>>]: GetCapitalizedGetter<key, GetExtendedContract<CONTRACT>> extends (...args: any) => any
     ? WithoutFirst<Parameters<GetCapitalizedGetter<key, GetExtendedContract<CONTRACT>>>>
     : never;
 }

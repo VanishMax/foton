@@ -4,12 +4,12 @@ import { type DataOrTypedError, returnData, returnError } from '../shared/errors
 
 import { composeReadPayload } from './abi/compose-read-payload.js';
 import { parseReadReturn } from './abi/parse-read-return.js';
-import type { CompiledContract, ContractGetterNames, ContractGetterReturn, ContractGetters } from './helper-types.js';
+import type { CamelCase, CompiledContract, ContractGetterNames, ContractGetterReturn, ContractGetters } from './helper-types.js';
 import type { ContractClient } from './types.js';
 
 export interface ReadContractOptions<CONTRACT extends CompiledContract, GETTER extends ContractGetterNames<CONTRACT>> {
   getter: GETTER;
-  arguments: ContractGetters<CONTRACT>[GETTER];
+  arguments: ContractGetters<CONTRACT>[CamelCase<GETTER>];
 }
 
 type ReadContractReturn<CONTRACT extends CompiledContract, GETTER extends ContractGetterNames<CONTRACT>> =
