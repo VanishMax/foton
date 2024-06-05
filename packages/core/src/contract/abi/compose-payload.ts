@@ -9,6 +9,8 @@ const getAvailableMethods = (abi: ContractABI): string[] => {
   return (abi.receivers || []).reduce((accum, currentValue) => {
     if (currentValue.message.kind === 'typed') {
       accum.push(currentValue.message.type);
+    } else if (currentValue.message.kind === 'text' && currentValue.message.text) {
+      accum.push(currentValue.message.text);
     }
     return accum;
   }, [] as string[]);
