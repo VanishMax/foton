@@ -1,6 +1,6 @@
 {
   "name": "@fotonjs/api",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Foton API: comfortable public APIs to connect to the TON blockchain",
   "keywords": [
     "TON",
