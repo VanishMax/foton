@@ -458,6 +458,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v3/notcoin_holders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Notcoin Holders
+         * @description Get Notcoin voucher holders
+         */
+        get: operations["get_notcoin_holders_api_v3_notcoin_holders_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -655,6 +675,8 @@ export interface components {
             query_id: string;
             /** Owner */
             owner: string;
+            /** Jetton Wallet */
+            jetton_wallet: string;
             /** Jetton Master */
             jetton_master: string;
             /** Transaction Hash */
@@ -663,6 +685,8 @@ export interface components {
             transaction_lt: string;
             /** Transaction Now */
             transaction_now: number;
+            /** Amount */
+            amount: string;
             /** Response Destination */
             response_destination: string | null;
             /** Custom Payload */
@@ -704,9 +728,9 @@ export interface components {
             /** Query Id */
             query_id: string;
             /** Source */
-            source: string;
+            source: string | null;
             /** Destination */
-            destination: string;
+            destination: string | null;
             /** Amount */
             amount: string;
             /** Source Wallet */
@@ -798,7 +822,7 @@ export interface components {
             /** Body */
             body: string;
             /** Decoded */
-            decoded: Omit<components["schemas"]["TextComment"] | components["schemas"]["BinaryComment"], "type"> | null;
+            decoded: (components["schemas"]["TextComment"] | components["schemas"]["BinaryComment"]) | null;
         };
         /** MessageInitState */
         MessageInitState: {
@@ -1847,6 +1871,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WalletInfo"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_notcoin_holders_api_v3_notcoin_holders_get: {
+        parameters: {
+            query?: {
+                /** @description Limit number of queried rows. Use with *offset* to batch read. */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

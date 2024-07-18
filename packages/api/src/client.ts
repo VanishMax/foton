@@ -23,9 +23,9 @@ export const createClient = (options?: CreateClientOptions): RpcClient => {
 
   if (authToken) {
     openapiClient.use({
-      onRequest: (req) => {
-        req.headers.set('X-API-Key', authToken);
-        return req;
+      onRequest: ({ request }) => {
+        request.headers.set('X-API-Key', authToken);
+        return request;
       },
     });
   }
