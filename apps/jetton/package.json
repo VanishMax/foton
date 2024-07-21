@@ -12,25 +12,25 @@
   },
   "dependencies": {
     "@ton/core": "^0.56.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "zustand": "^4.5.2"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@fotonjs/api": "workspace:*",
     "@fotonjs/core": "workspace:*",
-    "@tact-lang/compiler": "^1.2.0",
+    "@tact-lang/compiler": "^1.4.0",
     "@ton/blueprint": "^0.20.0",
-    "@types/react": "^18.2.66",
-    "@types/react-dom": "^18.2.22",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
-    "@vitejs/plugin-react-swc": "^3.5.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "@typescript-eslint/parser": "^7.16.1",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.8",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4",
     "vite-plugin-node-polyfills": "^0.21.0"
   }
 }
