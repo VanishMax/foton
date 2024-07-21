@@ -10,5 +10,5 @@ export const isTonConnectUI = (tonConnect: TonConnectUI | TonConnect): tonConnec
 }
 
 export const isTonConnect = (tonConnect: TonConnectUI | TonConnect): tonConnect is TonConnect => {
-  return ('isWalletInjected' in tonConnect && 'isInsideWalletBrowser' in tonConnect);
+  return ('tracker' in tonConnect && 'walletsList' in tonConnect && 'dappSettings' in tonConnect && 'bridgeConnectionStorage' in tonConnect);
 }

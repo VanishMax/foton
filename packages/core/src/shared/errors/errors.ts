@@ -9,6 +9,7 @@ import {
   ReconnectFunctionUnavailableError,
   IncorrectContractError,
   MissingContractAddressError,
+  ConnectUIFunctionUnavailableInNodeError,
 } from './syntax-errors.js';
 import {
   TonConnectError,
@@ -23,6 +24,7 @@ export type SupportedErrors = {
   // Syntax errors
   ConnectFunctionUnavailableError: ConnectFunctionUnavailableError,
   ConnectUIFunctionUnavailableError: ConnectUIFunctionUnavailableError,
+  ConnectUIFunctionUnavailableInNodeError: ConnectUIFunctionUnavailableInNodeError
   ReconnectFunctionUnavailableError: ReconnectFunctionUnavailableError,
   IncorrectContractError: IncorrectContractError,
   MissingContractAddressError: MissingContractAddressError,
@@ -43,6 +45,7 @@ export const supportedErrors = {
   // Syntax errors
   ConnectFunctionUnavailableError: ConnectFunctionUnavailableError,
   ConnectUIFunctionUnavailableError: ConnectUIFunctionUnavailableError,
+  ConnectUIFunctionUnavailableInNodeError: ConnectUIFunctionUnavailableInNodeError,
   ReconnectFunctionUnavailableError: ReconnectFunctionUnavailableError,
   IncorrectContractError: IncorrectContractError,
   MissingContractAddressError: MissingContractAddressError,

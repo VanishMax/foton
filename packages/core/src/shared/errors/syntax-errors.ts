@@ -20,6 +20,13 @@ export class ConnectUIFunctionUnavailableError extends SyntaxError {
 }
 
 
+export class ConnectUIFunctionUnavailableInNodeError extends SyntaxError {
+  constructor() {
+    super('This function is not available in the server environment. Please you `createWalletClient` instead or, if you use Next.js, call `createWalletClientUI` in `useEffect` hook or in the event handler, so it creates a wallet client when the `window` is available.');
+    this.name = 'ConnectUIFunctionUnavailableInNodeError';
+  }
+}
+
 export class ReconnectFunctionUnavailableError extends SyntaxError {
   constructor() {
     super('The reconnect is not available for UI-based wallet connections. Pass `restoreConnection: true` to the `createWalletClientUI` function to enable it');
