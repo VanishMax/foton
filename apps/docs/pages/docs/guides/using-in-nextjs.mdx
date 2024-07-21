@@ -1,0 +1,70 @@
+# Using in Next.js
+
+Next.js implements server-side rendering in React applications, and it proposes challenges for TON interactions.
+However, you can use Foton in Next.js applications by following these steps:
+
+## Using `createWalletClient`
+
+The default Wallet Client works fine in Next.js applications since it doesn't provide any UI. You can use it in a normal fashion:
+
+```ts filename="src/ton-clients.ts"
+import { createWalletClient } from '@fotonjs/core';
+
+export const walletClient = createWalletClient({
+  chain: 'mainnet',
+  manifestUrl: 'https://example.com/tonconnect-manifest.json',
+});
+```
+
+And then use it in your components:
+
+```tsx filename="src/connect.tsx"
+'use client';
+import { walletClient } from './ton-clients';
+
+export const Connect = () => {
+  const onClick = async () => {
+    const wallets = await walletClient.getWallets({ type: 'injected' });
+    const walletConnection = await walletClient.connect(wallets[0]);
+  };
+
+  return (
+    <button onClick={onClick}>Connect</button>
+  );
+};
+```
+
+## Using `createWalletClientUI`
+
+UI Client requires a DOM environment, so you need to define it inside a component:
+
+```tsx filename="src/connect.tsx"
+'use client';
+
+import { useEffect } from 'react';
+import { createWalletClientUI, WalletClientUI } from '@fotonjs/core';
+
+let walletClient: WalletClientUI;
+
+export const Connect = () => {
+  useEffect(() => {
+    if (walletClient) {
+      return;
+    }
+
+    walletClient = createWalletClientUI({
+      chain: 'testnet',
+      manifestUrl: 'https://counter.foton.sh/tonconnect-manifest.json',
+      restoreConnection: true,
+    })
+  }, []);
+
+  const onClick = async () => {
+    const walletConnection = await walletClient!.connect();
+  };
+
+  return (
+    <button onClick={onClick}>Connect</button>
+  );
+};
+```
