@@ -22,6 +22,8 @@ interface CreateWalletClientOptionsFull extends TonConnectUiOptionsWithManifest,
 
 export type CreateWalletClientUIOptions = CreateWalletClientOptionsFull | CreateWalletClientUIOptionsWithTC;
 
+let globalClient: WalletClientUI;
+
 export function createWalletClientUI (options?: CreateWalletClientUIOptions): WalletClientUI {
   const { chain, ...tonConnectUIOptions } = options || {};
 
@@ -29,18 +31,20 @@ export function createWalletClientUI (options?: CreateWalletClientUIOptions): Wa
     throw new ConnectUIFunctionUnavailableInNodeError();
   }
 
-  let connection: TonConnectUI;
-  if ((tonConnectUIOptions as CreateWalletClientUIOptionsWithTC).connection) {
-    connection = (tonConnectUIOptions as CreateWalletClientUIOptionsWithTC).connection;
-  } else {
-    connection = new TonConnectUI(tonConnectUIOptions as CreateWalletClientOptionsFull);
+  if (globalClient) {
+    return globalClient;
   }
 
   const client = {
-    connection,
     connected: false,
     address: undefined,
   } as WalletClientUI;
+
+  if ((tonConnectUIOptions as CreateWalletClientUIOptionsWithTC).connection) {
+    client.connection = (tonConnectUIOptions as CreateWalletClientUIOptionsWithTC).connection;
+  } else {
+    client.connection = new TonConnectUI(tonConnectUIOptions as CreateWalletClientOptionsFull);
+  }
 
   client.getWallets = getWallets.bind(client);
 
@@ -52,5 +56,6 @@ export function createWalletClientUI (options?: CreateWalletClientUIOptions): Wa
   // Subscribe to wallet connection changes
   onStatusChange.call(client);
 
+  globalClient = client;
   return client;
 }
