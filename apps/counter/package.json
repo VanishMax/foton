@@ -11,6 +11,7 @@
     "compile": "foton compile"
   },
   "dependencies": {
+    "@fotonjs/contracts": "link:../../packages/contracts",
     "@ton/core": "^0.56.3",
     "@tonconnect/ui": "^2.0.6",
     "@tonconnect/ui-react": "^2.0.6",

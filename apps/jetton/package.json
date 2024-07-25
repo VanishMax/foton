@@ -11,6 +11,7 @@
     "compile": "tact --config ./tact.config.json"
   },
   "dependencies": {
+    "@fotonjs/contracts": "link:../../packages/contracts",
     "@ton/core": "^0.56.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

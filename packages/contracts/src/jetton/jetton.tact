@@ -35,25 +35,25 @@ trait Jetton with Ownable {
     let init: StateInit = initOf JettonDefaultWallet(msg.owner_address, myAddress());
     if (msg.include_address) {
       send(SendParameters{
-      to: sender(),
-      value: 0,
-      mode: SendRemainingValue,
-      body: TakeWalletAddress{
-      query_id: msg.query_id,
-      wallet_address: contractAddress(init),
-      owner_address: beginCell().storeBool(true).storeAddress(msg.owner_address).endCell().asSlice()
-      }.toCell()
+        to: sender(),
+        value: 0,
+        mode: SendRemainingValue,
+        body: TakeWalletAddress{
+          query_id: msg.query_id,
+          wallet_address: contractAddress(init),
+          owner_address: beginCell().storeBool(true).storeAddress(msg.owner_address).endCell().asSlice()
+        }.toCell()
       });
     } else {
       send(SendParameters{
-      to: sender(),
-      value: 0,
-      mode: SendRemainingValue,
-      body: TakeWalletAddress { // 0xd1735400
-      query_id: msg.query_id,
-      wallet_address: contractAddress(init),
-      owner_address: beginCell().storeBool(false).endCell().asSlice()
-      }.toCell()
+        to: sender(),
+        value: 0,
+        mode: SendRemainingValue,
+        body: TakeWalletAddress { // 0xd1735400
+          query_id: msg.query_id,
+          wallet_address: contractAddress(init),
+          owner_address: beginCell().storeBool(false).endCell().asSlice()
+        }.toCell()
       });
     }
   }
@@ -68,20 +68,20 @@ trait Jetton with Ownable {
 
     let winit: StateInit = self.getJettonWalletInit(to); // Create message
     send(SendParameters{
-    to: contractAddress(winit),
-    value: 0,
-    bounce: true,
-    mode: SendRemainingValue,
-    body: TokenTransferInternal{
-    query_id: 0,
-    amount: amount,
-    from: myAddress(),
-    response_destination: response_destination,
-    forward_ton_amount: 0,
-    forward_payload: beginCell().endCell().asSlice()
-    }.toCell(),
-    code: winit.code,
-    data: winit.data
+      to: contractAddress(winit),
+      value: 0,
+      bounce: true,
+      mode: SendRemainingValue,
+      body: TokenTransferInternal{
+        query_id: 0,
+        amount: amount,
+        from: myAddress(),
+        response_destination: response_destination,
+        forward_ton_amount: 0,
+        forward_payload: beginCell().endCell().asSlice()
+      }.toCell(),
+      code: winit.code,
+      data: winit.data
     });
   }
 
@@ -98,11 +98,11 @@ trait Jetton with Ownable {
   // ====== Get Methods ====== //
   get fun get_jetton_data(): JettonData {
     return JettonData{
-    total_supply: self.total_supply,
-    mintable: self.mintable,
-    owner: self.owner,
-    content: self.content,
-    wallet_code: initOf JettonDefaultWallet(self.owner, myAddress()).code
+      total_supply: self.total_supply,
+      mintable: self.mintable,
+      owner: self.owner,
+      content: self.content,
+      wallet_code: initOf JettonDefaultWallet(self.owner, myAddress()).code
     };
   }
 
@@ -144,20 +144,20 @@ contract JettonDefaultWallet {
     let init: StateInit = initOf JettonDefaultWallet(msg.sender, self.master);
     let wallet_address: Address = contractAddress(init);
     send(SendParameters{
-    to: wallet_address,
-    value: 0,
-    mode: SendRemainingValue,
-    bounce: false,
-    body: TokenTransferInternal{ // 0x178d4519
-    query_id: msg.query_id,
-    amount: msg.amount,
-    from: self.owner,
-    response_destination: msg.response_destination,
-    forward_ton_amount: msg.forward_ton_amount,
-    forward_payload:  msg.forward_payload
-    }.toCell(),
-    code: init.code,
-    data: init.data
+      to: wallet_address,
+      value: 0,
+      mode: SendRemainingValue,
+      bounce: false,
+      body: TokenTransferInternal{ // 0x178d4519
+        query_id: msg.query_id,
+        amount: msg.amount,
+        from: self.owner,
+        response_destination: msg.response_destination,
+        forward_ton_amount: msg.forward_ton_amount,
+        forward_payload:  msg.forward_payload
+      }.toCell(),
+      code: init.code,
+      data: init.data
     });
   }
 
@@ -178,27 +178,27 @@ contract JettonDefaultWallet {
     if (msg.forward_ton_amount > 0) {
       msg_value = msg_value - msg.forward_ton_amount - fwd_fee;
       send(SendParameters{
-      to: self.owner,
-      value: msg.forward_ton_amount,
-      mode: SendPayGasSeparately,
-      bounce: false,
-      body: TokenNotification { // 0x7362d09c -- Remind the new Owner
-      query_id: msg.query_id,
-      amount: msg.amount,
-      from: msg.from,
-      forward_payload: msg.forward_payload
-      }.toCell()
+        to: self.owner,
+        value: msg.forward_ton_amount,
+        mode: SendPayGasSeparately,
+        bounce: false,
+        body: TokenNotification { // 0x7362d09c -- Remind the new Owner
+          query_id: msg.query_id,
+          amount: msg.amount,
+          from: msg.from,
+          forward_payload: msg.forward_payload
+        }.toCell()
       });
     }
 
     // 0xd53276db -- Cashback to the original Sender
     if (msg.response_destination != null && msg_value > 0) {
       send(SendParameters {
-      to: msg.response_destination!!,
-      value: msg_value,
-      bounce: false,
-      body: TokenExcesses { query_id: msg.query_id }.toCell(),
-      mode: SendPayGasSeparately
+        to: msg.response_destination!!,
+        value: msg_value,
+        bounce: false,
+        body: TokenExcesses { query_id: msg.query_id }.toCell(),
+        mode: SendPayGasSeparately
       });
     }
   }
@@ -215,16 +215,16 @@ contract JettonDefaultWallet {
 
     // Burn tokens
     send(SendParameters{
-    to: self.master,
-    value: 0,
-    mode: SendRemainingValue,
-    bounce: true,
-    body: TokenBurnNotification{
-    query_id: msg.query_id,
-    amount: msg.amount,
-    sender: self.owner,
-    response_destination: msg.response_destination!!
-    }.toCell()
+      to: self.master,
+      value: 0,
+      mode: SendRemainingValue,
+      bounce: true,
+      body: TokenBurnNotification{
+        query_id: msg.query_id,
+        amount: msg.amount,
+        sender: self.owner,
+        response_destination: msg.response_destination!!
+      }.toCell()
     });
   }
 
@@ -247,10 +247,10 @@ contract JettonDefaultWallet {
 
   get fun get_wallet_data(): JettonWalletData {
     return JettonWalletData{
-    balance: self.balance,
-    owner: self.owner,
-    master: self.master,
-    code: (initOf JettonDefaultWallet(self.owner, self.master)).code
+      balance: self.balance,
+      owner: self.owner,
+      master: self.master,
+      code: (initOf JettonDefaultWallet(self.owner, self.master)).code
     };
   }
 }

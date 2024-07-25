@@ -1,0 +1,53 @@
+{
+  "name": "@fotonjs/contracts",
+  "version": "0.0.1",
+  "description": "Foton contracts: a collection of reusable smart contracts for TON",
+  "keywords": [
+    "TON",
+    "Foton",
+    "The Open Network",
+    "Blockchain",
+    "Tact",
+    "FunC",
+    "Smart contracts"
+  ],
+  "license": "MIT",
+  "author": "vanishmax",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vanishmax/foton.git"
+  },
+  "homepage": "https://github.com/vanishmax/foton/tree/main/packages/api",
+  "bugs": "https://github.com/vanishmax/foton/issues",
+  "type": "module",
+  "files": [
+    "dist",
+    "readme.md"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    "./*": {
+      "types": "./dist/*/index.d.ts",
+      "require": "./dist/*/index.cjs",
+      "import": "./dist/*/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/*/index.ts --dts --minify --format cjs,esm --out-dir ./dist",
+    "prepare": "pnpm run build",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@ton/core": "^0.56.3",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.12",
+    "tsup": "^8.2.3"
+  }
+}

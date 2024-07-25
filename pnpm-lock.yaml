@@ -10,6 +10,9 @@ importers:
 
   apps/counter:
     dependencies:
+      '@fotonjs/contracts':
+        specifier: link:../../packages/contracts
+        version: link:../../packages/contracts
       '@ton/core':
         specifier: ^0.56.3
         version: 0.56.3(@ton/crypto@3.2.0)
@@ -55,7 +58,7 @@ importers:
         version: 7.16.1(eslint@8.57.0)(typescript@5.5.3)
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.0
-        version: 3.7.0(@swc/helpers@0.5.5)(vite@5.3.4(@types/node@20.14.11))
+        version: 3.7.0(@swc/helpers@0.5.5)(vite@5.3.4(@types/node@20.14.12))
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -70,10 +73,10 @@ importers:
         version: 5.5.3
       vite:
         specifier: ^5.3.4
-        version: 5.3.4(@types/node@20.14.11)
+        version: 5.3.4(@types/node@20.14.12)
       vite-plugin-node-polyfills:
         specifier: ^0.21.0
-        version: 0.21.0(rollup@4.19.0)(vite@5.3.4(@types/node@20.14.11))
+        version: 0.21.0(rollup@4.19.0)(vite@5.3.4(@types/node@20.14.12))
 
   apps/docs:
     dependencies:
@@ -114,6 +117,9 @@ importers:
 
   apps/jetton:
     dependencies:
+      '@fotonjs/contracts':
+        specifier: link:../../packages/contracts
+        version: link:../../packages/contracts
       '@ton/core':
         specifier: ^0.56.3
         version: 0.56.3(@ton/crypto@3.2.0)
@@ -138,7 +144,7 @@ importers:
         version: 1.4.0
       '@ton/blueprint':
         specifier: ^0.20.0
-        version: 0.20.0(@swc/core@1.5.24(@swc/helpers@0.5.5))(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0)(@ton/ton@13.11.2(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0))(@types/node@20.14.11)(typescript@5.5.3)
+        version: 0.20.0(@swc/core@1.5.24(@swc/helpers@0.5.5))(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0)(@ton/ton@13.11.2(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0))(@types/node@20.14.12)(typescript@5.5.3)
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -153,7 +159,7 @@ importers:
         version: 7.16.1(eslint@8.57.0)(typescript@5.5.3)
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.0
-        version: 3.7.0(@swc/helpers@0.5.5)(vite@5.3.4(@types/node@20.14.11))
+        version: 3.7.0(@swc/helpers@0.5.5)(vite@5.3.4(@types/node@20.14.12))
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -168,10 +174,10 @@ importers:
         version: 5.5.3
       vite:
         specifier: ^5.3.4
-        version: 5.3.4(@types/node@20.14.11)
+        version: 5.3.4(@types/node@20.14.12)
       vite-plugin-node-polyfills:
         specifier: ^0.21.0
-        version: 0.21.0(rollup@4.19.0)(vite@5.3.4(@types/node@20.14.11))
+        version: 0.21.0(rollup@4.19.0)(vite@5.3.4(@types/node@20.14.12))
 
   packages/api:
     dependencies:
@@ -222,6 +228,22 @@ importers:
       typescript:
         specifier: ^5
         version: 5.4.3
+
+  packages/contracts:
+    dependencies:
+      '@ton/core':
+        specifier: ^0.56.3
+        version: 0.56.3(@ton/crypto@3.2.0)
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
+    devDependencies:
+      '@types/node':
+        specifier: ^20.14.12
+        version: 20.14.12
+      tsup:
+        specifier: ^8.2.3
+        version: 8.2.3(@swc/core@1.5.24)(postcss@8.4.39)(typescript@5.5.4)(yaml@2.4.2)
 
   packages/core:
     dependencies:
@@ -1689,8 +1711,8 @@ packages:
   '@types/mute-stream@0.0.4':
     resolution: {integrity: sha512-CPM9nzrCPPJHQNA9keH9CVkVI+WR5kMa+7XEs5jcGQ0VoAGnLv242w8lIVgwAEfmE4oufJRaTc9PNLQl0ioAow==}
 
-  '@types/node@18.19.34':
-    resolution: {integrity: sha512-eXF4pfBNV5DAMKGbI02NnDtWrQ40hAN558/2vvS4gMpMIxaf6JmD7YjnZbq0Q9TDSSkKBamime8ewRoomHdt4g==}
+  '@types/node@18.19.42':
+    resolution: {integrity: sha512-d2ZFc/3lnK2YCYhos8iaNIYu9Vfhr92nHiyJHRltXWjXUBjEE+A4I58Tdbnw4VhggSW+2j5y5gTrLs4biNnubg==}
 
   '@types/node@20.12.2':
     resolution: {integrity: sha512-zQ0NYO87hyN6Xrclcqp7f8ZbXNbRfoGWNcMvHTPQp9UUrwI0mI7XBz+cu7/W6/VClYo2g63B0cjull/srU7LgQ==}
@@ -1700,6 +1722,9 @@ packages:
 
   '@types/node@20.14.11':
     resolution: {integrity: sha512-kprQpL8MMeszbz6ojB5/tU8PLN4kesnN8Gjzw349rDlNgsSzg90lAVj3llK99Dh7JON+t9AuscPPFW6mPbTnSA==}
+
+  '@types/node@20.14.12':
+    resolution: {integrity: sha512-r7wNXakLeSsGT0H1AU863vS2wa5wBOK4bWMjZz2wj+8nBx+m5PeIn0k8AloSLpRuiwdRQZwarZqHE4FNArPuJQ==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -4684,6 +4709,25 @@ packages:
       typescript:
         optional: true
 
+  tsup@8.2.3:
+    resolution: {integrity: sha512-6YNT44oUfXRbZuSMNmN36GzwPPIlD2wBccY7looM2fkTcxkf2NEmwr3OZuDZoySklnrIG4hoEtzy8yUXYOqNcg==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      '@microsoft/api-extractor': ^7.36.0
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: '>=4.5.0'
+    peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+
   tty-browserify@0.0.1:
     resolution: {integrity: sha512-C3TaO7K81YvjCgQH9Q1S3R3P3BtN3RIM8n+OvX4il1K1zgE8ZhI0op7kClgkxtutIE8hQrcrHBXvIheqKUUCxw==}
 
@@ -4728,6 +4772,11 @@ packages:
 
   typescript@5.5.3:
     resolution: {integrity: sha512-/hreyEujaB0w76zKo6717l3L0o/qEUtRgdvUBvlkhoWeOVMjMuHNHk0BRBzikzuGDqNmPQbg5ifMEqsHLiIUcQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  typescript@5.5.4:
+    resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -5844,7 +5893,7 @@ snapshots:
     dependencies:
       '@inquirer/type': 1.2.1
       '@types/mute-stream': 0.0.4
-      '@types/node': 20.14.1
+      '@types/node': 20.12.2
       '@types/wrap-ansi': 3.0.0
       ansi-escapes: 4.3.2
       chalk: 4.1.2
@@ -6731,7 +6780,7 @@ snapshots:
       '@ton-community/func-js-bin': 0.4.4-newops.1
       arg: 5.0.2
 
-  '@ton/blueprint@0.20.0(@swc/core@1.5.24(@swc/helpers@0.5.5))(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0)(@ton/ton@13.11.2(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0))(@types/node@20.14.11)(typescript@5.5.3)':
+  '@ton/blueprint@0.20.0(@swc/core@1.5.24(@swc/helpers@0.5.5))(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0)(@ton/ton@13.11.2(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0))(@types/node@20.14.12)(typescript@5.5.3)':
     dependencies:
       '@orbs-network/ton-access': 2.3.3
       '@tact-lang/compiler': 1.4.0
@@ -6746,7 +6795,7 @@ snapshots:
       inquirer: 8.2.6
       qrcode-terminal: 0.12.0
       ton-x: 2.1.0
-      ts-node: 10.9.2(@swc/core@1.5.24(@swc/helpers@0.5.5))(@types/node@20.14.11)(typescript@5.5.3)
+      ts-node: 10.9.2(@swc/core@1.5.24(@swc/helpers@0.5.5))(@types/node@20.14.12)(typescript@5.5.3)
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -6860,11 +6909,11 @@ snapshots:
 
   '@types/bn.js@5.1.5':
     dependencies:
-      '@types/node': 20.14.11
+      '@types/node': 20.14.12
 
   '@types/cli-progress@3.11.5':
     dependencies:
-      '@types/node': 20.14.1
+      '@types/node': 20.12.2
 
   '@types/d3-scale-chromatic@3.0.3': {}
 
@@ -6887,7 +6936,7 @@ snapshots:
   '@types/fs-extra@11.0.4':
     dependencies:
       '@types/jsonfile': 6.1.4
-      '@types/node': 20.14.1
+      '@types/node': 20.12.2
 
   '@types/hast@2.3.10':
     dependencies:
@@ -6903,7 +6952,7 @@ snapshots:
 
   '@types/jsonfile@6.1.4':
     dependencies:
-      '@types/node': 20.14.1
+      '@types/node': 20.12.2
 
   '@types/katex@0.16.7': {}
 
@@ -6925,9 +6974,9 @@ snapshots:
 
   '@types/mute-stream@0.0.4':
     dependencies:
-      '@types/node': 20.14.1
+      '@types/node': 20.12.2
 
-  '@types/node@18.19.34':
+  '@types/node@18.19.42':
     dependencies:
       undici-types: 5.26.5
 
@@ -6940,6 +6989,10 @@ snapshots:
       undici-types: 5.26.5
 
   '@types/node@20.14.11':
+    dependencies:
+      undici-types: 5.26.5
+
+  '@types/node@20.14.12':
     dependencies:
       undici-types: 5.26.5
 
@@ -7054,10 +7107,10 @@ snapshots:
       next: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
-  '@vitejs/plugin-react-swc@3.7.0(@swc/helpers@0.5.5)(vite@5.3.4(@types/node@20.14.11))':
+  '@vitejs/plugin-react-swc@3.7.0(@swc/helpers@0.5.5)(vite@5.3.4(@types/node@20.14.12))':
     dependencies:
       '@swc/core': 1.5.24(@swc/helpers@0.5.5)
-      vite: 5.3.4(@types/node@20.14.11)
+      vite: 5.3.4(@types/node@20.14.12)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -9954,7 +10007,7 @@ snapshots:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 20.14.11
+      '@types/node': 20.14.12
       long: 4.0.0
 
   protocols@2.0.1: {}
@@ -10598,14 +10651,14 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-node@10.9.2(@swc/core@1.5.24(@swc/helpers@0.5.5))(@types/node@20.14.11)(typescript@5.5.3):
+  ts-node@10.9.2(@swc/core@1.5.24(@swc/helpers@0.5.5))(@types/node@20.14.12)(typescript@5.5.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.14.11
+      '@types/node': 20.14.12
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
@@ -10671,6 +10724,34 @@ snapshots:
       - tsx
       - yaml
 
+  tsup@8.2.3(@swc/core@1.5.24)(postcss@8.4.39)(typescript@5.5.4)(yaml@2.4.2):
+    dependencies:
+      bundle-require: 5.0.0(esbuild@0.23.0)
+      cac: 6.7.14
+      chokidar: 3.6.0
+      consola: 3.2.3
+      debug: 4.3.5(supports-color@9.4.0)
+      esbuild: 0.23.0
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      picocolors: 1.0.1
+      postcss-load-config: 6.0.1(postcss@8.4.39)(yaml@2.4.2)
+      resolve-from: 5.0.0
+      rollup: 4.19.0
+      source-map: 0.8.0-beta.0
+      sucrase: 3.35.0
+      tree-kill: 1.2.2
+    optionalDependencies:
+      '@swc/core': 1.5.24(@swc/helpers@0.5.5)
+      postcss: 8.4.39
+      typescript: 5.5.4
+    transitivePeerDependencies:
+      - jiti
+      - supports-color
+      - tsx
+      - yaml
+
   tty-browserify@0.0.1: {}
 
   tunnel-agent@0.6.0:
@@ -10698,6 +10779,8 @@ snapshots:
   typescript@5.4.5: {}
 
   typescript@5.5.3: {}
+
+  typescript@5.5.4: {}
 
   ua-parser-js@1.0.38: {}
 
@@ -10907,21 +10990,21 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite-plugin-node-polyfills@0.21.0(rollup@4.19.0)(vite@5.3.4(@types/node@20.14.11)):
+  vite-plugin-node-polyfills@0.21.0(rollup@4.19.0)(vite@5.3.4(@types/node@20.14.12)):
     dependencies:
       '@rollup/plugin-inject': 5.0.5(rollup@4.19.0)
       node-stdlib-browser: 1.2.0
-      vite: 5.3.4(@types/node@20.14.11)
+      vite: 5.3.4(@types/node@20.14.12)
     transitivePeerDependencies:
       - rollup
 
-  vite@5.3.4(@types/node@20.14.11):
+  vite@5.3.4(@types/node@20.14.12):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.39
       rollup: 4.19.0
     optionalDependencies:
-      '@types/node': 20.14.11
+      '@types/node': 20.14.12
       fsevents: 2.3.3
 
   vm-browserify@1.1.2: {}
@@ -11045,7 +11128,7 @@ snapshots:
     dependencies:
       '@types/fs-extra': 11.0.4
       '@types/minimist': 1.2.5
-      '@types/node': 18.19.34
+      '@types/node': 18.19.42
       '@types/ps-tree': 1.1.6
       '@types/which': 3.0.3
       chalk: 5.3.0
