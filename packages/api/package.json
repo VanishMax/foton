@@ -9,7 +9,7 @@
     "API",
     "RPC"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "author": "vanishmax",
   "repository": {
     "type": "git",

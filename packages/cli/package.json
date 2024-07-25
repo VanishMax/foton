@@ -9,7 +9,7 @@
     "CLI",
     "Command line"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "author": "vanishmax",
   "type": "module",
   "repository": {
