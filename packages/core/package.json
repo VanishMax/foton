@@ -41,13 +41,13 @@
   },
   "dependencies": {
     "@fotonjs/api": "workspace:^",
-    "@ton/core": "^0.56.3",
-    "@ton/crypto": "^3.2.0",
-    "@tonconnect/sdk": "^3.0.3",
-    "@tonconnect/ui": "^2.0.6",
-    "typescript": "^5.5.3"
+    "@ton/core": "^0.59.0",
+    "@ton/crypto": "^3.3.0",
+    "@tonconnect/sdk": "^3.0.5",
+    "@tonconnect/ui": "^2.0.9",
+    "typescript": "^5.6.3"
   },
   "devDependencies": {
-    "tsup": "^8.1.2"
+    "tsup": "^8.3.0"
   }
 }

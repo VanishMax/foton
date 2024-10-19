@@ -7,11 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "compile": "foton compile"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@fotonjs/contracts": "link:../../packages/contracts",
+    "@fotonjs/contracts": "workspace:*",
     "@ton/core": "^0.56.3",
     "@tonconnect/ui": "^2.0.6",
     "@tonconnect/ui-react": "^2.0.6",

@@ -39,12 +39,12 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "openapi-fetch": "^0.10.2",
-    "openapi-typescript": "^7.0.4",
-    "typescript": "^5.5.3"
+    "openapi-fetch": "^0.12.2",
+    "openapi-typescript": "^7.4.1",
+    "typescript": "^5.6.3"
   },
   "devDependencies": {
-    "@types/node": "^20.14.11",
-    "tsup": "^8.1.2"
+    "@types/node": "^22.7.7",
+    "tsup": "^8.3.0"
   }
 }
