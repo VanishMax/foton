@@ -40,7 +40,7 @@ export async function writeContract <CONTRACT extends CompiledContract, METHOD e
     const res = await this._walletClient.connection.sendTransaction({
       network: getNetwork(this._walletClient._chain),
       validUntil: Date.now() + 5 * 60 * 1000,
-      from: this.address,
+      from: this._walletClient.address,
       messages: [
         {
           address: this.address,
