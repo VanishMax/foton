@@ -16,7 +16,7 @@ import { contractClient, publicClient } from './client';
 
 // Imagine the contract is a counter with `counter` getter.
 const res = await contractClient.read({
-  method: 'counter',
+  getter: 'counter',
   arguments: [],
 });
 // > res.data – 1 (counter's state example)
@@ -70,7 +70,7 @@ Getter name of the contract to call.
 
 ```ts {2}
 const res = await contractClient.read({
-  method: 'counter',
+  getter: 'counter',
   arguments: [],
 });
 ```
@@ -84,7 +84,7 @@ For example, a contract in Tact might have a getter declaration `get fun multipl
 
 ```ts {3}
 const res = await contractClient.read({
-  method: 'multiplied',
+  getter: 'multiplied',
   arguments: [1n],
 });
 ```
