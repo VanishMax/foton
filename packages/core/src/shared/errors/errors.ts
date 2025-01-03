@@ -41,6 +41,8 @@ export type SupportedErrors = {
   TonRateLimitError: TonRateLimitError,
 };
 
+export type SupportedErrorsKeys = keyof typeof supportedErrors;
+
 export const supportedErrors = {
   // Syntax errors
   ConnectFunctionUnavailableError: ConnectFunctionUnavailableError,
@@ -60,4 +62,4 @@ export const supportedErrors = {
   TonWalletDisconnectError: TonWalletDisconnectError,
   TonReadError: TonReadError,
   TonRateLimitError: TonRateLimitError,
-}
+} as const;
