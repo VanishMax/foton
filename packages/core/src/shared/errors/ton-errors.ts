@@ -16,7 +16,7 @@ export class TonError extends Error {
 }
 
 export class TonWalletConnectionError extends TonError {
-  constructor(cause?: Error) {
+  constructor(cause?: unknown) {
     super('Wallet connection failed');
     this.name = 'TonWalletConnectionError';
     this.cause = cause;
@@ -24,7 +24,7 @@ export class TonWalletConnectionError extends TonError {
 }
 
 export class TonWalletDisconnectError extends TonError {
-  constructor(cause?: Error) {
+  constructor(cause?: unknown) {
     super('Could not disconnect from the wallet');
     this.name = 'TonWalletDisconnectError';
     this.cause = cause;
@@ -32,7 +32,7 @@ export class TonWalletDisconnectError extends TonError {
 }
 
 export class TonReadError extends TonError {
-  constructor(cause?: Error) {
+  constructor(cause?: unknown) {
     super('Cannot process the read request. Either the request returned a non-zero exit code or the data could not be parsed');
     this.name = 'TonReadError';
     this.cause = cause;
@@ -40,7 +40,7 @@ export class TonReadError extends TonError {
 }
 
 export class TonRateLimitError extends TonError {
-  constructor(cause?: Error) {
+  constructor(cause?: unknown) {
     super('Rate limit is exceeded. Provide the `authKey` to the public client with a better Ton Center plan to get more requests per second');
     this.name = 'TonRateLimitError';
     this.cause = cause;

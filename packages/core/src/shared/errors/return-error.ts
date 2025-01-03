@@ -10,7 +10,7 @@ import {
  */
 export const returnError = <TYPE extends SupportedErrorsKeys>(
   type: TYPE,
-  cause?: Error
+  cause?: unknown
 ): DataOrError<any, SupportedErrors[TYPE]> => {
   const nativeTonErrors: SupportedErrorsKeys[] = ['TonConnectError', 'TonConnectUIError'] as const;
 
