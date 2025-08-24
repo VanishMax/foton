@@ -32,6 +32,6 @@ export async function sendTransaction (
     const hash = bocToHash(res.boc);
     return returnData(hash);
   }  catch (error) {
-    return returnError('UserRejectedTransactionError');
+    return returnError('UserRejectedTransactionError', error);
   }
 }

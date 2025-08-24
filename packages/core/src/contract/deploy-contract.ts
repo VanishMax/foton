@@ -68,6 +68,6 @@ export async function deployContract <CONTRACT extends CompiledContract>(
   } catch (error) {
     console.error('err', error);
     // TODO: add more error handlers for different scenarios
-    return returnError('UserRejectedTransactionError');
+    return returnError('UserRejectedTransactionError', error as Error);
   }
 }

@@ -53,7 +53,7 @@ export async function writeContract <CONTRACT extends CompiledContract, METHOD e
     return returnData(bocToHash(res.boc));
   } catch (error) {
     // TODO: add more error handlers for different scenarios
-    return returnError('UserRejectedTransactionError');
+    return returnError('UserRejectedTransactionError', error);
   }
 }
 

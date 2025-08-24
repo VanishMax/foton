@@ -41,9 +41,9 @@ export async function readContract<CONTRACT extends CompiledContract, GETTER ext
   // TODO: handle the read with more details
   if (res.error) {
     if (res.response.status === 429) {
-      return returnError('TonRateLimitError');
+      return returnError('TonRateLimitError', res.error);
     }
-    return returnError('TonReadError');
+    return returnError('TonReadError', res.error);
   }
 
   try {
@@ -51,6 +51,6 @@ export async function readContract<CONTRACT extends CompiledContract, GETTER ext
       parseReadReturn(fullContract.abi, options.getter, res.data) as ContractGetterReturn<CONTRACT, GETTER>
     );
   } catch (error) {
-    return returnError('TonReadError');
+    return returnError('TonReadError', error);
   }
 }
